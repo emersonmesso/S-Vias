@@ -1,0 +1,61 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 12/07/2018, 22:25:48
+    Author     : MichaelDydean
+*/
+@charset "uft-8";
+
+#map {
+    height: 100%;
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+aside {
+    display: block;
+    width: 20vw;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: black;
+    z-index:2;
+}
+/*ul {
+    list-style-type: none;
+}
+li {
+    display: block;
+    width: 13vw;
+    height: 7vh;
+    border: 1px solid #dedede;
+    color: #dedede;
+    text-align: center;
+    padding-top: 3vh;
+    cursor: pointer;
+}
+li:hover {
+    background: #dedede; 
+    border: 1px solid #dedede;;
+    color: black;
+}*/
+.bg-menu {
+	background: #FEDC00 linear-gradient(180deg, #FACC2E, #FEDC00) repeat-x !important;
+}
+#modal-insert-coords h1, #modal-form-upload h1{
+    padding-top: 5vh;
+    color: rgb(140, 140, 140);
+    font-size: 1.5em;
+    font-weight: 700;
+    text-align: center;
+}
+#form-coords, #form-upload {
+    padding: 30px;
+}
