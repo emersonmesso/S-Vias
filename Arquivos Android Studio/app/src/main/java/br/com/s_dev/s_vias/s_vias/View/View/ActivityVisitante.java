@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import br.com.s_dev.s_vias.s_vias.R;
 
+import static br.com.s_dev.s_vias.s_vias.View.View.PreProcessamento.REQUEST_LOCATION;
+
 public class ActivityVisitante extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
@@ -132,6 +134,7 @@ public class ActivityVisitante extends AppCompatActivity
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
             return;
         }
         mMap.setMyLocationEnabled(true);

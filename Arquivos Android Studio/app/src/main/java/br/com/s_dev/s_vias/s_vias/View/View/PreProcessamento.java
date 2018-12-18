@@ -128,11 +128,12 @@ public class PreProcessamento extends AppCompatActivity {
                 verificaCadastro(email);
                 exibirProgress(false);
             }
-
+            exibirProgress(false);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.i("falhas", "signInResult:failed code=" + e.getStatusCode());
+            exibirProgress(false);
         }
 
     }
@@ -142,7 +143,8 @@ public class PreProcessamento extends AppCompatActivity {
         perGPS();
         //verifica se existe internet
         verificaConexao();
-
+        ligin.setVisibility(View.VISIBLE);
+        carregando.setVisibility(View.GONE);
         if(ativoInt && ativoGps){
             //verifica se está cadastrado
             Log.i("Permissao", "Tudo Permitido!");
@@ -164,7 +166,9 @@ public class PreProcessamento extends AppCompatActivity {
             }
 
         }else{
+            ligin.setVisibility(View.VISIBLE);
             //mostra os botões de permissões
+            exibirProgress(false);
         }
 
     }

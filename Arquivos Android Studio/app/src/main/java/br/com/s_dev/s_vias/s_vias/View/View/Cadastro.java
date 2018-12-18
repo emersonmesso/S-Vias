@@ -25,10 +25,6 @@ public class Cadastro extends AppCompatActivity {
             public void onClick(View v) {
 
             //Ação de verificação dos dados
-
-            //trocando de tela
-            Intent intent = new Intent(Cadastro.this, MainActivity.class);
-            startActivity(intent);
             }
         });
     }
