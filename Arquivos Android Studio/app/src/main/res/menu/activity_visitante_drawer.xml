@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Entrar" />
+        <item
+            android:id="@+id/nav_cadastro"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Cadastre-se" />
+
+    </group>
+
+    <item android:title="Aplicativo e Empresa">
+        <menu>
+            <item
+                android:id="@+id/nav_sobre"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Sobre o Aplicativo" />
+            <item
+                android:id="@+id/nav_empresa"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Sobre a Empresa" />
+        </menu>
+    </item>
+
+</menu>
