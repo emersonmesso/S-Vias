@@ -1,15 +1,18 @@
 package br.com.s_dev.s_vias.s_vias.View.Model;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
+
 import com.google.android.gms.maps.model.LatLng;
 import java.util.Date;
 
 public class Marcador {
     private String descricao;
-    private Date data;
+    private String data;
     private String nome;
     private LatLng latlng;
-    private Bitmap midia;
+    private String midia;
+    private Cidadao cidadao;
 
     public String getDescricao() {
         return descricao;
@@ -19,11 +22,11 @@ public class Marcador {
         this.descricao = descricao;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 
@@ -43,11 +46,19 @@ public class Marcador {
         this.latlng = latlng;
     }
 
-    public Bitmap getMidia() {
+    public String getMidia() {
         return midia;
     }
 
-    public void setMidia(Bitmap midia) {
+    public void setMidia(String midia) {
         this.midia = midia;
+    }
+
+    public Cidadao getCidadao() {
+        return cidadao;
+    }
+
+    public void setCidadao(Cidadao cidadao) {
+        this.cidadao = cidadao;
     }
 }

@@ -199,6 +199,7 @@ public class PreProcessamento extends AppCompatActivity {
     }
 
     public void visitante (View v){
+        exibirProgress(true);
         Intent intent = new Intent(PreProcessamento.this,
                 ActivityVisitante.class);
         startActivity(intent);

@@ -126,7 +126,6 @@ public class HTTPRequest {
     //
     public String getDados(String Url, String argumentos){
 
-
         //
         getDataServidor(Url, argumentos);
 

@@ -16,4 +16,55 @@
         android:layout_height="match_parent"
         tools:context=".View.Mapa" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:foregroundGravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingTop="20dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBranco">
+
+            <SearchView
+                android:id="@+id/campoBusca"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:saveEnabled="true"
+                android:textAlignment="center"></SearchView>
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/telaLoad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBranco"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/loadMapa"
+                android:layout_width="120dp"
+                android:layout_height="138dp" />
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
 </android.support.constraint.ConstraintLayout>
