@@ -120,34 +120,27 @@ public class ActivityVisitante extends AppCompatActivity
             //Buscando a minha localização
             minhaLocalizacao = getLocation();
 
-            //buscando o meu CEP
-            Geocoder geo = new Geocoder(getApplicationContext());
-            try {
-                lugares = geo.getFromLocation(minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude(), 1);
-            } catch (IOException e) {
-                Log.i("erroE", e.getMessage());
-            }
+            if(minhaLocalizacao != null){
 
-            //verificando se as cidades disponíveis é iqual a minha cidade (Usando o Postal Code)
-            //percorrendo as cidades disponível
-            for(int i = 0; i < cidades.size(); i++){
-                if(cidades.get(i).getCEP() == lugares.get(0).getPostalCode() ){ //verifica se a minha cidada é permitida
-                    minhaCidade = true;
-                }
-            }
-
-            if(minhaCidade){
-                //Povoando a tela com os marcadores
-                HTTPRequest processa1 = new HTTPRequest();
+                //buscando o meu CEP
+                Geocoder geo = new Geocoder(getApplicationContext());
                 try {
-                    marcadores = func.getMarcadores(processa1.getDados(UtilAPP.LINK_SERVIDOR+"_api/getMarcadores.php", ""));
-                    Log.i("marcadores", String.valueOf( marcadores.size()));
-                } catch (JSONException e) {
+                    lugares = geo.getFromLocation(minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude(), 1);
+                } catch (IOException e) {
                     Log.i("erroE", e.getMessage());
                 }
-            }else{
-                //CidadeErro();
+
+                //verificando se as cidades disponíveis é iqual a minha cidade (Usando o Postal Code)
+                //percorrendo as cidades disponível
+                for(int i = 0; i < cidades.size(); i++){
+                    if(cidades.get(i).getCEP() == lugares.get(0).getPostalCode() ){ //verifica se a minha cidada é permitida
+                        minhaCidade = true;
+                    }
+                }
+
             }
+
+
 
         } catch (JSONException e) {
             Log.i("erroE", e.getMessage());
