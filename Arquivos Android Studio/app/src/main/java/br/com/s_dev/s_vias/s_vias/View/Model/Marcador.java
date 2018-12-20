@@ -1,10 +1,6 @@
 package br.com.s_dev.s_vias.s_vias.View.Model;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-
 import com.google.android.gms.maps.model.LatLng;
-import java.util.Date;
 
 public class Marcador {
     private String descricao;

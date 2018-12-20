@@ -1,11 +1,19 @@
 package br.com.s_dev.s_vias.s_vias.View.View;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,10 +29,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+
 import br.com.s_dev.s_vias.s_vias.R;
 import br.com.s_dev.s_vias.s_vias.View.Controller.HTTPRequest;
 
-public class PreProcessamento extends AppCompatActivity {
+public class PreProcessamento extends AppCompatActivity implements LocationListener {
 
     LocationManager locationManager;
     boolean ativoGps = false;
@@ -38,6 +47,7 @@ public class PreProcessamento extends AppCompatActivity {
     GoogleSignInOptions gso;
     int RC_SIGN_IN;
     ProgressBar mProgressBar;
+    private String provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +74,26 @@ public class PreProcessamento extends AppCompatActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        if (location != null) {
+            onLocationChanged(location);
+        }
 
         exibirProgress(false);
         onPreExecute();
@@ -200,9 +230,59 @@ public class PreProcessamento extends AppCompatActivity {
 
     public void visitante (View v){
         exibirProgress(true);
+
         Intent intent = new Intent(PreProcessamento.this,
                 ActivityVisitante.class);
         startActivity(intent);
         finish();
+    }
+
+    public void AtivaGPS() {
+        AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+        alerta.setMessage("Você precisa ativar o GPS para ter acesso ao sistema!");
+        alerta.setCancelable(false);
+        alerta.setPositiveButton("Cancelar", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+                exibirProgress(false);
+                Intent intent = new Intent(PreProcessamento.this,
+                        PreProcessamento.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        alerta.setNegativeButton("Ativar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                exibirProgress(false);
+            }
+        });
+        AlertDialog alert = alerta.create();
+        alert.show();
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }

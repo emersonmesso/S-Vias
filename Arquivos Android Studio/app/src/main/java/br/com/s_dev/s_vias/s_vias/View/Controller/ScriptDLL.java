@@ -22,7 +22,7 @@ public class ScriptDLL {
 
     public List<Cidades> getCidades (String dados) throws JSONException {
         List<Cidades> cidades = new ArrayList<>();
-
+        Log.i("cidades", dados);
         JSONArray jsonArray = new JSONArray(dados);
 
         if(jsonArray.length() != 0){
@@ -34,8 +34,6 @@ public class ScriptDLL {
                 Cidades cidade = new Cidades();
                 cidade.setCEP(jsonObject.getString("cep"));
                 cidade.setNome(jsonObject.getString("nome"));
-                LatLng latLng = new LatLng(jsonObject.getDouble("lat"), jsonObject.getDouble("lng"));
-                cidade.setLocalizacao(latLng);
                 cidade.setUf(jsonObject.getString("uf"));
                 cidades.add(cidade);
             }

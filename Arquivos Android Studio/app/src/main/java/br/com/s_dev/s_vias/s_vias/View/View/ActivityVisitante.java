@@ -7,17 +7,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +34,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -41,6 +46,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 
 import org.json.JSONException;
 
@@ -57,7 +63,7 @@ import br.com.s_dev.s_vias.s_vias.View.Model.Marcador;
 import static br.com.s_dev.s_vias.s_vias.View.View.PreProcessamento.REQUEST_LOCATION;
 
 public class ActivityVisitante extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, SearchView.OnQueryTextListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, SearchView.OnQueryTextListener, LocationListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
 
@@ -70,10 +76,14 @@ public class ActivityVisitante extends AppCompatActivity
     //
     SearchView campoBusca;
 
-
     Location minhaLocalizacao;
+    LatLng localMapaP = new LatLng(-12.4048291, -55.0187512);
+    LatLng localMapaG;
+    int zP = 5;
+    int zG = 14;
     LocationManager locationManager;
     private boolean minhaCidade = false;
+    private String provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,84 +101,131 @@ public class ActivityVisitante extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapa);
-        mapFragment.getMapAsync(this);
-
         //
         campoBusca = (SearchView) findViewById(R.id.campoBusca);
         loadMapa = (FrameLayout) findViewById(R.id.telaLoad);
 
         campoBusca.setOnQueryTextListener(this);
 
-        //Ativando localização via GPS
-        locationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE);
-        if(ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(ActivityVisitante.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        if (location != null) {
+            onLocationChanged(location);
         }
 
-        //Busca as cidades disponíveis
-        HTTPRequest processa = new HTTPRequest();
-        ScriptDLL func = new ScriptDLL();
-        try {
-            cidades = func.getCidades(processa.getDados(UtilAPP.LINK_SERVIDOR+"_api/getCidades.php", ""));
-            Log.i("cidades", cidades.get(0).getCEP());
+        //Buscando a minha localização
+        if(getLocation()){
+            exibirProgress(true);
+            //buscando o meu CEP
+            Geocoder geo = new Geocoder(getApplicationContext());
+            try {
 
-            //Buscando a minha localização
-            minhaLocalizacao = getLocation();
+                lugares = geo.getFromLocation(minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude(), 1);
 
-            if(minhaLocalizacao != null){
-
-                //buscando o meu CEP
-                Geocoder geo = new Geocoder(getApplicationContext());
+                //Busca as cidades disponíveis
+                HTTPRequest processa = new HTTPRequest();
+                ScriptDLL func = new ScriptDLL();
                 try {
-                    lugares = geo.getFromLocation(minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude(), 1);
-                } catch (IOException e) {
-                    Log.i("erroE", e.getMessage());
-                }
 
-                //verificando se as cidades disponíveis é iqual a minha cidade (Usando o Postal Code)
-                //percorrendo as cidades disponível
-                for(int i = 0; i < cidades.size(); i++){
-                    if(cidades.get(i).getCEP() == lugares.get(0).getPostalCode() ){ //verifica se a minha cidada é permitida
-                        minhaCidade = true;
+                    cidades = func.getCidades(processa.getDados(UtilAPP.LINK_SERVIDOR + "getCidades.php", ""));
+
+                    //verificando se as cidades disponíveis é iqual a minha cidade (Usando o Postal Code)
+                    //percorrendo as cidades disponível
+                    for(int i = 0; i < cidades.size(); i++){
+
+                        if(cidades.get(i).getCEP().equals( lugares.get(0).getPostalCode() ) ){ //verifica se a minha cidada é permitida
+                            minhaCidade = true;
+                            Log.i("cidades", "Certo");
+                        }
                     }
+                    if(!minhaCidade){
+                        exibirProgress(false);
+                        CidadeErro();
+                    }else{
+                        //recebe o os dados da posição da cidade
+                        localMapaG = new LatLng(lugares.get(0).getLatitude(), lugares.get(0).getLongitude());
+                        //povoa o mapa
+                        //buscando os dados no servidor
+                        HTTPRequest httpMark = new HTTPRequest();
+                        marcadores = func.getMarcadores(httpMark.getDados(UtilAPP.LINK_SERVIDOR + "getMarcadores.php?cep=" + lugares.get(0).getPostalCode(), ""));
+                        Log.i("cidades", String.valueOf( marcadores.size() ));
+                        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                .findFragmentById(R.id.mapa);
+                        mapFragment.getMapAsync(this);
+                        exibirProgress(false);
+                    }
+
+                } catch (JSONException e) {
+                    Log.i("cidades", "não encontrado");
+                    exibirProgress(false);
+                    CidadeErro();
                 }
 
+
+            } catch (IOException e) {
+                exibirProgress(false);
+                CidadeErro();
             }
 
-
-
-        } catch (JSONException e) {
-            Log.i("erroE", e.getMessage());
+        }else{
+            Toast.makeText(this, "Sem Localização!", Toast.LENGTH_LONG).show();
         }
 
     }
 
-    //
-    public Location getLocation(){
-        Location location = null;
-        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        } else {
-            location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+    private boolean getLocation(){
+        Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            if( location != null){
-                //
-
-            } else {
-                Toast.makeText(this, "Erro ao buscar sua Localização!", Toast.LENGTH_LONG).show();
-            }
+        if(locationGPS != null){
+            minhaLocalizacao = locationGPS;
+            return true;
+        }else{
+            return false;
         }
-        return location;
     }
 
+    /**/
+    /* Request updates at startup */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        locationManager.requestLocationUpdates(provider, 400, 1, this);
+    }
+
+    /* Remove the locationlistener updates when Activity is paused */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        locationManager.removeUpdates(this);
+    }
+
+    public void onLocationChanged(Location location) {
+        minhaLocalizacao = location;
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Toast.makeText(this, "Enabled new provider " + provider,
+                Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(this, "Disabled provider " + provider,
+                Toast.LENGTH_SHORT).show();
+    }
 
     //Mostra mensagem de cidade não permitida
     public void CidadeErro() {
@@ -266,47 +323,19 @@ public class ActivityVisitante extends AppCompatActivity
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        exibirProgress(true);
         mMap = googleMap;
-
-        LatLng local = new LatLng(-8.069222,-39.126781);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, 14);
-        mMap.moveCamera(update);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-            return;
-        }
-        mMap.setMyLocationEnabled(false);
-        //verificando se a cidade é permitida
 
         if(minhaCidade){
-            //Povoando a tela com os marcadores
-            HTTPRequest processa1 = new HTTPRequest();
-            try {
-                ScriptDLL func = new ScriptDLL();
-                marcadores = func.getMarcadores(processa1.getDados(UtilAPP.LINK_SERVIDOR+"_api/getMarcadores.php", ""));
-                Log.i("marcadores", String.valueOf( marcadores.size()));
-                addMarcadores(googleMap);
-            } catch (JSONException e) {
-                Log.i("erroE", e.getMessage());
-            }
-
+            LatLng local = new LatLng(localMapaG.latitude, localMapaG.longitude);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, zG);
+            mMap.moveCamera(update);
+            mMap.setOnMarkerClickListener(this);
         }else{
-            CidadeErro();
+            LatLng local = new LatLng(localMapaP.latitude, localMapaP.longitude);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, zP);
+            mMap.moveCamera(update);
         }
 
-        exibirProgress(false);
-    }
-
-    private void addMarcadores (GoogleMap googleMap){
-        mMap = googleMap;
         for (int i = 0; i < marcadores.size(); i++) {
 
             //
@@ -321,6 +350,7 @@ public class ActivityVisitante extends AppCompatActivity
         }
     }
 
+
     @Override
     public boolean onQueryTextSubmit(String query) {
         Toast.makeText(this, query, Toast.LENGTH_LONG).show();
@@ -329,6 +359,31 @@ public class ActivityVisitante extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        final AlertDialog.Builder viewop = new AlertDialog.Builder(this);
+
+        LayoutInflater li = getLayoutInflater();
+
+        //inflamos o layout alerta.xml na view
+        View view = li.inflate(R.layout.click_marcador, null);
+
+        viewop.setView(view);
+        viewop.setCancelable(false);
+        viewop.setPositiveButton("Voltar", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+                AlertDialog b = viewop.create();
+                b.dismiss();
+            }
+        });
+        AlertDialog alert = viewop.create();
+        alert.show();
         return false;
     }
 }

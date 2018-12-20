@@ -10,6 +10,6 @@ public class UtilAPP {
     //Conexão com o servidor
     public static final int CONNECTION_TIMEOUT = 10000;
     public static final int READ_TIMEOUT = 15000;
-    public static String LINK_SERVIDOR = "http://emersonmesso95.000webhostapp.com/";
+    public static String LINK_SERVIDOR = "http://emersonmesso95.000webhostapp.com/_api/";
 
 }
