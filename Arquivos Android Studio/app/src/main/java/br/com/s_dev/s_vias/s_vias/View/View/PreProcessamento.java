@@ -30,6 +30,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
+
 import br.com.s_dev.s_vias.s_vias.R;
 import br.com.s_dev.s_vias.s_vias.View.Controller.HTTPRequest;
 
@@ -74,27 +76,6 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        Criteria criteria = new Criteria();
-        provider = locationManager.getBestProvider(criteria, false);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(provider);
-
-        if (location != null) {
-            onLocationChanged(location);
-        }
-
         exibirProgress(false);
         onPreExecute();
     }
@@ -115,7 +96,6 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
 
 
     //verifica se o usuário está logado
-
 
     //Verifica se existe permissão do GPS
     private void perGPS(){
@@ -204,33 +184,28 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
     }
 
     private void verificaCadastro (String email){
-        ligin.setVisibility(View.INVISIBLE);
+        ligin.setVisibility(View.VISIBLE);
         HTTPRequest request = new HTTPRequest();
+            String dados = request.getDados("https://emersonmesso95.000webhostapp.com/_api/_apiVerificaLogin.php?email=" + email, "");
+            Log.i("dados", dados);
 
-        String dados = request.getDados("https://emersonmesso95.000webhostapp.com/_api/_apiVerificaLogin.php?email=" + email, "");
-
-        Log.i("dados", dados);
-
-        if(dados.equals("1")){
-            Log.i("dados", "ok");
-            Intent intent = new Intent(PreProcessamento.this,
-                    MainActivity.class);
-            startActivity(intent);
-            finish();
-        }else{
-            Log.i("dados", "Erro");
-            Intent intent = new Intent(PreProcessamento.this,
-                    Cadastro.class);
-            startActivity(intent);
-            finish();
-        }
-
-
+            if(dados.equals("1")){
+                Log.i("dados", "ok");
+                Intent intent = new Intent(PreProcessamento.this,
+                        MainActivity.class);
+                startActivity(intent);
+                finish();
+            }else{
+                Log.i("dados", "Erro");
+                Intent intent = new Intent(PreProcessamento.this,
+                        Cadastro.class);
+                startActivity(intent);
+                finish();
+            }
     }
 
     public void visitante (View v){
         exibirProgress(true);
-
         Intent intent = new Intent(PreProcessamento.this,
                 ActivityVisitante.class);
         startActivity(intent);
