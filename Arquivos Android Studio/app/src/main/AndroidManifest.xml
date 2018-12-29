@@ -55,7 +55,12 @@
         <activity
             android:name=".View.View.ActivityVisitante"
             android:label="@string/title_activity_visitante"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".View.View.BuscaDenuncia"
+        android:parentActivityName=".View.View.ActivityVisitante"
+            >
+
+        </activity>
     </application>
 
 </manifest>

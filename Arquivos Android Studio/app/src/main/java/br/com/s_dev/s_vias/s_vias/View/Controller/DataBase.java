@@ -4,21 +4,18 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by allanromanato on 5/27/15.
- */
 class DataBase extends SQLiteOpenHelper {
 
 
     public DataBase(Context context) {
         super(context, UtilAPP.BANCO, null, UtilAPP.VERSAO);
         SQLiteDatabase db = getWritableDatabase();
-
+        db.execSQL( SQLUtil.getCreateTabelaDenuncia() );
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL( SQLUtil.getCreateTabelaDenuncia() );
     }
 
     @Override

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -32,9 +34,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -50,10 +54,16 @@ import com.google.android.gms.maps.model.PointOfInterest;
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import br.com.s_dev.s_vias.s_vias.R;
+import br.com.s_dev.s_vias.s_vias.View.Controller.CriaDataBase;
+import br.com.s_dev.s_vias.s_vias.View.Controller.DownloadImageFromInternet;
 import br.com.s_dev.s_vias.s_vias.View.Controller.HTTPRequest;
 import br.com.s_dev.s_vias.s_vias.View.Controller.ScriptDLL;
 import br.com.s_dev.s_vias.s_vias.View.Controller.UtilAPP;
@@ -109,6 +119,9 @@ public class ActivityVisitante extends AppCompatActivity
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+
+        //
+        exibirProgress(true);
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
         Location location = locationManager.getLastKnownLocation(provider);
@@ -172,7 +185,7 @@ public class ActivityVisitante extends AppCompatActivity
             }
 
         }else{
-            Toast.makeText(this, "Sem Localização!", Toast.LENGTH_LONG).show();
+            erroLocalizacao();
         }
 
     }
@@ -254,6 +267,33 @@ public class ActivityVisitante extends AppCompatActivity
 
     }
 
+    //Mostra que não encontrou a localização
+    public void erroLocalizacao() {
+        AlertDialog.Builder loca = new AlertDialog.Builder(this);
+        loca.setMessage("Não encontramos a sua localização.\nPor favor locomova-se para carpturarmos a sua licalização.\nPressione OK quando estiver pronto!");
+        loca.setCancelable(false);
+        loca.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+        loca.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+            }
+        });
+        AlertDialog alert = loca.create();
+        alert.show();
+
+    }
+
+
 
     private void exibirProgress(boolean exibir) {
         loadMapa.setVisibility(exibir ? View.VISIBLE : View.GONE);
@@ -325,6 +365,9 @@ public class ActivityVisitante extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        CriaDataBase banco = new CriaDataBase();
+        banco.criaConexao(getApplicationContext());
+
         if(minhaCidade){
             LatLng local = new LatLng(localMapaG.latitude, localMapaG.longitude);
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, zG);
@@ -353,7 +396,12 @@ public class ActivityVisitante extends AppCompatActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Toast.makeText(this, query, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, BuscaDenuncia.class);
+        intent.putExtra("query", query);
+        intent.putExtra("cep", lugares.get(0).getPostalCode());
+        intent.putExtra("lat", lugares.get(0).getLatitude());
+        intent.putExtra("lng", lugares.get(0).getLongitude());
+        startActivity(intent);
         return true;
     }
 
@@ -366,12 +414,55 @@ public class ActivityVisitante extends AppCompatActivity
     public boolean onMarkerClick(Marker marker) {
         final AlertDialog.Builder viewop = new AlertDialog.Builder(this);
 
+        LatLng posisao = marker.getPosition();
+
+        int pos = -1;
+
         LayoutInflater li = getLayoutInflater();
+        //buscando os dados do marcador
+        for (int i = 0; i < marcadores.size(); i++){
+            if(marcadores.get(i).getLatlng().latitude == posisao.latitude && marcadores.get(i).getLatlng().longitude == posisao.longitude){
+                pos = i;
+            }
+        }
+
+        Log.i("posicao", "Posição do marcador no mapa: " + posisao.latitude + " | " + posisao.longitude);
+        Log.i("posicao", "Posição do marcador: " + marcadores.get(pos).getLatlng().latitude + " | " + marcadores.get(pos).getLatlng().longitude);
 
         //inflamos o layout alerta.xml na view
         View view = li.inflate(R.layout.click_marcador, null);
+        ImageView imgDenuncia = (ImageView) view.findViewById(R.id.imgMarcador);
+
+        imgDenuncia.setImageDrawable(getDrawable(R.drawable.load));
+        TextView nomeDenuncia = (TextView) view.findViewById(R.id.nomeDenuncia);
+        nomeDenuncia.setText(marcadores.get(pos).getNome());
+
+        DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
+        img.execute(marcadores.get(pos).getMidia());
+        TextView descDenuncia = (TextView) view.findViewById(R.id.descDenuncia);
+        descDenuncia.setText(marcadores.get(pos).getDescricao());
+        TextView cordenadasDenuncia = (TextView) view.findViewById(R.id.cordenadas);
+
+        ImageView imgSituacao = (ImageView) view.findViewById(R.id.situacaoDenuncia);
+
+        if(marcadores.get(pos).getSituacao() == "pendente"){
+            //troca a imagem aqui de pendente
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
+        }else if(marcadores.get(pos).getSituacao() == "andamento"){
+            //Em andamento
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
+        }else{
+            //Concluido
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
+        }
+
+        cordenadasDenuncia.setText("Latitude: " + posisao.latitude + " Longitude: " + posisao.longitude);
+
 
         viewop.setView(view);
+
+
+
         viewop.setCancelable(false);
         viewop.setPositiveButton("Voltar", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -383,7 +474,20 @@ public class ActivityVisitante extends AppCompatActivity
             }
         });
         AlertDialog alert = viewop.create();
+
+
+
+
         alert.show();
+
+        /*capturando os textViews e imageViews
+        TextView nomeDenuncia = (TextView) findViewById(R.id.nomeDenuncia);
+
+
+        //alterando os dados na tela
+        nomeDenuncia.setText(marcadores.get(pos).getNome());
+        */
+
         return false;
     }
 }

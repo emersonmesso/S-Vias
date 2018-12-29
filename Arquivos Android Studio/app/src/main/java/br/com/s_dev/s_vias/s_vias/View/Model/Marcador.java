@@ -9,6 +9,16 @@ public class Marcador {
     private LatLng latlng;
     private String midia;
     private Cidadao cidadao;
+    private String situacao;
+
+
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
 
     public String getDescricao() {
         return descricao;

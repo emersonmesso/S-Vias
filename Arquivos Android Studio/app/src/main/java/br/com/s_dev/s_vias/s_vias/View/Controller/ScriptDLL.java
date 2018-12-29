@@ -62,6 +62,7 @@ public class ScriptDLL {
                 denuncia.setData(jsonObject.getString("data"));
                 denuncia.setDescricao(jsonObject.getString("desc"));
                 denuncia.setMidia(jsonObject.getString("img"));
+                denuncia.setSituacao(jsonObject.getString("sit"));
                 LatLng latLng = new LatLng(jsonObject.getDouble("lat"), jsonObject.getDouble("lng"));
                 denuncia.setLatlng(latLng);
                 denuncias.add(denuncia);

@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -29,8 +30,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-
-import java.io.IOException;
 
 import br.com.s_dev.s_vias.s_vias.R;
 import br.com.s_dev.s_vias.s_vias.View.Controller.HTTPRequest;
@@ -96,6 +95,7 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
 
 
     //verifica se o usuário está logado
+
 
     //Verifica se existe permissão do GPS
     private void perGPS(){
@@ -184,28 +184,35 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
     }
 
     private void verificaCadastro (String email){
-        ligin.setVisibility(View.VISIBLE);
+        ligin.setVisibility(View.INVISIBLE);
         HTTPRequest request = new HTTPRequest();
-            String dados = request.getDados("https://emersonmesso95.000webhostapp.com/_api/_apiVerificaLogin.php?email=" + email, "");
-            Log.i("dados", dados);
 
-            if(dados.equals("1")){
-                Log.i("dados", "ok");
-                Intent intent = new Intent(PreProcessamento.this,
-                        MainActivity.class);
-                startActivity(intent);
-                finish();
-            }else{
-                Log.i("dados", "Erro");
-                Intent intent = new Intent(PreProcessamento.this,
-                        Cadastro.class);
-                startActivity(intent);
-                finish();
-            }
+        String dados = request.getDados("https://emersonmesso95.000webhostapp.com/_api/_apiVerificaLogin.php?email=" + email, "");
+
+        Log.i("dados", dados);
+
+        if(dados.equals("1")){
+            Log.i("dados", "ok");
+            Intent intent = new Intent(PreProcessamento.this,
+                    MainActivity.class);
+            startActivity(intent);
+            finish();
+        }else if(dados.equals("0")){
+            Log.i("dados", "Erro");
+            Intent intent = new Intent(PreProcessamento.this,
+                    Cadastro.class);
+            startActivity(intent);
+            finish();
+        }else{
+            Toast.makeText(this, "Erro no banco de dados!", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
     public void visitante (View v){
         exibirProgress(true);
+
         Intent intent = new Intent(PreProcessamento.this,
                 ActivityVisitante.class);
         startActivity(intent);
