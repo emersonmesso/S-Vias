@@ -11,5 +11,7 @@ public class UtilAPP {
     public static final int CONNECTION_TIMEOUT = 10000;
     public static final int READ_TIMEOUT = 15000;
     public static String LINK_SERVIDOR = "http://emersonmesso95.000webhostapp.com/_api/";
+    public static String LINK_SERVIDOR_EMAIL = "http://emersonmesso95.000webhostapp.com/_api/_apiVerificaLogin.php?email=";
+    public static String LINK_SERVIDOR_CADASTRO = "http://emersonmesso95.000webhostapp.com/_api/cadastro.php?";
 
 }

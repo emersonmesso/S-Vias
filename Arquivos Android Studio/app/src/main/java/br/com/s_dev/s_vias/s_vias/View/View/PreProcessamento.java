@@ -17,8 +17,10 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -33,6 +35,7 @@ import com.google.android.gms.tasks.Task;
 
 import br.com.s_dev.s_vias.s_vias.R;
 import br.com.s_dev.s_vias.s_vias.View.Controller.HTTPRequest;
+import br.com.s_dev.s_vias.s_vias.View.Controller.UtilAPP;
 
 public class PreProcessamento extends AppCompatActivity implements LocationListener {
 
@@ -41,14 +44,13 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
     boolean ativoInt = false;
     static final int REQUEST_LOCATION = 1;
 
-    SignInButton buttonLogin;
+    AppCompatButton buttonLogin;
     LinearLayout ligin;
     LinearLayout carregando;
     GoogleSignInClient googleSignInClient;
     GoogleSignInOptions gso;
     int RC_SIGN_IN;
     ProgressBar mProgressBar;
-    private String provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +61,24 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
         ligin = (LinearLayout) findViewById(R.id.login);
         carregando = (LinearLayout) findViewById(R.id.carregando);
         ligin.setVisibility(View.GONE);
-        buttonLogin = (SignInButton) findViewById(R.id.sign_in_button);
-        buttonLogin.setSize(SignInButton.SIZE_STANDARD);
+        buttonLogin = (AppCompatButton) findViewById(R.id.sign_in_button);
+
         mProgressBar = (ProgressBar) findViewById(R.id.note_list_progress);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 singIn();
+            }
+        });
+
+        AppCompatButton cadastro = (AppCompatButton) findViewById(R.id.btnCadastro);
+        cadastro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PreProcessamento.this,
+                        Cadastro.class);
+                startActivity(intent);
             }
         });
 
@@ -187,7 +199,7 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
         ligin.setVisibility(View.INVISIBLE);
         HTTPRequest request = new HTTPRequest();
 
-        String dados = request.getDados("https://emersonmesso95.000webhostapp.com/_api/_apiVerificaLogin.php?email=" + email, "");
+        String dados = request.getDados(UtilAPP.LINK_SERVIDOR_EMAIL + email, "");
 
         Log.i("dados", dados);
 
