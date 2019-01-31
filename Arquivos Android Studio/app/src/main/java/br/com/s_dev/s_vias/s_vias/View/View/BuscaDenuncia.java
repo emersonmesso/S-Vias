@@ -180,10 +180,7 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
 
         cordenadasDenuncia.setText("Latitude: " + posisao.latitude + " Longitude: " + posisao.longitude);
 
-
         viewop.setView(view);
-
-
 
         viewop.setCancelable(false);
         viewop.setPositiveButton("Voltar", new DialogInterface.OnClickListener() {
@@ -196,10 +193,6 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
             }
         });
         AlertDialog alert = viewop.create();
-
-
-
-
         alert.show();
 
         return false;

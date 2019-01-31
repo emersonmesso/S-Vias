@@ -2,6 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'sistemassvias'
+            storeFile file('E:/android/Aplicativo/chaves.jks')
+            storePassword 'sistemassvias'
+        }
     }
     compileSdkVersion 28
     defaultConfig {
@@ -19,12 +25,14 @@ android {
             storePassword "password"
             keyAlias "my-alias"
             keyPassword "password"
+            v2SigningEnabled false
         }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     buildToolsVersion '28.0.3'
@@ -35,6 +43,7 @@ android {
 allprojects {
     repositories {
         google()
+        jcenter()
 
         // If you're using a version of Gradle lower than 4.1, you must instead use:
         // maven {
@@ -47,13 +56,12 @@ allprojects {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.google.android.gms:play-services-ads:17.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:design:28.0.0'
-
-
-
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     testImplementation 'junit:junit:4.12'

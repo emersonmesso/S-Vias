@@ -26,6 +26,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA3QyLr-_lg64XrY0AeKBQrUWxmuTzz5AI" />
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1846233707943905~6483000765"/>
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -51,6 +55,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".View.View.PreProcessamento"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".View.View.ActivityVisitante"
