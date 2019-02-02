@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBranco"
+    tools:context=".View.View.PreProcessamento">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="104dp"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:id="@+id/carregando"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Verificando Os Dados!"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:textAlignment="center">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="147dp"
+                android:textAlignment="center"
+                android:src="@drawable/icon" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:text="Bem Vindo Ao S-Vias" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="112dp"
+                android:backgroundTint="@color/colorAppBar"
+                android:onClick="visitante"
+                android:text="Entrar Com Minha Conta"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20dp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnVisitante"
+                android:layout_width="match_parent"
+                android:layout_height="112dp"
+                android:backgroundTint="@color/colorAppBar"
+                android:onClick="visitante"
+                android:text="Entrar Como Visitante"
+                android:textColor="@color/colorBranco"
+                android:textSize="20dp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnCadastro"
+                android:layout_width="match_parent"
+                android:layout_height="112dp"
+                android:backgroundTint="@color/colorAppBar"
+                android:onClick="visitante"
+                android:text="Cadastre-se"
+                android:textColor="@color/colorBranco"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="27dp">
+
+        <ProgressBar
+            android:id="@+id/note_list_progress"
+            android:layout_width="match_parent"
+            android:layout_height="112dp"
+            android:layout_gravity="center_vertical" />
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>
