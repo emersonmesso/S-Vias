@@ -14,7 +14,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="">
         <link type = "image/png" rel = "icon" href = "_images/Imagem2.png" id = "icone" />
-       <title>S-ViasSimple Map</title>
+       <title>S-Vias</title>
         <link rel="stylesheet" href="_styles/bootstrap.css">
         <link rel="stylesheet" href="_styles/modals.css"/>
         <link rel="stylesheet" href="_styles/main.css"/>
@@ -75,6 +75,11 @@
             }
             #menu > li {
                 padding-left: 5%;
+                color: #FACC2E;
+                background-color: black;
+            }
+            a, a:hover, a:active, a:link {
+               text-decoration: none;
             }
         </style>
     </head>
@@ -90,7 +95,7 @@
                     Centro de Convenções | Natal - RN| 25 e 26 de Julho&nbsp;2018 
                 </span> -->
             </a>
-            <input type="search" placeholder="  Pesquisar" style="width: 30%; height: 45px; margin-left: 20%; border-radius: 10px; border: none;" />
+            <input type="search" placeholder="Pesquisar" style="width: 30%; height: 45px; margin-left: 20%; border-radius: 10px; border: none; padding-left: 3%;" />
             <!-- Barra de navegação recolhível -->
             <button class="navbar-toggler border border-secondary" type="button" data-toggle="collapse" data-target="#navbar_site">
                 <div class="content-menu"></div>
@@ -103,13 +108,13 @@
             <!-- menu do site -->
             <div class="collapse navbar-collapse" id="navbar_site">
                 <ul class="menu" style="margin-left: 35%;"> 
-                    <li style="width: 120px;" class="border border-secondary py-2 rounded" onclick="window.location.assign('login.php');"> <!-- <li class="nav-item text-right"> -->
+                    <li style="width: 7vw;" class="border border-secondary py-2 rounded" onclick="window.location.assign('login.php');"> <!-- <li class="nav-item text-right"> -->
                         <p style="text-align: center;" ><a href="login.php">Login</a></p>
                     </li>
-                    <li style="width: 120px;" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
+                    <li style="width: 7vw;" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
                         <p style="text-align: center;"><a href="#">Sobre</a></p>
                     </li>
-                    <li style="width: 120px" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
+                    <li style="width: 7vw" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
                         <p style="text-align: center;"><a href="#">Help</a></p>
                     </li>
                 </ul>
