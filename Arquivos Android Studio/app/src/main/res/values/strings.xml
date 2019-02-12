@@ -9,4 +9,6 @@
     <string name="action_settings">Sair</string>
     <string name="title_activity_main">S-Vias</string>
     <string name="title_activity_visitante">S-Vias</string>
+    <string name="descSobre">O Aplicativo S-Vias foi criado para auxiliar prefeituras de cidades a controlar os problemas referentes à buracos nas vias da cidade!</string>
+    <string name="server_client_id">285181906247-t8ji9qos1delp9j3ff1cdttp0iknemrd.apps.googleusercontent.com</string>
 </resources>

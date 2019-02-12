@@ -6,11 +6,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_login"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/baseline_input_black_48"
             android:title="Entrar" />
         <item
             android:id="@+id/nav_cadastro"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/baseline_create_black_48"
             android:title="Cadastre-se" />
 
     </group>
@@ -19,11 +19,11 @@
         <menu>
             <item
                 android:id="@+id/nav_sobre"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/baseline_help_outline_black_48"
                 android:title="Sobre o Aplicativo" />
             <item
                 android:id="@+id/nav_empresa"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/baseline_info_black_48"
                 android:title="Sobre a Empresa" />
         </menu>
     </item>
