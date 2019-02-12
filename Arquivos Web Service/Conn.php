@@ -6,10 +6,10 @@
  * Data de modificação: 2018-12-21.
  */
 
-$servidor = '';
-$user = '';
+$servidor = 'localhost';
+$user = 'root';
 $pass = '';
-$database = '';
+$database = 'svias';
 
 global $conn;
 

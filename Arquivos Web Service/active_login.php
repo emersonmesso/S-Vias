@@ -3,44 +3,54 @@
 /*
  * Autor: Michael Dydean
  * Data de criação: 2018-12-21.
- * Data de modificação: 2018-12-21.
+ * Data de modificação: 2019-02-11.
  */
 
 if (isset($_POST['env'])) {//verificar código de autenticação incluso
-    $user = (!empty($_POST["nome_login_n"])) ? htmlspecialchars($_POST["nome_login_n"]) : "";
-    $pass = (!empty($_POST["pass_login_n"])) ? htmlspecialchars($_POST["pass_login_n"]) : "";
+    $email_n = (!empty($_POST["email_n"])) ? htmlspecialchars($_POST["email_n"]) : "";
+    $pass_n = (!empty($_POST["pass_n"])) ? htmlspecialchars($_POST["pass_n"]) : "";
 
-    if (strlen($user) < 3) {
-        header('Location: create_login.php');
+    if (strlen($email_n) < 3) {
+        echo "email inválido!";
+        // header('Location: create_email.php');
     }
 
-    if (strlen($pass) < 3) {
-        header('Location: create_login.php');
+    if (strlen($pass_n) < 3) {
+        echo "senha inválida!";
+        //header('Location: create_email.php');
     }
 }
 
 include './Conn.php';
+include './Cidadao.php';
+include './CidadaoDAO.php';
 
-if (isset($_POST['select-l']) === "Cid") {
+if ($_POST['select-l'] === "Cid") {
 
     $cidadao = new Cidadao();
-
-    $cidadao->set_login($login);
-    $cidadao->set_senha($senha);
-
     $cDao = new CidadaoDAO($conn);
 
-    if ($cDao->is_cidadao()) {
-        //acesso
-    } else {
-        //não acesso
-    }
-} else if (isset($_POST['select-l']) === "Inst") {
+   $cidadao->set_email($email_n);
+    $cidadao->set_senha($pass_n);
+
+    $cDao->set_cidadao($cidadao);
     
+    if($cDao->get_cidadao() == null) {
+        echo "null";
+    }
+
+    if ($cDao->is_cidadao()) {
+       header('Location: newEmptyPHP.php');
+    } else {
+        header('Location: login.php');
+    }
+    
+} /*else if (isset($_POST['select-l']) === "Inst") {
+
     $instituicao = new Instituicao();
 
-    $instituicao->set_login($login);
-    $instituicao->set_senha($senha);
+    $cidadao->set_email($email_n);
+    $cidadao->set_senha($pass_n);
 
     $cDao = new InstituicaoDAO($conn);
 
@@ -49,11 +59,11 @@ if (isset($_POST['select-l']) === "Cid") {
     } else {
         //não acesso
     }
-    
 } else {
-    header('Location: create_login.php');
+    echo "erro!<br/>";
+    //header('Location: create_email.php');
 }
-
+*/
 
 
 

@@ -121,11 +121,11 @@
                         </label>
                         <div id="content-login-c">
                             <p> 
-                                <input id="nome_login" name="nome_login_n" type="text" placeholder="Username or E-mail"/>
+                                <input id="nome_login" name="email_n" type="text" placeholder="Username or E-mail"/>
                             </p>
                             <br>
                             <p> 
-                                <input id="pass_login" name="pass_login_n" type="password" placeholder="Password" /> 
+                                <input id="pass_login" name="pass_n" type="password" placeholder="Password" /> 
                             </p>
                             <p> 
                                 <input name="env" type="submit" value="Entrar" />

@@ -9,7 +9,7 @@
 class Cidadao {
 
     var $nome;
-    var $login;
+    var $email;
     var $senha;
     var $cpf;
 
@@ -17,8 +17,8 @@ class Cidadao {
         return $this->nome;
     }
 
-    function get_login() {
-        return $this->login;
+    function get_email() {
+        return $this->email;
     }
 
     function get_senha() {
@@ -33,8 +33,8 @@ class Cidadao {
         $this->nome = $nome;
     }
 
-    function set_login($login) {
-        $this->login = $login;
+    function set_email($email) {
+        $this->email = $email;
     }
 
     function set_senha($senha) {

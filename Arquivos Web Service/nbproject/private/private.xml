@@ -5,7 +5,12 @@
         <group>
             <file>file:/C:/xampp/htdocs/S-Vias/Arquivos%20Web%20Service/index.php</file>
             <file>file:/C:/xampp/htdocs/S-Vias/Arquivos%20Web%20Service/_styles/login.css</file>
+            <file>file:/C:/xampp/htdocs/S-Vias/Arquivos%20Web%20Service/active_login.php</file>
+            <file>file:/C:/xampp/htdocs/S-Vias/Arquivos%20Web%20Service/newEmptyPHP.php</file>
+            <file>file:/C:/xampp/htdocs/S-Vias/Arquivos%20Web%20Service/Conn.php</file>
+            <file>file:/C:/xampp/htdocs/S-Vias/Arquivos%20Web%20Service/CidadaoDAO.php</file>
             <file>file:/C:/xampp/htdocs/S-Vias/Arquivos%20Web%20Service/login.php</file>
+            <file>file:/C:/xampp/htdocs/S-Vias/Arquivos%20Web%20Service/Cidadao.php</file>
         </group>
     </open-files>
 </project-private>
