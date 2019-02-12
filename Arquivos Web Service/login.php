@@ -2,7 +2,7 @@
 /*
  * Autor: Michael Dydean
  * Data de criação: 2018-12-07.
- * Data de modificação: 2018-12-21.
+ * Data de modificação: 2019-02-11.
  */
 ?>
 <!DOCTYPE html>
@@ -44,14 +44,14 @@
                 z-index: 3;
             }
             #login2{
-   background: #f7f7f7;
-    border: 1px solid rgba(147, 184, 189,0.8);
-    -webkit-box-shadow: 5px;
-    border-radius: 5px;
-      width: 50%;
-      margin-left: 25%;
-      padding: 5%;
-}
+                background: #f7f7f7;
+                border: 1px solid rgba(147, 184, 189,0.8);
+                -webkit-box-shadow: 5px;
+                border-radius: 5px;
+                width: 50%;
+                margin-left: 25%;
+                padding: 5%;
+            }
             footer {
                 padding-top: 5vh;
                 padding-bottom: 5vh;
@@ -72,14 +72,14 @@
 
             <!-- Select Login S-Vias | Google  -->
             <div class="row" style="padding-top: 5vh;">
-                 <div class="col col-3 border"></div>
+                <div class="col col-3 border"></div>
                 <div id="login1" class="col col-6">
                     <ul> 
                         <li id="l-svias" style="width: 100%; height: 8vh; margin-bottom: 5%; z-index: 2" class="border border-secondary py-2 rounded" 
                             onclick="document.getElementById('login1').style.display = 'none';
-                                window.location.assign('#login-svias');
-                                document
-                                        .getElementById('login-svias').style.display = 'block';">
+                                    window.location.assign('#login-svias');
+                                    document
+                                            .getElementById('login-svias').style.display = 'block';">
                             <p style="text-align: center;"><a href="#login-svias">Login S-Vias</a></p>
                         </li>
                         <li id="l-google" style="width: 100%; height: 8vh;  z-index: 2" class="border border-secondary py-2 rounded"> <!--onclick="document
@@ -91,14 +91,14 @@
                         </li>
                     </ul>
                 </div>
-                  <div class="col col-3 border"></div>
+                <div class="col col-3 border"></div>
             </div>
 
             <!-- Login S-Vias -->
             <div id="login-svias" class="row justify-content-center"> 
                 <!-- Login S-Vias -->
-               <div class="col col-12 border">
-                   <form id="login2" method="post" action="active_login.php"> 
+                <div class="col col-12 border">
+                    <form id="login2" method="post" action="active_login.php"> 
                         <script>
                             function changeSelect() {
                                 var obj = document.getElementById('select-login');
@@ -121,7 +121,7 @@
                         </label>
                         <div id="content-login-c">
                             <p> 
-                                <input id="nome_login" name="email_n" type="text" placeholder="Username or E-mail"/>
+                                <input id="nome_login" name="email_n" type="text" placeholder="Username or E-mail" autocomplete/>
                             </p>
                             <br>
                             <p> 
@@ -133,22 +133,22 @@
                         </div>
                         <div id="content-login-i">
                             <p> 
-                                <input id="cnpj" name="cnpj_n" type="text" placeholder="cnpj for institute"/>
+                                <input id="nome_login_i" name="email_n" type="text" placeholder="Username or E-mail"/>
                             </p>
                             <br>
                             <p> 
-                                <input id="pass_inst" name="pass_inst_n" type="password" placeholder="Password" /> 
+                                <input id="pass_login_i" name="pass_n" type="password" placeholder="Password" /> 
                             </p>
                             <p> 
                                 <input name="env" type="submit" value="Entrar" />
                             </p>
                         </div>
                     </form>
-                    </div>
+                </div>
             </div>
             <!-- footer site s-vias  -->
             <footer class="row" style="position: absolute; bottom: 0vh; width: 75%;">
-                 <hr/>
+                <hr/>
                 <div class="col col-4 border"></div>
                 <div class="col col-4 border">
                     <p style="font-size: 1vw; font-family: 'Arial', Gadget, sans-serif;">S-Vias 2018 | SDea Development</p>

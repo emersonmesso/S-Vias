@@ -3,7 +3,7 @@
 /*
  * Autor: Michael Dydean
  * Data de criação: 2018-12-21.
- * Data de modificação: 2019-02-11.
+ * Data de modificação: 2019-02-12.
  */
 
 if (isset($_POST['env'])) {//verificar código de autenticação incluso
@@ -30,40 +30,42 @@ if ($_POST['select-l'] === "Cid") {
     $cidadao = new Cidadao();
     $cDao = new CidadaoDAO($conn);
 
-   $cidadao->set_email($email_n);
-    $cidadao->set_senha($pass_n);
-
-    $cDao->set_cidadao($cidadao);
-    
-    if($cDao->get_cidadao() == null) {
-        echo "null";
-    }
-
-    if ($cDao->is_cidadao()) {
-       header('Location: newEmptyPHP.php');
-    } else {
-        header('Location: login.php');
-    }
-    
-} /*else if (isset($_POST['select-l']) === "Inst") {
-
-    $instituicao = new Instituicao();
-
     $cidadao->set_email($email_n);
     $cidadao->set_senha($pass_n);
 
-    $cDao = new InstituicaoDAO($conn);
+    $cDao->set_cidadao($cidadao);
 
-    if ($cDao->is_instituicao()) {
-        //acesso
+    if ($cDao->is_cidadao()) {
+        // header('Location: newEmptyPHP.php');
     } else {
-        //não acesso
+        echo '<script>'
+        . 'alert("Login inválido!"); '
+        . 'window.location.assign("login.php");'
+        . '</script>';
+        //header('Location: login.php');
+    }
+} else if (isset($_POST['select-l']) === "Inst") {
+
+    $instituicao = new Instituicao();
+    $iDao = new InstituicaoDAO($conn);
+
+    $instituicao->set_email($email_n);
+    $instituicao->set_senha($pass_n);
+
+    $iDao->set_instituicao($instituicao);
+
+    if ($iDao->is_instituicao()) {
+        // header('Location: newEmptyPHP.php');
+    } else {
+        echo '<script>'
+        . 'alert("Login inválido!"); '
+        . 'window.location.assign("login.php");'
+        . '</script>';
     }
 } else {
     echo "erro!<br/>";
     //header('Location: create_email.php');
 }
-*/
 
 
 

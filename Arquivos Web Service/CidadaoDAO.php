@@ -3,7 +3,7 @@
 /*
  * Autor: Michael Dydean
  * Data de criação: 2018-12-21.
- * Data de modificação: 2018-12-21.
+ * Data de modificação: 2019-02-11.
  */
 
 class CidadaoDAO {
@@ -42,33 +42,18 @@ class CidadaoDAO {
     }
 
     function get_cidadao() {
-       $query = "SELECT * FROM cidadao WHERE email = '$this->email'";
+
+        $query = "SELECT * FROM cidadao WHERE email = '$this->email'";
 
         $result = mysqli_query($this->conn, $query) or die("erro na pesquisa de posts!");
 
         $row = mysqli_num_rows($result);
 
-        if ($row > 0) {
-            $array = [];
-            while ($linha = mysqli_fetch_array($result)) {
-                
-                echo $linha;
-               echo count($linha);
-                
-                foreach($linha as $item) {
-                    $array[] = $item;
-                }
-            }
-             var_dump($array);
-            echo count($array);
-            return $array;
-        } else {
-           return NULL;
-        }
+        return $row;
     }
 
     function is_cidadao() {
-        return (count($this->get_cidadao()) > 4);
+        return $this->get_cidadao() === 1;
     }
 
     function delete() {
