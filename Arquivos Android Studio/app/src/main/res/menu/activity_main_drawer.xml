@@ -6,32 +6,24 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_singin"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Import" />
+            android:icon="@drawable/baseline_face_black_48"
+            android:title="Meu Perfil" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:icon="@drawable/baseline_list_black_48"
+            android:title="Minhas Denúncias" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Comunicação">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_sobre"
+                android:icon="@drawable/baseline_help_outline_black_48"
+                android:title="Sobre" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_empresa"
+                android:icon="@drawable/baseline_info_black_48"
+                android:title="Desenvolvedor" />
         </menu>
     </item>
 

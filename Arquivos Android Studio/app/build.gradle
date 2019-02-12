@@ -1,69 +1,38 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'key0'
-            keyPassword 'sistemassvias'
-            storeFile file('E:/android/Aplicativo/chaves.jks')
-            storePassword 'sistemassvias'
-        }
-    }
+
     compileSdkVersion 28
     defaultConfig {
-        applicationId "br.com.s_dev.s_vias.s_vias"
+        applicationId "com.sdev.svias"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 5
-        versionName '0.2.1'
+        versionCode 1
+        versionName '1.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionNameSuffix 'S-Vias Beta'
-    }
-    signingConfigs {
-        release {
-            storeFile file("my-release-key.jks")
-            storePassword "password"
-            keyAlias "my-alias"
-            keyPassword "password"
-            v2SigningEnabled false
-        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
         }
-    }
-    buildToolsVersion '28.0.3'
-    productFlavors {
-
-    }
-}
-allprojects {
-    repositories {
-        google()
-        jcenter()
-
-        // If you're using a version of Gradle lower than 4.1, you must instead use:
-        // maven {
-        //     url 'https://maven.google.com'
-        // }
-
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'de.hdodenhof:circleimageview:2.1.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.google.android.gms:play-services-ads:17.1.1'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'com.google.android.gms:play-services-ads:17.1.3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+
+    implementation 'com.loopj.android:android-async-http:1.4.9'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

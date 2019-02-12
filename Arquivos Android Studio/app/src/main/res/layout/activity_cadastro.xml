@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.View.Cadastro">
+    tools:context=".View.Cadastro">
 
 
     <LinearLayout
@@ -20,7 +20,6 @@
             android:orientation="vertical">
 
             <ImageView
-                android:src="@drawable/icon"
                 android:layout_width="match_parent"
                 android:layout_height="138dp" />
 
