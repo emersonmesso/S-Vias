@@ -36,7 +36,7 @@ if ($_POST['select-l'] === "Cid") {
     $cDao->set_cidadao($cidadao);
 
     if ($cDao->is_cidadao()) {
-        // header('Location: newEmptyPHP.php');
+        // header('Location: index.php');
     } else {
         echo '<script>'
         . 'alert("Login inválido!"); '
@@ -55,7 +55,7 @@ if ($_POST['select-l'] === "Cid") {
     $iDao->set_instituicao($instituicao);
 
     if ($iDao->is_instituicao()) {
-        // header('Location: newEmptyPHP.php');
+        // header('Location: index.php');
     } else {
         echo '<script>'
         . 'alert("Login inválido!"); '
@@ -63,8 +63,10 @@ if ($_POST['select-l'] === "Cid") {
         . '</script>';
     }
 } else {
-    echo "erro!<br/>";
-    //header('Location: create_email.php');
+  echo '<script>'
+        . 'alert("Dados inválido!"); '
+        . 'window.location.assign("login.php");'
+        . '</script>';
 }
 
 

@@ -2,7 +2,7 @@
 /*
  * Autor: Michael Dydean
  * Data de criação: 2018-12-07.
- * Data de modificação: 2019-02-11.
+ * Data de modificação: 2019-02-12.
  */
 ?>
 <!DOCTYPE html>
@@ -16,47 +16,6 @@
         <title>Login</title>
         <link rel="stylesheet" href="_styles/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="_styles/login.css" />
-
-        <style>
-            li {
-                list-style-type: none;
-            }
-            #login-svias {
-                display: none;
-            }
-            #content-login-i {
-                display: none;
-            }
-            #s-logo {
-                width: 40%; 
-                /*                align-items: center;
-                                flex-direction: row;
-                                flex-wrap: wrap;
-                                justify-content: center;
-                                display: flex;
-                */
-                width: 10%; 
-                position:absolute;
-                top:10%;
-                left:45%;
-                margin-top:-50px;
-                margin-left:-50px;
-                z-index: 3;
-            }
-            #login2{
-                background: #f7f7f7;
-                border: 1px solid rgba(147, 184, 189,0.8);
-                -webkit-box-shadow: 5px;
-                border-radius: 5px;
-                width: 50%;
-                margin-left: 25%;
-                padding: 5%;
-            }
-            footer {
-                padding-top: 5vh;
-                padding-bottom: 5vh;
-            }
-        </style>
     </head>
     <body>
         <div style="height: 100vh; padding-top: 5vh;" class="container">
@@ -72,7 +31,7 @@
 
             <!-- Select Login S-Vias | Google  -->
             <div class="row" style="padding-top: 5vh;">
-                <div class="col col-3 border"></div>
+                <div class="col col-3"></div>
                 <div id="login1" class="col col-6">
                     <ul> 
                         <li id="l-svias" style="width: 100%; height: 8vh; margin-bottom: 5%; z-index: 2" class="border border-secondary py-2 rounded" 
@@ -90,14 +49,15 @@
                             <p style="text-align: center;"><a href="#">Login Google</a></p>
                         </li>
                     </ul>
+                    <a class="link" href="create_profile.php">Não tenho conta</a>
                 </div>
-                <div class="col col-3 border"></div>
+                <div class="col col-3"></div>
             </div>
 
             <!-- Login S-Vias -->
             <div id="login-svias" class="row justify-content-center"> 
                 <!-- Login S-Vias -->
-                <div class="col col-12 border">
+                <div class="col col-12">
                     <form id="login2" method="post" action="active_login.php"> 
                         <script>
                             function changeSelect() {
@@ -143,18 +103,26 @@
                                 <input name="env" type="submit" value="Entrar" />
                             </p>
                         </div>
+                        <div class="group-link">
+                            <ul>
+                                <li>
+                                    <a class="link" style="width: 40%; margin-left: 5%; float: left; border-right: 1px solid #9e9e9e;" href="create_profile.php">Não tenho conta</a>
+                                    <a class="link" style="width: 40%; margin-left: 0%; margin-right: 5%; float: left; border-left: 1px solid rgba(100, 100, 100, 0.8);" href="recover_profile.php">Recuperar acesso</a>
+                                </li>
+                            </ul>
+                        </div>
                     </form>
                 </div>
             </div>
             <!-- footer site s-vias  -->
             <footer class="row" style="position: absolute; bottom: 0vh; width: 75%;">
                 <hr/>
-                <div class="col col-4 border"></div>
-                <div class="col col-4 border">
+                <div class="col col-4"></div>
+                <div class="col col-4">
                     <p style="font-size: 1vw; font-family: 'Arial', Gadget, sans-serif;">S-Vias 2018 | SDea Development</p>
                 </div>
                 <hr/>
-                <div class="col col-4 border"></div>
+                <div class="col col-4"></div>
                 <div class="col border">
                     <ul style="list-style-type: none;">
                         <li style="display: inline-block; margin-left: 1%;"><a href="index.php">Home</a></li>

@@ -1,3 +1,10 @@
+/*
+ * Autor: Michael Dydean
+ * Data de criação: 2018-12-07.
+ * Data de modificação: 2019-02-12.
+ */
+@charset "uft-8";
+
 .logo{
     width:50px;
     height: 50px;
@@ -8,20 +15,20 @@ body{
     background-repeat: no-repeat;
     z-index: 1;
 }
-.content{
+/*.content{
     width: 500px;
     min-height: 560px;    
     margin: 0px auto;
     position: relative;   
 
-}
+}*/
 p{
     margin-bottom:15px;
 }
 
-.content p:first-child{
+/*.content p:first-child{
     margin: 0px;
-}
+}*/
 
 ::-webkit-input-placeholder  {
     color: #bebcbc; 
@@ -67,13 +74,51 @@ input[type="submit"]{
 }
 
 #login1{
-    padding: 48px 8% 60px 0%;
+    padding: 48px 8% 60px 4%;
     background: #f7f7f7;
     border: 1px solid rgba(147, 184, 189,0.8);
     -webkit-box-shadow: 5px;
     border-radius: 5px;
 }
-
-
-
-
+li {
+    list-style-type: none;
+}
+#login-svias {
+    display: none;
+}
+#content-login-i {
+    display: none;
+}
+#s-logo {
+    width: 10%; 
+    position:absolute;
+    top:10%;
+    left:45%;
+    margin-top:-50px;
+    margin-left:-50px;
+    z-index: 3;
+}
+#login2{
+    background: #f7f7f7;
+    border: 1px solid rgba(147, 184, 189,0.8);
+    -webkit-box-shadow: 5px;
+    border-radius: 5px;
+    width: 50%;
+    margin-left: 25%;
+    padding: 5%;
+}
+footer {
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+}
+.link {
+    width: 40%;
+    margin-left: 35%;
+    text-decoration: #002752;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    display: flex;
+    font-size: 0.9em;
+}
