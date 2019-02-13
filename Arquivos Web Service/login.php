@@ -81,11 +81,11 @@
                         </label>
                         <div id="content-login-c">
                             <p> 
-                                <input id="nome_login" name="email_n" type="text" placeholder="Username or E-mail" autocomplete/>
+                                <input id="nome_login" name="email_n1" type="text" placeholder="Username or E-mail" autocomplete/>
                             </p>
                             <br>
                             <p> 
-                                <input id="pass_login" name="pass_n" type="password" placeholder="Password" /> 
+                                <input id="pass_login" name="pass_n1" type="password" placeholder="Password" /> 
                             </p>
                             <p> 
                                 <input name="env" type="submit" value="Entrar" />
@@ -93,11 +93,11 @@
                         </div>
                         <div id="content-login-i">
                             <p> 
-                                <input id="nome_login_i" name="email_n" type="text" placeholder="Username or E-mail"/>
+                                <input id="nome_login_i" name="email_n2" type="text" placeholder="Username or E-mail"/>
                             </p>
                             <br>
                             <p> 
-                                <input id="pass_login_i" name="pass_n" type="password" placeholder="Password" /> 
+                                <input id="pass_login_i" name="pass_n2" type="password" placeholder="Password" /> 
                             </p>
                             <p> 
                                 <input name="env" type="submit" value="Entrar" />
