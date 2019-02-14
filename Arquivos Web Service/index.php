@@ -2,7 +2,7 @@
 /*
  * Autor: Michael Dydean
  * Data de criação: 2018-12-07.
- * Data de modificação: 2019-02-13.
+ * Data de modificação: 2019-02-14.
  */
 ?>
 <!DOCTYPE html>
@@ -78,7 +78,7 @@
         <nav class="navbar navbar-expand-lg bg-menu">
             <!-- Logomarca -->
             <a class="navbar-brand" href="index.php" style="padding: 2%;">
-                <p style="position: absolute; top: 10%; left: 1%; z-index: 2; font-size: 1.3em; font-weight: 700;">S-Vias</p>
+                <p style="color: #212529;  position: absolute; top: 10%; left: 1%; z-index: 2; font-size: 1.3em; font-weight: 700;">S-Vias</p>
                 <image src="_images/Logo.png" id="logotipo"/>
                 <br/>
                 <!--<span class="lead" style="font-family: 'Libre Baskerville', serif; font-size: 0.9em;color:#888; font-weight:bold; margin-left: 0%; margin-top: 5px;">
