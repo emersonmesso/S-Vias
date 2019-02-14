@@ -3,21 +3,21 @@
 /*
  * Autor: Michael Dydean
  * Data de criação: 2018-12-21.
- * Data de modificação: 2018-12-21.
+ * Data de modificação: 2019-02-13.
  */
 
 class Denuncia {
 
-    var $cpf;
     var $titulo;
     var $desccricao;
     var $data;
-    var $local;
+    var $local = [];
     var $classificacao;
     var $status;
-
-    function get_cpf() {
-        return $this->cpf;
+    var $login;
+    
+    function get_login() {
+    return $this->login;    
     }
     
     function get_titulo() {
@@ -43,9 +43,9 @@ class Denuncia {
     function get_status() {
         return $this->status;
     }
-
-    function set_cpf($cpf) {
-        $this->cpf = $cpf;
+    
+    function set_login($login) {
+        $this->login = $login;
     }
     
     function set_titulo($titulo) {

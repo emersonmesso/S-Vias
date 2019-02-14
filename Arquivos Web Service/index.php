@@ -1,47 +1,23 @@
 <?php
-
 /*
  * Autor: Michael Dydean
  * Data de criação: 2018-12-07.
- * Data de modificação: 2018-12-21.
+ * Data de modificação: 2019-02-13.
  */
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-         <meta name="viewport" content="initial-scale=1.0">
+        <meta name="viewport" content="initial-scale=1.0">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="">
         <link type = "image/png" rel = "icon" href = "_images/Imagem2.png" id = "icone" />
-       <title>S-Vias</title>
+        <title>S-Vias</title>
         <link rel="stylesheet" href="_styles/bootstrap.css">
         <link rel="stylesheet" href="_styles/modals.css"/>
         <link rel="stylesheet" href="_styles/main.css"/>
         <style>
-            .info-marker h1 {
-                text-align: center;
-                font-size: 2em;
-                font-weight: bold;
-            }
-            .info-marker ul > li {
-                list-style: none;
-                font-size: 1em;
-            }
-            .info-marker ul > li > span {
-                font-weight: bold;
-            }
-
-            .info-aloc-marker h2 {
-                font-size: 1.2em;    
-            }
-            .info-aloc-marker ul > li {
-                list-style: none;
-                font-size: 1em;
-            }
-            .info-aloc-marker ul > li > span {
-                font-weight: normal;
-            }
             #menu-itens {
                 width: 50px;
                 height: 50px;
@@ -79,12 +55,26 @@
                 background-color: black;
             }
             a, a:hover, a:active, a:link {
-               text-decoration: none;
+                text-decoration: none;
+            }
+            .marker {
+                width: 15vw;
+                display: block;
+                border: 1px solid black;
+                padding: 1vw;
+            }
+            .marker h1 {
+                 text-align: center;
+                font-size: 2em;
+                font-weight: bold;
+                border-bottom: 1px solid #dedede;
+            }
+            .marker p {
+                padding-top: 2%;
             }
         </style>
     </head>
     <body>
-
         <nav class="navbar navbar-expand-lg bg-menu">
             <!-- Logomarca -->
             <a class="navbar-brand" href="index.php" style="padding: 2%;">
@@ -150,6 +140,8 @@
                 //mapa
                 var map = new google.maps.Map(document.getElementById('map'), options);
 
+              //  addMarker({lat: -8.08180257518267, lng: -39.253463977233696});
+
                 /**
                  * O código abaixo é uma função que adiciona os marcadores no, por meio do evento click.
                  
@@ -169,17 +161,28 @@
                  /*código para recarregar a página
                  
                  // location.reload(true);//false - pagina em cache, true - pagina do servidor
-<?php
-/* código para recarregar a página */
-
-//header("Refresh: 0");
-//header("Refresh: 0; url=index.php");
-//header('Location: index.php');
-?>
                  
                  });
                  **/
+<?php
+include './Conn.php';
+include './Denuncia.php';
+include './DenunciaDAO.php';
 
+$denuncia = new Denuncia();
+$dDao = new DenunciaDAO($conn);
+
+$a = $dDao->get_denuncias();
+
+foreach ($a as $linha) {
+    
+    echo ""
+    . "addMarker({lat: $linha[5], lng: $linha[6]}, '<div class=\"marker\"><h1>$linha[2]</h1><p>$linha[3]</p></div>');";
+//    for($i = 0; $i < (count($linha) / 2); $i ++) {
+//echo $linha[$i] . "<br/>";
+//    }
+}
+?>
                 //função adicionar marcadores
                 function addMarker(coords, info) {
                     this.coords = coords;
@@ -188,7 +191,7 @@
                             {
                                 position: coords,
                                 map: map,
-                                icon: '_images/server.png'
+                                icon: '_images/marker_icon.png'
                             });
                     //janelas de informações
                     var infoWindow = new google.maps.InfoWindow({
