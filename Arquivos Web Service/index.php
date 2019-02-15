@@ -64,7 +64,7 @@
                 padding: 1vw;
             }
             .marker h1 {
-                 text-align: center;
+                text-align: center;
                 font-size: 2em;
                 font-weight: bold;
                 border-bottom: 1px solid #dedede;
@@ -85,7 +85,10 @@
                     Centro de Convenções | Natal - RN| 25 e 26 de Julho&nbsp;2018 
                 </span> -->
             </a>
-            <input type="search" placeholder="Pesquisar" style="width: 30%; height: 5vh; margin-left: 20%; border-radius: 10px; border: none; padding-left: 3%;" />
+            <form action="login.php"></form>
+            <input name="search" type="search" placeholder="Pesquisar" style="width: 30%; height: 5vh; margin-left: 20%; border-radius: 10px; border: none; padding-left: 3%; z-index: 2;"/>
+            <button style="border: none; margin-left: -3vw; margin-top: 0vh; width: 35px; height: 35px; z-index: 3; background: url('./_images/pesq.png') no-repeat; cursor: pointer;" formmethod="post" formaction="result_search.php" value=" ">
+            </button>
             <!-- Barra de navegação recolhível -->
             <button class="navbar-toggler border border-secondary" type="button" data-toggle="collapse" data-target="#navbar_site">
                 <div class="content-menu"></div>
@@ -140,7 +143,7 @@
                 //mapa
                 var map = new google.maps.Map(document.getElementById('map'), options);
 
-              //  addMarker({lat: -8.08180257518267, lng: -39.253463977233696});
+                //  addMarker({lat: -8.08180257518267, lng: -39.253463977233696});
 
                 /**
                  * O código abaixo é uma função que adiciona os marcadores no, por meio do evento click.
@@ -175,7 +178,7 @@ $dDao = new DenunciaDAO($conn);
 $a = $dDao->get_denuncias();
 
 foreach ($a as $linha) {
-    
+
     echo ""
     . "addMarker({lat: $linha[5], lng: $linha[6]}, '<div class=\"marker\"><h1>$linha[2]</h1><p>$linha[3]</p></div>');";
 //    for($i = 0; $i < (count($linha) / 2); $i ++) {

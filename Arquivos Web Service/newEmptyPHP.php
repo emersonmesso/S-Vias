@@ -23,7 +23,7 @@ session_start(); //inicia a sessão
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link rel="stylesheet" href="_styles/bootstrap.css">
             <style>
-                  #map {
+                #map {
                     height: 100%;
                 }
                 /* Optional: Makes the sample page fill the window. */
@@ -43,7 +43,7 @@ session_start(); //inicia a sessão
                     border-radius: 8px;
                     box-shadow: 2px 2px 3px #3a3a3a;
                 }
-            #logotipo {
+                #logotipo {
                     width: 130px;
                     height: 70px;
                     display: block;
@@ -133,7 +133,7 @@ session_start(); //inicia a sessão
                     display: block;
                 }
                 #nav1 {
-                                        padding: 5px 11px 5px 15px;
+                    padding: 5px 11px 5px 15px;
                 }
                 #nav2 {
                     padding: 5px 11px 5px 15px;
@@ -227,7 +227,9 @@ session_start(); //inicia a sessão
                         Centro de Convenções | Natal - RN| 25 e 26 de Julho&nbsp;2018 
                     </span> -->
                 </a>
-                <input type="search" placeholder="Pesquisar" style="position: fixed; width: 30%; height: 5vh; margin-left: 25%; border-radius: 10px; border: none; padding-left: 3%;" />
+                <input name="search" type="search" placeholder="Pesquisar" style="position: fixed; width: 30%; height: 5vh; margin-left: 25%; border-radius: 10px; border: none; padding-left: 3%; z-index: 2;" />
+            <button style="position: fixed; border: none; margin-left: 52%; margin-top: 0vh; width: 35px; height: 35px; background: url('./_images/pesq.png') no-repeat; z-index: 3; cursor: pointer;" formmethod="post" formaction="result_search.php" value=" ">
+            </button>
                 <!-- Barra de navegação recolhível -->
                 <!--                <nav id='nav1' class='nav-btn' title="Abrir" onclick='slidetoggle()'>
                                     <div></div>
@@ -255,7 +257,6 @@ session_start(); //inicia a sessão
                         <br/>
                         <br/>
                         <ul>
-                            <li>pesquisa</li>
                             <li>gerenciar denuncias</li>
                             <li>conta</li>
                             <li><a href="logout.php">logout</a></li>
@@ -263,7 +264,130 @@ session_start(); //inicia a sessão
                     </section>
                 </div>
             </aside>
+            <div id="add"></div>
+            <div id="map"></div>
+
+            <script>
+                setInterval(function () {
+                    window.location.reload();//reload em 5 minutos
+                }, 300000);
+
+                var map;
+                var coords;
+                var contClick = 1;
+                var coord1, coord2;
+                var center = {
+                }
+
+                function initMap() {
+                    //opções
+                    var options = {
+                        zoom: 13,
+                        center: {
+                            lat: -8.0725, lng: -39.1268 //posição inicial no mapa
+                        }
+                    }
+
+                    //mapa
+                    var map = new google.maps.Map(document.getElementById('map'), options);
+
+                    //  addMarker({lat: -8.08180257518267, lng: -39.253463977233696});
+
+                    /**
+                     * O código abaixo é uma função que adiciona os marcadores no, por meio do evento click.
+                     
+                     google.maps.event.addListener(map, 'click', function (event) {
+                     
+                     var coords = event.latLng;
+                     var lat = coords.lat();
+                     var lng = coords.lng();
+                     
+                     alert('posso adicionar informações do servidor nesse momento!!!');
+                     addMarker(coords);
+                     enviarCoords("lat:" + lat + ",lng:" + lng);
+                     //capturar as cordenadas a partir do 'event.latLng'
+                     
+                     window.location.assign('index.php');
+                     
+                     /*código para recarregar a página
+                     
+                     // location.reload(true);//false - pagina em cache, true - pagina do servidor
+                     
+                     });
+                     **/
+    <?php
+    include './Conn.php';
+    include './Denuncia.php';
+    include './DenunciaDAO.php';
+
+    $denuncia = new Denuncia();
+    $dDao = new DenunciaDAO($conn);
+
+    $a = $dDao->get_denuncias();
+
+    foreach ($a as $linha) {
+
+        echo ""
+        . "addMarker({lat: $linha[5], lng: $linha[6]}, '<div class=\"marker\"><h1>$linha[2]</h1><p>$linha[3]</p></div>');";
+//    for($i = 0; $i < (count($linha) / 2); $i ++) {
+//echo $linha[$i] . "<br/>";
+//    }
+    }
+    ?>
+                    //função adicionar marcadores
+                    function addMarker(coords, info) {
+                        this.coords = coords;
+                        //marcadores
+                        var marker = new google.maps.Marker(
+                                {
+                                    position: coords,
+                                    map: map,
+                                    icon: '_images/marker_icon.png'
+                                });
+                        //janelas de informações
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: info
+                        });
+                        //eventos
+                        marker.addListener('click', function () {
+                            addLink(marker.getPosition());
+
+                        });
+                        marker.addListener('mouseover', function () {
+                            infoWindow.open(map, marker)
+                        });
+                        marker.addListener('mouseout', function () {
+                            infoWindow.close()
+                        });
+                        /*
+                         * A função de arrastar o marcador será desativada, pois se faz
+                         * necessário implementar um código para atualizar a nova coordenada
+                         * do marcador no 'arquivo de coordenadas'.
+                         
+                         marker.setDraggable(true);
+                         */
+                    }
+
+                }
+
+            </script>
+
+            <script asyn defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDaFKMowME4EWRAPFmRUwp-kTu1ndQ3JM&callback=initMap" async defer></script>
+
+            <!-- scripts embarcados -->
+            <script src="_scripts/jquery.js"></script>
+            <script src="_scripts/popper.js"></script>
+            <script src="_scripts/bootstrap.js"></script>
             <script src="_scripts/globaldoc_js.js"></script>
+
+            <footer style="padding-top: 1%; margin-left: 65%;">
+                <p style="float: left;margin-right: 1%;">S-Vias 2018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</p>
+                <ul style="list-style-type: none;">
+                    <li style="display: inline-block; margin-left: 1%;"><a href="login.php">Login</a></li>
+                    <li style="display: inline-block; margin-left: 1%;">Sobre</li>
+                    <li style="display: inline-block; margin-left: 1%;">Ajuda</li>
+                </ul>
+            </footer>
         </body>
     </html>
 <?php else: ?>
