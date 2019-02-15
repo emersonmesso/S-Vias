@@ -49,13 +49,3 @@ li:hover {
 .bg-menu {
 	background: #FEDC00 linear-gradient(180deg, #FACC2E, #FEDC00) repeat-x !important;
 }
-#modal-insert-coords h1, #modal-form-upload h1{
-    padding-top: 5vh;
-    color: rgb(140, 140, 140);
-    font-size: 1.5em;
-    font-weight: 700;
-    text-align: center;
-}
-#form-coords, #form-upload {
-    padding: 30px;
-}

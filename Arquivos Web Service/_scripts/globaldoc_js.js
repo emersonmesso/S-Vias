@@ -108,10 +108,11 @@ function noSlideToggle() {
 }
 /*Código da página*/
 var id;
-window.onload = function () {
-    id = setInterval(noSlideToggle, 8000);
-
-};
+//atualiza a página e executa o métodos 'noSlideToggle'
+//window.onload = function () {
+//    id = setInterval(noSlideToggle, 80000);
+//
+//};
 document.body.onresize = function () {
     noSlideToggle();
 //    location.reload(true);//Reloads the current page from the server

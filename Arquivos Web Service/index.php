@@ -85,7 +85,7 @@
                     Centro de Convenções | Natal - RN| 25 e 26 de Julho&nbsp;2018 
                 </span> -->
             </a>
-            <input type="search" placeholder="Pesquisar" style="width: 30%; height: 45px; margin-left: 20%; border-radius: 10px; border: none; padding-left: 3%;" />
+            <input type="search" placeholder="Pesquisar" style="width: 30%; height: 5vh; margin-left: 20%; border-radius: 10px; border: none; padding-left: 3%;" />
             <!-- Barra de navegação recolhível -->
             <button class="navbar-toggler border border-secondary" type="button" data-toggle="collapse" data-target="#navbar_site">
                 <div class="content-menu"></div>
@@ -97,14 +97,14 @@
             </button>
             <!-- menu do site -->
             <div class="collapse navbar-collapse" id="navbar_site">
-                <ul class="menu" style="margin-left: 35%;"> 
-                    <li style="width: 7vw;" class="border border-secondary py-2 rounded" onclick="window.location.assign('login.php');"> <!-- <li class="nav-item text-right"> -->
+                <ul class="menu" style="margin-left: 20%;"> 
+                    <li style="width: 9vw;" class="border border-secondary py-2 rounded" onclick="window.location.assign('login.php');"> <!-- <li class="nav-item text-right"> -->
                         <p style="text-align: center;" ><a href="login.php">Login</a></p>
                     </li>
-                    <li style="width: 7vw;" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
+                    <li style="width: 9vw;" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
                         <p style="text-align: center;"><a href="#">Sobre</a></p>
                     </li>
-                    <li style="width: 7vw" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
+                    <li style="width: 9vw" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
                         <p style="text-align: center;"><a href="#">Help</a></p>
                     </li>
                 </ul>

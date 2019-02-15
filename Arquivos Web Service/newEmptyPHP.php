@@ -22,9 +22,8 @@ session_start(); //inicia a sessão
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link rel="stylesheet" href="_styles/bootstrap.css">
-            <link rel="stylesheet" href="_styles/modals.css"/>
             <style>
-                #map {
+                  #map {
                     height: 100%;
                 }
                 /* Optional: Makes the sample page fill the window. */
@@ -35,18 +34,7 @@ session_start(); //inicia a sessão
                 }
                 .bg-menu {
                     background: #FEDC00 linear-gradient(180deg, #FACC2E, #FEDC00) repeat-x !important;
-                }
-                #modal-insert-coords h1, #modal-form-upload h1{
-                    padding-top: 5vh;
-                    color: rgb(140, 140, 140);
-                    font-size: 1.5em;
-                    font-weight: 700;
-                    text-align: center;
-                }
-                #form-coords, #form-upload {
-                    padding: 30px;
-                }
-                #menu-itens {
+                }    #menu-itens {
                     width: 50px;
                     height: 50px;
                     display: block;
@@ -55,16 +43,7 @@ session_start(); //inicia a sessão
                     border-radius: 8px;
                     box-shadow: 2px 2px 3px #3a3a3a;
                 }
-                .content-menu {
-                    width: 40px;
-                    height: 2px;
-                    display: block;
-                    background: #828a91;
-                    margin-top: 6px;
-                    margin-left: auto;
-                    margin-right: auto;
-                }
-                #logotipo {
+            #logotipo {
                     width: 130px;
                     height: 70px;
                     display: block;
@@ -129,7 +108,7 @@ session_start(); //inicia a sessão
                     top: 7vh;
                 }
                 #nav1 > div {
-                    height: 0.5vh;
+                    /*                    height: 0.3vh;*/
                 }
                 #nav-slide {
                     top: 13%;
@@ -148,19 +127,15 @@ session_start(); //inicia a sessão
                     border: 1px solid #bababa;
                     border-radius: 2px;
                     cursor: pointer;
-                    background-color: #fff;
+                    background: #FACC2E;
                     transition: all 0.4s linear;
                     z-index: 11;
                     display: block;
                 }
                 #nav1 {
-                    width: 4vw;
-                    height: 6vh;
-                    padding: 5px 11px 5px 15px;
+                                        padding: 5px 11px 5px 15px;
                 }
                 #nav2 {
-                    width: 4vw;
-                    height: 6vh;
                     padding: 5px 11px 5px 15px;
                     display: none;
                 }
@@ -171,9 +146,9 @@ session_start(); //inicia a sessão
                     border: #0061f2 1px solid;
                 }
                 #nav1 > div {
-                    width: 90%;
-                    background: #dcdcdc;
-                    margin: 6px 0px;
+                    /*                    width: 90%;
+                                        background: #dcdcdc;
+                                        margin: 6px 0px;*/
                     transition: all 0.4s linear;
                 }
                 #nav1:hover div {
@@ -186,6 +161,7 @@ session_start(); //inicia a sessão
                     transition: all 0.4s linear;
                 }
                 #nav-slide {
+                    top: 0px;
                     position: absolute;
                     right:-25vw;
                     width: 0px;
@@ -199,7 +175,7 @@ session_start(); //inicia a sessão
                 }
                 #sessao_links {
                     margin-left: 75vw;
-                    width: 25vw;
+                    width: 35vw;
                     padding: 0%;
                     padding-right: 1.5%;
                     opacity: 1;
@@ -210,6 +186,8 @@ session_start(); //inicia a sessão
                     -user-select: none;
                 }
                 #sessao_links > ul {
+                    top: 20vh;
+                    position: absolute;
                     padding: 0%;
                     margin: 0%;
                     text-transform: uppercase;
@@ -227,12 +205,19 @@ session_start(); //inicia a sessão
                     border: 2px solid #ddd;
                     color: black;
                 }
+                .content-menu {
+                    width: 40px;
+                    height: 2px;
+                    display: block;
+                    background: #828a91;
+                    margin-top: 6px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
             </style>
         </head>
         <body>
-
-
-            <nav class="navbar navbar-expand-lg bg-menu">
+            <nav style="z-index: 8;" class="navbar navbar-expand-lg bg-menu">
                 <!-- Logomarca -->
                 <a class="navbar-brand" href="index.php" style="padding: 2%;">
                     <p style="color: #212529; position: absolute; top: 10%; left: 1%; z-index: 2; font-size: 1.3em; font-weight: 700;">S-Vias</p>
@@ -242,16 +227,26 @@ session_start(); //inicia a sessão
                         Centro de Convenções | Natal - RN| 25 e 26 de Julho&nbsp;2018 
                     </span> -->
                 </a>
-                <input type="search" placeholder="Pesquisar" style="width: 30%; height: 45px; margin-left: 20%; border-radius: 10px; border: none; padding-left: 3%;" />
+                <input type="search" placeholder="Pesquisar" style="position: fixed; width: 30%; height: 5vh; margin-left: 25%; border-radius: 10px; border: none; padding-left: 3%;" />
                 <!-- Barra de navegação recolhível -->
-                <nav id='nav1' class='nav-btn' title="Abrir" onclick='slidetoggle()'>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </nav>
-                <nav id='nav2' class='nav-btn' onclick='slidetoggle()'>
+                <!--                <nav id='nav1' class='nav-btn' title="Abrir" onclick='slidetoggle()'>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </nav>-->
+                <button id="nav1" class="nav-btn border border-secondary" type="button" title="Abrir" onclick='slidetoggle()'>
+                    <div class="content-menu"></div>
+                    <div class="content-menu"></div>
+                    <div class="content-menu"></div>
+                    <div class="content-menu"></div>
+                    <div style="background: none; margin-top: 4px;" class="content-menu"></div>
+                </button>
+                <!--                <nav id='nav2' class='nav-btn' onclick='slidetoggle()'>
+                                    <img id='icone_fechar' src='_images/close.png' alt="Fechar" title='Fechar' draggable="false"/>
+                                </nav>-->
+                <button id="nav2" class="nav-btn border border-secondary" type="button" title="Abrir" onclick='slidetoggle()'>
                     <img id='icone_fechar' src='_images/close.png' alt="Fechar" title='Fechar' draggable="false"/>
-                </nav>
+                </button>
             </nav>
 
             <aside id='nav-slide'>

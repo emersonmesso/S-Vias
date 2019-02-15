@@ -59,7 +59,7 @@ input{
 input[type="submit"]{
     width: 100%!important;
     cursor: pointer;  
-    background: yellow;
+    background: #FACC2E;
     padding: 8px 5px;
     color: black;
     font-size: 20px;  
