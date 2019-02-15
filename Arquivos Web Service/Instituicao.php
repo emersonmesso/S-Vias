@@ -13,7 +13,71 @@ class Instituicao {
     var $senha;
     var $end;
     var $email;
+    var $cnpj;
+    var $num_ende;
+    var $cidade;
+    var $cep;
+    var $bairro;
+    var $uf;
+    
+    
+    function getCnpj() {
+        return $this->cnpj;
+    }
 
+    function getNum_ende() {
+        return $this->num_ende;
+    }
+
+    function getCidade() {
+        return $this->cidade;
+    }
+
+    function getCep() {
+        return $this->cep;
+    }
+
+    function getBairro() {
+        return $this->bairro;
+    }
+
+    function getUf() {
+        return $this->uf;
+    }
+
+    function setCnpj($cnpj) {
+        $this->cnpj = $cnpj;
+    }
+
+    function setNum_ende($num_ende) {
+        $this->num_ende = $num_ende;
+    }
+
+    function setCidade($cidade) {
+        $this->cidade = $cidade;
+    }
+
+    function setCep($cep) {
+        $this->cep = $cep;
+    }
+
+    function setBairro($bairro) {
+        $this->bairro = $bairro;
+    }
+
+    function setUf($uf) {
+        $this->uf = $uf;
+    }
+    
+    function getEnd() {
+        return $this->end;
+    }
+
+    function setEnd($end) {
+        $this->end = $end;
+    }
+
+    
     function get_r_social() {
         return $this->r_social;
     }

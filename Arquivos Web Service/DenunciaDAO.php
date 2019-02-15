@@ -47,11 +47,17 @@ class DenunciaDAO {
         mysqli_refresh($this->conn, mysqli_query($this->conn, $query) or die("erro ao inserir os dados na tabela endereco!"));
     }
 
+<<<<<<< HEAD
     function get_denuncia($termo) {
         
         $query = "SELECT * FROM denuncia WHERE titulo LIKE '%$termo%' or descricao LIKE '%$termo%' or /*data LIKE '%$buscar%' or*/ lati LIKE '%$termo%' or lng LIKE '%$termo%'";
        
                 $result = mysqli_query($this->conn, $query) or die("erro na pesquisa de posts!");
+=======
+    function get_denuncia() {
+        $query = "SELECT * FROM denuncia WHERE titulo = '$this->titulo'";
+        $result = mysqli_query($this->conn, $query) or die("erro na pesquisa de posts!");
+>>>>>>> 6a0bae476f60ae12741d80deb5c4cc9286c766a1
 
         $row = mysqli_num_rows($result);
 
