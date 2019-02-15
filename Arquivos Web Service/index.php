@@ -98,13 +98,13 @@
             <!-- menu do site -->
             <div class="collapse navbar-collapse" id="navbar_site">
                 <ul class="menu" style="margin-left: 20%;"> 
-                    <li style="width: 9vw;" class="border border-secondary py-2 rounded" onclick="window.location.assign('login.php');"> <!-- <li class="nav-item text-right"> -->
+                    <li style="width: 9vw; cursor: pointer;" class="border border-secondary py-2 rounded" onclick="window.location.assign('login.php');"> <!-- <li class="nav-item text-right"> -->
                         <p style="text-align: center;" ><a href="login.php">Login</a></p>
                     </li>
-                    <li style="width: 9vw;" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
+                    <li style="width: 9vw; cursor: pointer;" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
                         <p style="text-align: center;"><a href="#">Sobre</a></p>
                     </li>
-                    <li style="width: 9vw" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
+                    <li style="width: 9vw; cursor: pointer;" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
                         <p style="text-align: center;"><a href="#">Help</a></p>
                     </li>
                 </ul>
@@ -228,7 +228,7 @@ foreach ($a as $linha) {
         <script src="_scripts/popper.js"></script>
         <script src="_scripts/bootstrap.js"></script>
 
-        <footer style="padding-top: 1%; margin-left: 65%;">
+        <footer style="padding-top: 1%; margin-left: 65%; width: 80%; position: fixed; bottom: 0px;">
             <p style="float: left;margin-right: 1%;">S-Vias 2018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</p>
             <ul style="list-style-type: none;">
                 <li style="display: inline-block; margin-left: 1%;"><a href="login.php">Login</a></li>

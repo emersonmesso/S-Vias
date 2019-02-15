@@ -139,6 +139,7 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
         provider = locationManager.getBestProvider(criteria, false);
         minhaLocalizacao = locationManager.getLastKnownLocation(provider);
         if (minhaLocalizacao != null) {
+            onResume();
             onLocationChanged(minhaLocalizacao);
         }
 
@@ -174,6 +175,10 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
                 Parametro p = new Parametro("",nome, CEP,desc,personEmail, minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude(), UtilAPP.LINK_SERVIDOR_CADASTRO_DENUCIA);
                 CadastraInfo envia = new CadastraInfo(p, imageBitmap);
                 envia.execute();
+            }else{
+                //Não tem Imagem
+                Toast.makeText(getApplicationContext(), "Selecione Uma Imagem", Toast.LENGTH_LONG).show();
+                exibirProgress(true);
             }
             }
         });

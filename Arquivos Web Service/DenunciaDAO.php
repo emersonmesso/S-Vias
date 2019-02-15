@@ -49,7 +49,6 @@ class DenunciaDAO {
 
     function get_denuncia() {
         $query = "SELECT * FROM denuncia WHERE titulo = '$this->titulo'";
-
         $result = mysqli_query($this->conn, $query) or die("erro na pesquisa de posts!");
 
         $row = mysqli_num_rows($result);

@@ -14,6 +14,12 @@ class InstituicaoDAO {
     var $email;
     var $end;
     var $conn;
+    var $cidade;
+    var $num_ende;
+    var $uf;
+    var $cep;
+    var $cnpj;
+    var $bairro;
 
     function __construct($conexao) {
         $this->conn = $conexao;
@@ -23,16 +29,21 @@ class InstituicaoDAO {
         $this->r_social = $instituicao->get_r_social();
         $this->telefone = $instituicao->get_telefone();
         $this->senha = $instituicao->get_senha();
-        $this->end = $instituicao->get_end();
+        $this->end = $instituicao->getEnd();
         $this->email = $instituicao->get_email();
+        $this->cidade = $instituicao->getCidade();
+        $this->cnpj = $instituicao->getCnpj();
+        $this->num_ende = $instituicao->getNum_ende();
+        $this->uf = $instituicao->getUf();
+        $this->cep = $instituicao->getCep();
+        $this->bairro = $instituicao->getBairro();
     }
 
     //falta adicionar o campo endereco
     function insert_instituicao() {
 
-        $query = "INSERT INTO instituicao(razao_social, senha, telefone, email)"
-                . " VALUES('$this->r_social', '$this->senha', '$this->telefone', '$this->email')";
-
+        $query = "INSERT INTO instituicao(razao_social, cnpj, endereco, num_ende, bairro, cidade, uf, senha, telefone, email, cep)"
+                . " VALUES('$this->r_social', '$this->cnpj', '$this->end', '$this->num_ende', '$this->bairro', '$this->cidade', '$this->uf', '$this->senha', '$this->telefone', '$this->email', '$this->cep')";
         mysqli_refresh($this->conn, mysqli_query($this->conn, $query) or die("erro ao inserir os dados na tabela endereco!"));
     }
 

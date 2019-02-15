@@ -38,6 +38,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -156,16 +157,12 @@ public class MainActivity extends AppCompatActivity
         googleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount acc = GoogleSignIn.getLastSignedInAccount(this);
 
-
-
         if(acc != null){
             personName = acc.getDisplayName();
             personEmail = acc.getEmail();
             personPhoto = acc.getPhotoUrl();
         }
         //
-
-
 
         /*ANUNCIOS*/
 
@@ -182,7 +179,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
-                Toast.makeText(getApplicationContext(), "Anúncio Atualizado !", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -432,7 +428,6 @@ public class MainActivity extends AppCompatActivity
 
     //
     public Bitmap DownloadImage(String pURL){
-
         StrictMode.ThreadPolicy vPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(vPolicy);
 
@@ -512,6 +507,7 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "GPS Ativado " + provider,
                 Toast.LENGTH_SHORT).show();
         onLocationChanged(minhaLocalizacao);
+        onResume();
     }
 
     @Override
@@ -525,7 +521,6 @@ public class MainActivity extends AppCompatActivity
         final AlertDialog.Builder viewop = new AlertDialog.Builder(this);
 
         LatLng posisao = marker.getPosition();
-
         int pos = -1;
 
         LayoutInflater li = getLayoutInflater();
@@ -540,12 +535,22 @@ public class MainActivity extends AppCompatActivity
         View view = li.inflate(R.layout.click_marcador, null);
         ImageView imgDenuncia = (ImageView) view.findViewById(R.id.imgMarcador);
 
-        imgDenuncia.setImageDrawable(getDrawable(R.drawable.load));
+        Glide.with(view).load(R.drawable.load).into(imgDenuncia);
         TextView nomeDenuncia = (TextView) view.findViewById(R.id.nomeDenuncia);
         nomeDenuncia.setText(marcadores.get(pos).getNome());
 
         DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
         img.execute(marcadores.get(pos).getMidia());
+
+        imgDenuncia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
         TextView descDenuncia = (TextView) view.findViewById(R.id.descDenuncia);
         descDenuncia.setText(marcadores.get(pos).getDescricao());
         TextView cordenadasDenuncia = (TextView) view.findViewById(R.id.cordenadas);
@@ -554,10 +559,10 @@ public class MainActivity extends AppCompatActivity
 
         if(marcadores.get(pos).getSituacao().equals("Pendente" )){
             //troca a imagem aqui de pendente
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.vermelho));
         }else if(marcadores.get(pos).getSituacao().equals("Em Progresso" )){
             //Em andamento
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.amarelo));
         }else{
             //Concluido
             imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));

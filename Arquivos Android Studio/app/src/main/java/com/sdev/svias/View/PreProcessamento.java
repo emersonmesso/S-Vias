@@ -110,6 +110,7 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
                 != PackageManager.PERMISSION_GRANTED){
             ativoGps = false;
             ActivityCompat.requestPermissions(PreProcessamento.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            AtivaGPS();
         }else {
             ativoGps = true;
         }

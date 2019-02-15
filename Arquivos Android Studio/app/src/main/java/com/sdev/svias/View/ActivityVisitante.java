@@ -32,6 +32,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -182,10 +183,8 @@ public class ActivityVisitante extends AppCompatActivity
     public void onLocationChanged(Location location) {
         minhaLocalizacao = location;
         if(!ativoGPS){
-            Toast.makeText(this, "Localização Atualizada!", Toast.LENGTH_LONG).show();
             ativoGPS = true;
         }
-        //Toast.makeText(this, "Localização Atualizada!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -196,14 +195,14 @@ public class ActivityVisitante extends AppCompatActivity
 
     @Override
     public void onProviderEnabled(String provider) {
-        Toast.makeText(this, "Enabled new provider " + provider,
+        Toast.makeText(this, "GPS Ativado!",
                 Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(this, "Disabled provider " + provider,
+        Toast.makeText(this, "GPS Desativado! ",
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -410,14 +409,11 @@ public class ActivityVisitante extends AppCompatActivity
             }
         }
 
-        Log.i("posicao", "Posição do marcador no mapa: " + posisao.latitude + " | " + posisao.longitude);
-        Log.i("posicao", "Posição do marcador: " + marcadores.get(pos).getLatlng().latitude + " | " + marcadores.get(pos).getLatlng().longitude);
-
         //inflamos o layout alerta.xml na view
         View view = li.inflate(R.layout.click_marcador, null);
         ImageView imgDenuncia = (ImageView) view.findViewById(R.id.imgMarcador);
 
-        imgDenuncia.setImageDrawable(getDrawable(R.drawable.load));
+        Glide.with(view).load(R.drawable.load).into(imgDenuncia);
         TextView nomeDenuncia = (TextView) view.findViewById(R.id.nomeDenuncia);
         nomeDenuncia.setText(marcadores.get(pos).getNome());
 
@@ -431,22 +427,16 @@ public class ActivityVisitante extends AppCompatActivity
 
         if(marcadores.get(pos).getSituacao() == "pendente"){
             //troca a imagem aqui de pendente
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.vermelho));
         }else if(marcadores.get(pos).getSituacao() == "andamento"){
             //Em andamento
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.amarelo));
         }else{
             //Concluido
             imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
         }
-
         cordenadasDenuncia.setText("Latitude: " + posisao.latitude + " Longitude: " + posisao.longitude);
-
-
         viewop.setView(view);
-
-
-
         viewop.setCancelable(false);
         viewop.setPositiveButton("Voltar", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -458,20 +448,7 @@ public class ActivityVisitante extends AppCompatActivity
             }
         });
         AlertDialog alert = viewop.create();
-
-
-
-
         alert.show();
-
-        /*capturando os textViews e imageViews
-        TextView nomeDenuncia = (TextView) findViewById(R.id.nomeDenuncia);
-
-
-        //alterando os dados na tela
-        nomeDenuncia.setText(marcadores.get(pos).getNome());
-        */
-
         return false;
     }
 
@@ -521,8 +498,7 @@ public class ActivityVisitante extends AppCompatActivity
                             }
                         }
                         if(!minhaCidade){
-                            CidadeErro();
-                            this.retorno = "erro";
+                            this.retorno = "erro1";
                         }else{
                             //recebe o os dados da posição da cidade
                             localMapaG = new LatLng(lugares.get(0).getLatitude(), lugares.get(0).getLongitude());
@@ -536,32 +512,32 @@ public class ActivityVisitante extends AppCompatActivity
 
                     } catch (JSONException e) {
                         Log.i("cidades", "não encontrado");
-                        this.retorno = "erro";
-                        CidadeErro();
+                        this.retorno = "erro1";
                     }
 
 
                 } catch (IOException e) {
-                    this.retorno = "erro";
-                    CidadeErro();
+                    this.retorno = "erro1";
                 }
 
             }else{
-                this.retorno = "erro";
+                this.retorno = "erro2";
                 ativoGPS = false;
-                erroLocalizacao();
             }
-
-
             return this.retorno;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("RETORNO", result);
 
             if(result == "ok"){
                 chamaMapa();
+            }else if(result == "erro1"){
+                CidadeErro();
+            }else{
+                erroLocalizacao();
+                onResume();
+                onLocationChanged(minhaLocalizacao);
             }
 
             exibirProgress(false);
