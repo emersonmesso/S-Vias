@@ -4,11 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,7 +19,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
@@ -34,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,16 +95,13 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, SearchView.OnQueryTextListener, LocationListener, GoogleMap.OnMarkerClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, SearchView.OnQueryTextListener, LocationListener, GoogleMap.OnMarkerClickListener, GpsStatus.Listener {
 
     private GoogleMap mMap;
     GoogleSignInClient googleSignInClient;
     GoogleSignInOptions gso;
     private String personName;
-    private String personGivenName;
-    private String personFamilyName;
     private String personEmail;
-    private String personId;
     private Uri personPhoto;
     TextView nomeUser;
     TextView emailUser;
@@ -121,9 +124,9 @@ public class MainActivity extends AppCompatActivity
     LatLng localMapaG;
     int zP = 5;
     int zG = 14;
-    private static final int OPEN_REQUEST_CODE = 41;
-    Bitmap imageSelect;
     SupportMapFragment mapFragment;
+    private ImageView imgLoad;
+    private GpsStatus mStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,78 +167,49 @@ public class MainActivity extends AppCompatActivity
         }
         //
 
+        imgLoad = (ImageView) findViewById(R.id.imgLoad);
+        Glide.with(this).load(R.drawable.load).into(imgLoad);
+
         /*ANUNCIOS*/
 
         //AdMob
         MobileAds.initialize(this, "ca-app-pub-1846233707943905~6483000765");
-
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdView.loadAd(adRequest);
-
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // Code to be executed when an ad request fails.
-                onAdLoaded();
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when when the user is about to return
-                // to the app after tapping on an ad.
-            }
-        });
-
         /*ANÚNCIOS*/
 
 
         /*CAMPO DE BUSCA*/
         campoBusca = (SearchView) findViewById(R.id.campoBusca);
         loadMapa = (FrameLayout) findViewById(R.id.telaLoad);
-
         campoBusca.setOnQueryTextListener(this);
         /*CAMPO DE BUSCA*/
 
 
         /*LOCALIZAÇÃO E DADOS DA TELA*/
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.addGpsStatusListener(this);
 
         BuscaDadosSistema sistema = new BuscaDadosSistema();
         sistema.execute();
-
     }
 
     public void CidadeErro() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Sua cidade não é compatível com o nosso sistema!");
+        builder.setMessage(R.string.erroCidade);
         builder.setCancelable(false);
-        builder.setPositiveButton("Quero Na Cidade", new DialogInterface.OnClickListener() {
+        /*builder.setPositiveButton("Quero Na Cidade", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //
             }
         });
-        builder.setNegativeButton("Sair", new DialogInterface.OnClickListener() {
+        */
+        builder.setNegativeButton(R.string.sair, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //
@@ -249,32 +223,42 @@ public class MainActivity extends AppCompatActivity
         alert.show();
 
     }
-
     //Mostra que não encontrou a localização
     public void erroLocalizacao() {
         AlertDialog.Builder loca = new AlertDialog.Builder(this);
-        loca.setMessage("Não encontramos a sua localização. Ative seu GPS!\nAguarde até carpturarmos a sua licalização.\nPressione OK quando a localização for encontrada!");
+        LayoutInflater layoutInflater = getLayoutInflater();
+
+        View view = layoutInflater.inflate(R.layout.layoutlocal, null);
+
+        ImageView loadImg = (ImageView) view.findViewById(R.id.loadImg);
+
+        Glide.with(getApplicationContext()).load(R.drawable.load).into(loadImg);
+
+        loca.setView(view);
         loca.setCancelable(false);
-        loca.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        loca.setNegativeButton(R.string.sair, new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //
-                Intent intent = getIntent();
-                finish();
+                signOut();
+                Intent intent = new Intent(MainActivity.this, PreProcessamento.class);
                 startActivity(intent);
+                finish();
             }
         });
-        loca.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+        loca.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //volta para tela de login
-                signOut();
-                Intent i = new Intent(MainActivity.this, PreProcessamento.class);
+                //
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
                 finish();
-                startActivity(i);
             }
         });
+
         AlertDialog alert = loca.create();
         alert.show();
 
@@ -284,8 +268,8 @@ public class MainActivity extends AppCompatActivity
         Location locationGPS = locationManager.getLastKnownLocation(provider);
 
         if(locationGPS != null){
-            ativoGPS = true;
             minhaLocalizacao = locationGPS;
+            ativoGPS = true;
             return true;
         }else{
             return false;
@@ -347,8 +331,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_cadastro) {
-            // Handle the camera action
+            //Meu Perfil
         } else if (id == R.id.nav_gallery) {
+            //Minhas Denúncias
+            Intent intent = new Intent(this, ActivityDenuncias.class);
+            intent.putExtra("email", personEmail);
+            intent.putExtra("cep", lugares.get(0).getPostalCode());
+            intent.putExtra("lat", lugares.get(0).getLatitude());
+            intent.putExtra("lng", lugares.get(0).getLongitude());
+            startActivity(intent);
 
         } else if (id == R.id.nav_sobre) {
             Intent i = new Intent(MainActivity.this, ActivityContato.class);
@@ -491,10 +482,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        minhaLocalizacao = locationManager.getLastKnownLocation(provider);
+        minhaLocalizacao = location;
         if(!ativoGPS){
+            Toast.makeText(getApplicationContext(), R.string.locationChange, Toast.LENGTH_LONG).show();
             ativoGPS = true;
         }
+
     }
 
     @Override
@@ -504,15 +497,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onProviderEnabled(String provider) {
-        Toast.makeText(this, "GPS Ativado " + provider,
+        Toast.makeText(this, R.string.gpsEnable,
                 Toast.LENGTH_SHORT).show();
-        onLocationChanged(minhaLocalizacao);
         onResume();
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(this, "GPS Desativado " + provider,
+        Toast.makeText(this, R.string.gpsDisable,
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -534,21 +526,23 @@ public class MainActivity extends AppCompatActivity
         //inflamos o layout alerta.xml na view
         View view = li.inflate(R.layout.click_marcador, null);
         ImageView imgDenuncia = (ImageView) view.findViewById(R.id.imgMarcador);
-
-        Glide.with(view).load(R.drawable.load).into(imgDenuncia);
         TextView nomeDenuncia = (TextView) view.findViewById(R.id.nomeDenuncia);
         nomeDenuncia.setText(marcadores.get(pos).getNome());
+        //verificando se existe a imagem
+        if(marcadores.get(pos).getMidia().equals("")){
+            imgDenuncia.setImageResource(R.drawable.image_off);
+        }else{
+            Glide.with(view).load(R.drawable.load).into(imgDenuncia);
+            DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
+            img.execute(marcadores.get(pos).getMidia());
 
-        DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-        img.execute(marcadores.get(pos).getMidia());
+            imgDenuncia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        imgDenuncia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
+                }
+            });
+        }
 
 
         TextView descDenuncia = (TextView) view.findViewById(R.id.descDenuncia);
@@ -570,7 +564,7 @@ public class MainActivity extends AppCompatActivity
         cordenadasDenuncia.setText("Latitude: " + posisao.latitude + " Longitude: " + posisao.longitude);
         viewop.setView(view);
         viewop.setCancelable(false);
-        viewop.setPositiveButton("Voltar", new DialogInterface.OnClickListener() {
+        viewop.setPositiveButton(R.string.voltar, new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -583,6 +577,35 @@ public class MainActivity extends AppCompatActivity
         alert.show();
         return false;
     }
+
+    @Override
+    public void onGpsStatusChanged(int event) {
+        mStatus = locationManager.getGpsStatus(mStatus);
+        Log.i("TESTE", (ativoGPS)? "Sim" : "Não");
+        switch (event) {
+            case GpsStatus.GPS_EVENT_STARTED:
+                // Do Something with mStatus info
+                //Log.i("TESTE", "1");
+                break;
+
+            case GpsStatus.GPS_EVENT_STOPPED:
+                // Do Something with mStatus info
+                //Log.i("TESTE", "2");
+                break;
+
+            case GpsStatus.GPS_EVENT_FIRST_FIX:
+                // Do Something with mStatus info
+                //Log.i("TESTE", "3");
+                break;
+
+            case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+                // Do Something with mStatus info
+                //Log.i("TESTE", "4");
+                break;
+        }
+
+    }
+
     /**/
     private class BuscaDadosSistema extends AsyncTask<String, String, String> {
         private String retorno;

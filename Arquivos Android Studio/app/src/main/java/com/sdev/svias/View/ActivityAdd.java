@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -39,6 +40,16 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.sdev.svias.Controller.UtilAPP;
 import com.sdev.svias.Model.Parametro;
 import com.sdev.svias.R;
@@ -49,11 +60,13 @@ import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.protocol.HTTP;
 import cz.msebera.android.httpclient.util.EntityUtils;
 
-public class ActivityAdd extends AppCompatActivity implements LocationListener {
+public class ActivityAdd extends AppCompatActivity implements LocationListener, OnMapReadyCallback {
     ImageView imgSelect;
     ImageView imgFoto;
     ImageView imgDenuncia;
@@ -68,6 +81,9 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
     EditText nomeDenuncia;
     EditText descDenuncia;
     String ID_LOC;
+    private ImageView imgLoad;
+    SupportMapFragment mapFragment;
+    private GoogleMap mMap;
 
 
     //Conta Google
@@ -89,6 +105,10 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
         super.onCreate(savedInstanceState);
         super.setTitle("Fazer Denuncia");
         setContentView(R.layout.activity_add);
+
+        imgLoad = (ImageView) findViewById(R.id.imgLoad);
+        Glide.with(this).load(R.drawable.load).into(imgLoad);
+
 
         //Recebendo os dados da conta do google
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -165,26 +185,42 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
         btnConcluir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            exibirProgress(true);
-            final String nome = String.valueOf(nomeDenuncia.getText());
-            final String desc = String.valueOf(descDenuncia.getText());
-            //verifica a imagem selecionada
-            if(imageBitmap != null){
-                Log.i("ENVIANDO", "Enviando os dados");
-                //
-                Parametro p = new Parametro("",nome, CEP,desc,personEmail, minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude(), UtilAPP.LINK_SERVIDOR_CADASTRO_DENUCIA);
-                CadastraInfo envia = new CadastraInfo(p, imageBitmap);
-                envia.execute();
-            }else{
-                //Não tem Imagem
-                Toast.makeText(getApplicationContext(), "Selecione Uma Imagem", Toast.LENGTH_LONG).show();
-                exibirProgress(true);
-            }
+                final String nome = String.valueOf(nomeDenuncia.getText());
+                final String desc = String.valueOf(descDenuncia.getText());
+
+
+                if(nome.equals("") || desc.equals("")){
+
+                    Toast.makeText(getApplicationContext(), "Adicione Todas As Informações!", Toast.LENGTH_LONG).show();
+                    exibirProgress(false);
+
+                }else{
+                    //verifica a imagem selecionada
+                    if(imageBitmap != null){
+                        Log.i("ENVIANDO", "Enviando os dados");
+                        //
+                        Parametro p = new Parametro("",nome, CEP,desc,personEmail, minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude(), UtilAPP.LINK_SERVIDOR_CADASTRO_DENUCIA);
+                        CadastraInfo envia = new CadastraInfo(p, imageBitmap);
+                        envia.execute();
+                    }else{
+                        //Não tem Imagem
+                        Parametro p = new Parametro("",nome, CEP,desc,personEmail, minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude(), UtilAPP.LINK_SERVIDOR_CADASTRO_DENUCIA);
+                        CadastraInfo envia = new CadastraInfo(p, null);
+                        envia.execute();
+                    }
+                }
+
             }
         });
 
         exibirProgress(false);
 
+    }
+
+    public void chamaMapa(){
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapas);
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -268,6 +304,7 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         minhaLocalizacao = location;
+        chamaMapa();
         if(!ativoGPS){
             ativoGPS = true;
         }
@@ -285,6 +322,25 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        mMap.clear();
+
+        LatLng local = new LatLng(minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude());
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, 14);
+        mMap.moveCamera(update);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+        Marker marcador = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(minhaLocalizacao.getLatitude(), minhaLocalizacao.getLongitude()))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+        );
+        marcador.setDraggable(true);
 
     }
 
@@ -311,11 +367,18 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
         @Override
         protected String doInBackground(String... strings) {
 
-            ByteArrayOutputStream saida = new ByteArrayOutputStream();
-            this.imageBitmap.compress( Bitmap.CompressFormat.JPEG, 100, saida );
-            byte[] img = saida.toByteArray();
-            String imgArray = Base64.encodeToString( img, Base64.DEFAULT );
-            this.parametro.setImagem(imgArray);
+
+            if(this.imageBitmap != null){
+
+                ByteArrayOutputStream saida = new ByteArrayOutputStream();
+                this.imageBitmap.compress( Bitmap.CompressFormat.JPEG, 100, saida );
+                byte[] img = saida.toByteArray();
+                String imgArray = Base64.encodeToString( img, Base64.DEFAULT );
+                this.parametro.setImagem(imgArray);
+
+            }else{
+                this.parametro.setImagem("img");
+            }
 
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(UtilAPP.LINK_SERVIDOR_CADASTRO_DENUCIA);
@@ -330,7 +393,7 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
                 valores.add(new BasicNameValuePair("lat", String.valueOf( this.parametro.getLat() )));
                 valores.add(new BasicNameValuePair("lng", String.valueOf( this.parametro.getLng() )));
 
-                httpPost.setEntity(new UrlEncodedFormEntity(valores));
+                httpPost.setEntity(new UrlEncodedFormEntity(valores, "UTF-8"));
                 HttpResponse response = httpClient.execute(httpPost);
                 answer = EntityUtils.toString(response.getEntity());
             } catch (UnsupportedEncodingException e) {
@@ -346,11 +409,14 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("RETORNO", result);
-
             if(result.equals("")){
                 exibirProgress(false);
-                addSucesso();
+                if(this.imageBitmap == null){
+                    addSucesso(false);
+                }else{
+                    addSucesso(true);
+                }
+
             }else{
                 exibirProgress(false);
                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
@@ -360,9 +426,15 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener {
     }
 
     //Mostra que não encontrou a localização
-    public void addSucesso() {
+    public void addSucesso(boolean img) {
         AlertDialog.Builder loca = new AlertDialog.Builder(this);
-        loca.setMessage("Denúncia Adicionada Com Sucesso!");
+
+        if(img){
+            loca.setMessage("Denúncia Adicionada Com Sucesso!");
+        }else{
+            loca.setMessage("Denúncia Adicionada Com Sucesso!\nDenúncias Com Imagem Tem Prioridades!");
+        }
+
         loca.setCancelable(false);
         loca.setPositiveButton("Ver No Mapa", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

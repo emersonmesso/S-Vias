@@ -2,6 +2,10 @@ package com.sdev.svias.View;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +17,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,6 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.List;
 import com.sdev.svias.R;
 import com.sdev.svias.Controller.DownloadImageFromInternet;
@@ -38,6 +46,8 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
     FrameLayout loadMapa;
     List<Marcador> marcadores;
     LatLng mapa;
+    SupportMapFragment mapFragment;
+    ImageView imgLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,26 +63,15 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_busca_denuncia);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
+        imgLoad = (ImageView) findViewById(R.id.imgLoad);
         loadMapa = (FrameLayout) findViewById(R.id.telaLoad);
+        Glide.with(getApplicationContext()).load(R.drawable.load).into(imgLoad);
+
         exibirProgress(true);
 
-        //buscando os dados no servidor
-        ScriptDLL func = new ScriptDLL();
-        HTTPRequest httpMark = new HTTPRequest();
-        try {
-            marcadores = func.getMarcadores(httpMark.getDados(UtilAPP.LINK_SERVIDOR + "buscaMarcadores.php?cep=" + cep+"&busca=" + query, ""));
-            if(marcadores.size() == 0){
-                exibeAlert();
-            }
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.mapa);
-            mapFragment.getMapAsync(this);
-            exibirProgress(false);
-
-        } catch (JSONException e) {
-            Toast.makeText(this, "Não foi possível buscar denúncia!", Toast.LENGTH_LONG).show();
-        }
+        //Buscando os dados da busca
+        BuscaDadosSistema sistema = new BuscaDadosSistema();
+        sistema.execute();
 
     }
 
@@ -107,22 +106,37 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
         mMap = googleMap;
 
         LatLng local = new LatLng(mapa.latitude, mapa.longitude);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, 14);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, 13);
         mMap.moveCamera(update);
         mMap.setOnMarkerClickListener(this);
 
         for (int i = 0; i < marcadores.size(); i++) {
-
             //
-            Marker marcador = googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(marcadores.get(i).getLatlng().latitude, marcadores.get(i).getLatlng().longitude))
-                    .title(marcadores.get(i).getNome())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-            );
+            Marker marcador;
+            if(marcadores.get(i).getSituacao().equals("Pendente")){
+
+                marcador = googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(marcadores.get(i).getLatlng().latitude, marcadores.get(i).getLatlng().longitude))
+                        .title(marcadores.get(i).getNome())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                );
+            }else if(marcadores.get(i).getSituacao().equals("Em Progresso" )){
+                marcador = googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(marcadores.get(i).getLatlng().latitude, marcadores.get(i).getLatlng().longitude))
+                        .title(marcadores.get(i).getNome())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                );
+            }else{
+                marcador = googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(marcadores.get(i).getLatlng().latitude, marcadores.get(i).getLatlng().longitude))
+                        .title(marcadores.get(i).getNome())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                );
+            }
             marcador.hideInfoWindow();
             marcador.setTag(0);
+
         }
-        exibirProgress(false);
     }
 
     private void exibirProgress(boolean exibir) {
@@ -134,7 +148,6 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
         final AlertDialog.Builder viewop = new AlertDialog.Builder(this);
 
         LatLng posisao = marker.getPosition();
-
         int pos = -1;
 
         LayoutInflater li = getLayoutInflater();
@@ -145,40 +158,44 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
             }
         }
 
-        Log.i("posicao", "Posição do marcador no mapa: " + posisao.latitude + " | " + posisao.longitude);
-        Log.i("posicao", "Posição do marcador: " + marcadores.get(pos).getLatlng().latitude + " | " + marcadores.get(pos).getLatlng().longitude);
-
         //inflamos o layout alerta.xml na view
         View view = li.inflate(R.layout.click_marcador, null);
         ImageView imgDenuncia = (ImageView) view.findViewById(R.id.imgMarcador);
 
-        imgDenuncia.setImageDrawable(getDrawable(R.drawable.load));
+        Glide.with(view).load(R.drawable.load).into(imgDenuncia);
         TextView nomeDenuncia = (TextView) view.findViewById(R.id.nomeDenuncia);
         nomeDenuncia.setText(marcadores.get(pos).getNome());
 
         DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
         img.execute(marcadores.get(pos).getMidia());
+
+        imgDenuncia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
         TextView descDenuncia = (TextView) view.findViewById(R.id.descDenuncia);
         descDenuncia.setText(marcadores.get(pos).getDescricao());
         TextView cordenadasDenuncia = (TextView) view.findViewById(R.id.cordenadas);
 
         ImageView imgSituacao = (ImageView) view.findViewById(R.id.situacaoDenuncia);
 
-        if(marcadores.get(pos).getSituacao() == "pendente"){
+        if(marcadores.get(pos).getSituacao().equals("Pendente" )){
             //troca a imagem aqui de pendente
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
-        }else if(marcadores.get(pos).getSituacao() == "andamento"){
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.vermelho));
+        }else if(marcadores.get(pos).getSituacao().equals("Em Progresso" )){
             //Em andamento
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.amarelo));
         }else{
             //Concluido
             imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
         }
-
         cordenadasDenuncia.setText("Latitude: " + posisao.latitude + " Longitude: " + posisao.longitude);
-
         viewop.setView(view);
-
         viewop.setCancelable(false);
         viewop.setPositiveButton("Voltar", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -191,7 +208,102 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
         });
         AlertDialog alert = viewop.create();
         alert.show();
-
         return false;
     }
+
+    //Mostra mensagem de nada encontrado
+    public void BuscaNada() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Não Encontramos Nenhuma Denúncia Para Sua Busca!");
+        builder.setCancelable(false);
+
+        builder.setNegativeButton("Voltar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+                onBackPressed();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void ErroSistema() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Houve Algum Erro!");
+        builder.setCancelable(false);
+
+        builder.setNegativeButton("Voltar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+                onBackPressed();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+
+
+
+
+
+    /*BUSCA DE DADOS*/
+    private class BuscaDadosSistema extends AsyncTask<String, String, String> {
+        private String retorno;
+
+        @Override
+        protected void onPreExecute (){
+            exibirProgress(true);
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            //buscando os dados no servidor
+            ScriptDLL func = new ScriptDLL();
+            HTTPRequest httpMark = new HTTPRequest();
+            try {
+                marcadores = func.getMarcadores(httpMark.getDados(UtilAPP.LINK_SERVIDOR + "buscaMarcadores.php?cep=" + cep+"&busca=" + query, ""));
+                if(marcadores.size() == 0){
+                    this.retorno = "erro2";
+                }else{
+                    this.retorno = "ok";
+                }
+
+            } catch (JSONException e) {
+                this.retorno = "erro1";
+            }
+            return this.retorno;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(result == "ok"){
+                chamaMapa();
+                Toast.makeText(getApplicationContext(), "Encontramos " + String.valueOf( marcadores.size() ) + " Denúncia(s)", Toast.LENGTH_LONG).show();
+            }else if(result == "erro2"){
+                BuscaNada();
+            }else{
+                ErroSistema();
+            }
+
+            exibirProgress(false);
+        }
+    }
+
+    public void chamaMapa(){
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapa);
+        mapFragment.getMapAsync(this);
+    }
+
+
 }

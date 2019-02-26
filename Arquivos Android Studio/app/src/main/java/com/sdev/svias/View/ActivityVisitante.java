@@ -83,6 +83,7 @@ public class ActivityVisitante extends AppCompatActivity
     private AdView mAdView;
     boolean ativoGPS = false;
     SupportMapFragment mapFragment;
+    private ImageView imgLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,38 +110,12 @@ public class ActivityVisitante extends AppCompatActivity
                 .build();
         mAdView.loadAd(adRequest);
 
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // Code to be executed when an ad request fails.
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when when the user is about to return
-                // to the app after tapping on an ad.
-            }
-        });
-
         //
         campoBusca = (SearchView) findViewById(R.id.campoBusca);
         loadMapa = (FrameLayout) findViewById(R.id.telaLoad);
+
+        imgLoad = (ImageView) findViewById(R.id.imgLoad);
+        Glide.with(this).load(R.drawable.load).into(imgLoad);
 
         campoBusca.setOnQueryTextListener(this);
 
@@ -195,22 +170,23 @@ public class ActivityVisitante extends AppCompatActivity
 
     @Override
     public void onProviderEnabled(String provider) {
-        Toast.makeText(this, "GPS Ativado!",
+        Toast.makeText(this, R.string.gpsEnable,
                 Toast.LENGTH_SHORT).show();
-
+        onResume();
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(this, "GPS Desativado! ",
+        Toast.makeText(this, R.string.gpsDisable,
                 Toast.LENGTH_SHORT).show();
     }
 
     //Mostra mensagem de cidade não permitida
     public void CidadeErro() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Sua cidade não é compatível com o nosso sistema!");
+        builder.setMessage(R.string.erroCidade);
         builder.setCancelable(false);
+        /*
         builder.setPositiveButton("Quero Na Cidade", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -218,7 +194,8 @@ public class ActivityVisitante extends AppCompatActivity
                 //
             }
         });
-        builder.setNegativeButton("Sair", new DialogInterface.OnClickListener() {
+        */
+        builder.setNegativeButton(R.string.sair, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //
@@ -236,24 +213,38 @@ public class ActivityVisitante extends AppCompatActivity
     //Mostra que não encontrou a localização
     public void erroLocalizacao() {
         AlertDialog.Builder loca = new AlertDialog.Builder(this);
-        loca.setMessage("Não encontramos a sua localização.\nAguarde até carpturarmos a sua licalização.\nPressione OK quando a localização for encontrada!");
+        LayoutInflater layoutInflater = getLayoutInflater();
+
+        View view = layoutInflater.inflate(R.layout.layoutlocal, null);
+
+        ImageView loadImg = (ImageView) view.findViewById(R.id.loadImg);
+
+        Glide.with(getApplicationContext()).load(R.drawable.load).into(loadImg);
+
+        loca.setView(view);
         loca.setCancelable(false);
-        loca.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        loca.setNegativeButton(R.string.sair, new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //
-                Intent intent = getIntent();
-                finish();
+                Intent intent = new Intent(ActivityVisitante.this, PreProcessamento.class);
                 startActivity(intent);
+                finish();
             }
         });
-        loca.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+        loca.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //
+                Intent intent = new Intent(ActivityVisitante.this, ActivityVisitante.class);
+                startActivity(intent);
+                finish();
             }
         });
+
         AlertDialog alert = loca.create();
         alert.show();
 
@@ -318,7 +309,7 @@ public class ActivityVisitante extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.nav_empresa) {
-            String url = "https://emersonmesso95.000webhostapp.com/";
+            String url = UtilAPP.LINK_SITE_EMPRESA;
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
@@ -332,9 +323,6 @@ public class ActivityVisitante extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        CriaDataBase banco = new CriaDataBase();
-        banco.criaConexao(getApplicationContext());
 
         if(minhaCidade){
             LatLng local = new LatLng(localMapaG.latitude, localMapaG.longitude);
@@ -398,7 +386,6 @@ public class ActivityVisitante extends AppCompatActivity
         final AlertDialog.Builder viewop = new AlertDialog.Builder(this);
 
         LatLng posisao = marker.getPosition();
-
         int pos = -1;
 
         LayoutInflater li = getLayoutInflater();
@@ -412,23 +399,35 @@ public class ActivityVisitante extends AppCompatActivity
         //inflamos o layout alerta.xml na view
         View view = li.inflate(R.layout.click_marcador, null);
         ImageView imgDenuncia = (ImageView) view.findViewById(R.id.imgMarcador);
-
-        Glide.with(view).load(R.drawable.load).into(imgDenuncia);
         TextView nomeDenuncia = (TextView) view.findViewById(R.id.nomeDenuncia);
         nomeDenuncia.setText(marcadores.get(pos).getNome());
+        //verificando se existe a imagem
+        if(marcadores.get(pos).getMidia().equals("")){
+            imgDenuncia.setImageResource(R.drawable.image_off);
+        }else{
+            Glide.with(view).load(R.drawable.load).into(imgDenuncia);
+            DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
+            img.execute(marcadores.get(pos).getMidia());
 
-        DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-        img.execute(marcadores.get(pos).getMidia());
+            imgDenuncia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
+
         TextView descDenuncia = (TextView) view.findViewById(R.id.descDenuncia);
         descDenuncia.setText(marcadores.get(pos).getDescricao());
         TextView cordenadasDenuncia = (TextView) view.findViewById(R.id.cordenadas);
 
         ImageView imgSituacao = (ImageView) view.findViewById(R.id.situacaoDenuncia);
 
-        if(marcadores.get(pos).getSituacao() == "pendente"){
+        if(marcadores.get(pos).getSituacao().equals("Pendente" )){
             //troca a imagem aqui de pendente
             imgSituacao.setImageDrawable(getDrawable(R.drawable.vermelho));
-        }else if(marcadores.get(pos).getSituacao() == "andamento"){
+        }else if(marcadores.get(pos).getSituacao().equals("Em Progresso" )){
             //Em andamento
             imgSituacao.setImageDrawable(getDrawable(R.drawable.amarelo));
         }else{
@@ -438,7 +437,7 @@ public class ActivityVisitante extends AppCompatActivity
         cordenadasDenuncia.setText("Latitude: " + posisao.latitude + " Longitude: " + posisao.longitude);
         viewop.setView(view);
         viewop.setCancelable(false);
-        viewop.setPositiveButton("Voltar", new DialogInterface.OnClickListener() {
+        viewop.setPositiveButton(R.string.voltar, new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(DialogInterface dialog, int which) {

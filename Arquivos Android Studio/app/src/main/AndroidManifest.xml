@@ -18,13 +18,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".View.OnboardingActivity"></activity>
-        <activity android:name=".View.ActivityContato" />
+        <activity android:name=".View.ActivityAdd2"></activity>
+        <activity
+            android:name=".View.ActivityDenuncias"
+            android:label="Minhas Denúncias"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".View.OnboardingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".View.ActivityContato"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".View.ActivityAdd"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".View.Cadastro"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
         <meta-data
@@ -43,6 +55,7 @@
             android:value="@integer/google_play_services_version" /> <!-- The API key for Google Maps-based APIs. -->
         <activity
             android:name=".View.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,6 +66,7 @@
         <activity
             android:name=".View.MainActivity"
             android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".View.PreProcessamento"

@@ -51,33 +51,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="33dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:text="Localização Da Denúncia" />
-
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/mapas"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="197dp"
-                    tools:context=".View.Mapa" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="15dp"
-                android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -88,11 +63,10 @@
                     android:src="@drawable/midiaselect" />
 
                 <TextView
+                    android:textAlignment="center"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Ou"
-                    android:textAlignment="center" />
-
+                    android:text="Ou" />
                 <ImageView
                     android:id="@+id/imgFoto"
                     android:layout_width="159dp"
@@ -116,7 +90,21 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/mapaadd"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".View.Mapa" />
+
+
+        </LinearLayout>
 
     </ScrollView>
 
@@ -135,39 +123,6 @@
             android:background="@color/colorAppBar"
             android:text="Concluir"
             android:textColor="#FFFFFF" />
-
-    </FrameLayout>
-
-
-    <FrameLayout
-        android:id="@+id/telaLoad"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="1dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imgLoad"
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:src="@drawable/load" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/enviandoDenuncia"
-                android:textAlignment="center" />
-        </LinearLayout>
-
 
     </FrameLayout>
 

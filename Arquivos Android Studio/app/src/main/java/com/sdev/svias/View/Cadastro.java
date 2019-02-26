@@ -8,8 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,6 +36,8 @@ public class Cadastro extends AppCompatActivity {
     int RC_SIGN_IN;
     EditText campoCPF;
     EditText campoSenha;
+    private ImageView imgLoad;
+    FrameLayout loadMapa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,10 @@ public class Cadastro extends AppCompatActivity {
         setContentView(R.layout.activity_cadastro);
 
         //Minhas alterações
-        mProgressBar = (ProgressBar) findViewById(R.id.note_list_progress);
+        loadMapa = (FrameLayout) findViewById(R.id.telaLoad);
+        imgLoad = (ImageView) findViewById(R.id.imgLoad);
+        Glide.with(this).load(R.drawable.load).into(imgLoad);
+
         campoCPF = (EditText)findViewById(R.id.campoCPF);
         campoSenha = (EditText) findViewById(R.id.campoSenha);
 
@@ -65,7 +74,7 @@ public class Cadastro extends AppCompatActivity {
     }
 
     private void exibirProgress(boolean exibir) {
-        mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
+        loadMapa.setVisibility(exibir ? View.VISIBLE : View.GONE);
     }
 
 
