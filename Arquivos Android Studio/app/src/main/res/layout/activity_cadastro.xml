@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.View.Cadastro">
+    tools:context=".View.Cadastro">
 
 
     <LinearLayout
@@ -82,17 +82,36 @@
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/telaLoad"
         android:layout_width="match_parent"
-        android:layout_height="564dp"
-        tools:layout_editor_absoluteX="286dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:ignore="MissingConstraints">
+        android:layout_height="match_parent"
+        android:background="@color/colorBranco"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="1dp">
 
-        <ProgressBar
-            android:id="@+id/note_list_progress"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="112dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imgLoad"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:src="@drawable/load" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cadastrando"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+
     </FrameLayout>
 
 

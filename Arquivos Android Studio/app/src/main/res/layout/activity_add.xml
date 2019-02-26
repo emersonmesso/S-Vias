@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.ActivityAdd">
+
+    <ScrollView android:padding="10dp"
+        android:id="@+id/telaConteudo"
+        android:layout_marginBottom="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="FAZER DENÚNCIA"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:textSize="30dp"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="Nome Da Denúncia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/editNomeDenuncia"
+                android:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:text="Descrição Da Denúncia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/editDescDenuncia"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:inputType="textMultiLine" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="33dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:text="Localização Da Denúncia" />
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/mapas"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="197dp"
+                    tools:context=".View.Mapa" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgArquivos"
+                    android:layout_width="159dp"
+                    android:layout_height="136dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/midiaselect" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Ou"
+                    android:textAlignment="center" />
+
+                <ImageView
+                    android:id="@+id/imgFoto"
+                    android:layout_width="159dp"
+                    android:layout_height="136dp"
+                    android:src="@drawable/tirarfoto" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="35dp">
+
+                <ImageView
+                    android:id="@+id/imgDenuncia"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="1dp">
+
+        <Button
+            android:layout_gravity="bottom|center"
+            android:id="@+id/btnConcluir"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:background="@color/colorAppBar"
+            android:text="Concluir"
+            android:textColor="#FFFFFF" />
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/telaLoad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imgLoad"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:src="@drawable/load" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/enviandoDenuncia"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

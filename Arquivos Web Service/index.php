@@ -1,91 +1,23 @@
-<!--
- * Autor: Michael Dydean
- * Data de criação: 2018-07-12.
- * Data de midificação: 2018-09-30.
- */
--->
 <?php
-
-function lerArquivoMarker($url) {
-
-    if (isset($url)) {//utilizar RegEx
-        if (file_exists($url)) {
-
-            $xml = simplexml_load_file($url);
-
-            foreach ($xml->groupnode->node as $node) {
-
-                $att = $node->attributes();
-
-                $text = "addMarker({" . $att->coord . "}, '<div class=\"info-marker\">"
-                        . "<h1>" . $att->name . "</h1>"
-                        . "<ul><li><span>Qtd. de RAM :&nbsp;&nbsp;&nbsp;&nbsp;</span>" . $att->ram . "</li>"
-                        . "<li><span>Qtd. de CPU : &nbsp;&nbsp;&nbsp;&nbsp;</span>" . $att->cpu . "</li></ul>"
-                        . "</div>";
-
-                $text .= "<div class=\"info-aloc-marker\">"
-                        . "<h2>Redes virtuais alocadas</h2>";
-
-                foreach ($node->alocacao->nodevirtual as $nodevirtual) {
-                    $att = $nodevirtual->attributes();
-                    if (!empty($att->id)) {
-                        $text .= "<ul><li><span>Id : &nbsp;&nbsp;</span>" . $att->id . "</li>"
-                                . "<li><span>Qtd. de RAM : &nbsp;&nbsp;</span>" . $att->ram . "</li>"
-                                . "<li><span>Qtd. de Disco : &nbsp;&nbsp;</span>" . $att->disco . "</li>"
-                                . "<li><span>Qtd. de CPU : &nbsp;&nbsp;</span>" . $att->cpu . "</li></ul>"
-                                . "<br/>";
-                    } else {
-                        //$text .= "<h2>Nenhuma rede alocada.</h2>";
-                    }
-                }
-                $text .= "</div>');";
-
-                echo $text;
-            }
-
-            foreach ($xml->grouplink->link as $link) {
-                $att = $link->attributes();
-                echo "addLinks([" . $att->coord . "]);";
-            }
-        } else {
-            exit('Falha ao abrir arquivo');
-        }
-    }
-}
+/*
+ * Autor: Michael Dydean
+ * Data de criação: 2018-12-07.
+ * Data de modificação: 2019-02-14.
+ */
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Simple Map</title>
         <meta name="viewport" content="initial-scale=1.0">
         <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link type = "image/png" rel = "icon" href = "_images/Imagem2.png" id = "icone" />
+        <title>S-Vias</title>
         <link rel="stylesheet" href="_styles/bootstrap.css">
         <link rel="stylesheet" href="_styles/modals.css"/>
         <link rel="stylesheet" href="_styles/main.css"/>
         <style>
-            .info-marker h1 {
-                text-align: center;
-                font-size: 2em;
-                font-weight: bold;
-            }
-            .info-marker ul > li {
-                list-style: none;
-                font-size: 1em;
-            }
-            .info-marker ul > li > span {
-                font-weight: bold;
-            }
-
-            .info-aloc-marker h2 {
-                font-size: 1.2em;    
-            }
-            .info-aloc-marker ul > li {
-                list-style: none;
-                font-size: 1em;
-            }
-            .info-aloc-marker ul > li > span {
-                font-weight: normal;
-            }
             #menu-itens {
                 width: 50px;
                 height: 50px;
@@ -113,41 +45,73 @@ function lerArquivoMarker($url) {
                 top: 1px;
                 left: 12px;
             }
+            li {
+                list-style: none;
+                display: inline-block;
+            }
+            #menu > li {
+                padding-left: 5%;
+                color: #FACC2E;
+                background-color: black;
+            }
+            a, a:hover, a:active, a:link {
+                text-decoration: none;
+            }
+            .marker {
+                width: 15vw;
+                display: block;
+                border: 1px solid black;
+                padding: 1vw;
+            }
+            .marker h1 {
+                text-align: center;
+                font-size: 2em;
+                font-weight: bold;
+                border-bottom: 1px solid #dedede;
+            }
+            .marker p {
+                padding-top: 2%;
+            }
         </style>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg bg-menu">
-
-            <p style="position: absolute; top: 13px; left: 15px; z-index: 2; font-size: 1.3em; font-weight: 700;">S-Vias</p>
-            <image src="_images/Logo.png" id="logotipo"/>
-            <input type="search" placeholder="  Pesquisar" style="width: 20%; height: 30px; margin-left: 40%; border-radius: 10px; border: none;" />
-
-
+            <!-- Logomarca -->
+            <a class="navbar-brand" href="index.php" style="padding: 2%;">
+                <p style="color: #212529;  position: absolute; top: 10%; left: 1%; z-index: 2; font-size: 1.3em; font-weight: 700;">S-Vias</p>
+                <image src="_images/Logo.png" id="logotipo"/>
+                <br/>
+                <!--<span class="lead" style="font-family: 'Libre Baskerville', serif; font-size: 0.9em;color:#888; font-weight:bold; margin-left: 0%; margin-top: 5px;">
+                    Centro de Convenções | Natal - RN| 25 e 26 de Julho&nbsp;2018 
+                </span> -->
+            </a>
+            <form action="login.php"></form>
+            <input name="search" type="search" placeholder="Pesquisar" style="width: 30%; height: 5vh; margin-left: 20%; border-radius: 10px; border: none; padding-left: 3%; z-index: 2;"/>
+            <button style="border: none; margin-left: -3vw; margin-top: 0vh; width: 35px; height: 35px; z-index: 3; background: url('./_images/pesq.png') no-repeat; cursor: pointer;" formmethod="post" formaction="result_search.php" value=" ">
+            </button>
             <!-- Barra de navegação recolhível -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_site">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler border border-secondary" type="button" data-toggle="collapse" data-target="#navbar_site">
+                <div class="content-menu"></div>
+                <div class="content-menu"></div>
+                <div class="content-menu"></div>
+                <div class="content-menu"></div>
+                <div style="background: none; margin-top: 4px;" class="content-menu"></div>
+
             </button>
             <!-- menu do site -->
-            <div style="margin-right: 2%;" class="collapse navbar-collapse" id="navbar_site">
-                <ul class="navbar-nav ml-auto">
-                    <li>
-                        <div class="dropdown">
-                            <div id="menu-itens" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                                <div style="background: none; margin-top: 4px;" class="content-menu"></div>
-                                <div class="content-menu"></div>
-                                <div class="content-menu"></div>
-                                <div class="content-menu"></div>
-                                <div class="content-menu"></div>
-                            </div>
-                            <div class="dropdown-menu" style="margin-left: -2vw; font-size: 16px;" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="login.htm">Login</a>
-                                <a class="dropdown-item" href="#">Sobre</a>
-                                <a class="dropdown-item" href="#">Ajuda</a>
-                            </div>
-                        </div>
+            <div class="collapse navbar-collapse" id="navbar_site">
+                <ul class="menu" style="margin-left: 20%;"> 
+                    <li style="width: 9vw; cursor: pointer;" class="border border-secondary py-2 rounded" onclick="window.location.assign('login.php');"> <!-- <li class="nav-item text-right"> -->
+                        <p style="text-align: center;" ><a href="login.php">Login</a></p>
+                    </li>
+                    <li style="width: 9vw; cursor: pointer;" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
+                        <p style="text-align: center;"><a href="#">Sobre</a></p>
+                    </li>
+                    <li style="width: 9vw; cursor: pointer;" class="border border-secondary py-2 rounded" onclick="window.location.assign('#');">
+                        <p style="text-align: center;"><a href="#">Help</a></p>
                     </li>
                 </ul>
+
             </div>
         </nav>
 
@@ -179,6 +143,8 @@ function lerArquivoMarker($url) {
                 //mapa
                 var map = new google.maps.Map(document.getElementById('map'), options);
 
+                //  addMarker({lat: -8.08180257518267, lng: -39.253463977233696});
+
                 /**
                  * O código abaixo é uma função que adiciona os marcadores no, por meio do evento click.
                  
@@ -198,17 +164,28 @@ function lerArquivoMarker($url) {
                  /*código para recarregar a página
                  
                  // location.reload(true);//false - pagina em cache, true - pagina do servidor
-<?php
-/* código para recarregar a página */
-
-//header("Refresh: 0");
-//header("Refresh: 0; url=index.php");
-//header('Location: index.php');
-?>
                  
                  });
                  **/
+<?php
+include './Conn.php';
+include './Denuncia.php';
+include './DenunciaDAO.php';
 
+$denuncia = new Denuncia();
+$dDao = new DenunciaDAO($conn);
+
+$a = $dDao->get_denuncias();
+
+foreach ($a as $linha) {
+
+    echo ""
+    . "addMarker({lat: $linha[5], lng: $linha[6]}, '<div class=\"marker\"><h1>$linha[2]</h1><p>$linha[3]</p></div>');";
+//    for($i = 0; $i < (count($linha) / 2); $i ++) {
+//echo $linha[$i] . "<br/>";
+//    }
+}
+?>
                 //função adicionar marcadores
                 function addMarker(coords, info) {
                     this.coords = coords;
@@ -217,7 +194,7 @@ function lerArquivoMarker($url) {
                             {
                                 position: coords,
                                 map: map,
-                                icon: '_images/server.png'
+                                icon: '_images/marker_icon.png'
                             });
                     //janelas de informações
                     var infoWindow = new google.maps.InfoWindow({
@@ -254,10 +231,10 @@ function lerArquivoMarker($url) {
         <script src="_scripts/popper.js"></script>
         <script src="_scripts/bootstrap.js"></script>
 
-        <footer style="padding-top: 1%; margin-left: 80%;">
+        <footer style="padding-top: 1%; margin-left: 65%; width: 80%; position: fixed; bottom: 0px;">
             <p style="float: left;margin-right: 1%;">S-Vias 2018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</p>
             <ul style="list-style-type: none;">
-                <li style="display: inline-block; margin-left: 1%;"><a href="login.htm">Login</a></li>
+                <li style="display: inline-block; margin-left: 1%;"><a href="login.php">Login</a></li>
                 <li style="display: inline-block; margin-left: 1%;">Sobre</li>
                 <li style="display: inline-block; margin-left: 1%;">Ajuda</li>
             </ul>

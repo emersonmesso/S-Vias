@@ -9,4 +9,20 @@
     <string name="action_settings">Sair</string>
     <string name="title_activity_main">S-Vias</string>
     <string name="title_activity_visitante">S-Vias</string>
+    <string name="descSobre">O Aplicativo S-Vias foi criado para auxiliar prefeituras de cidades a controlar os problemas referentes à buracos nas vias da cidade!</string>
+    <string name="server_client_id">285181906247-t8ji9qos1delp9j3ff1cdttp0iknemrd.apps.googleusercontent.com</string>
+    <string name="erroLocalizacao">Não encontramos a sua localização. Ative seu GPS!\nAguarde até capturarmos a sua localização.\nPressione OK quando a localização for encontrada!</string>
+    <string name="ok">Ok</string>
+    <string name="voltar">Voltar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="erroCidade">Sua cidade não é compatível com o nosso sistema!</string>
+    <string name="sair">Sair</string>
+    <string name="locationChange">Localização Encontrada!</string>
+    <string name="gpsEnable">GPS Ativado!</string>
+    <string name="gpsDisable">GPS Desativado!</string>
+    <string name="minhasDenuncias">Carregando Suas Denúncias</string>
+    <string name="enviandoDenuncia">Enviando Sua Denúncia!</string>
+    <string name="buscaLocal">Buscando Sua Localização</string>
+    <string name="carregaBusca">Carregando Resultados...</string>
+    <string name="cadastrando">Concluindo Cadastro...</string>
 </resources>
