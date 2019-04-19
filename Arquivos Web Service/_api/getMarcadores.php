@@ -11,7 +11,7 @@ if(!isset($_GET['cep'])){
 $cep = $_GET['cep'];
 
 //buscando as denuncias pelo cep
-$result = $Controller->getSql()->select("denuncia", "*", "cep = $cep");
+$result = $Controller->getSql()->select("denuncia", "*", "cep = $cep", "data DESC");
 
 while($rows = mysqli_fetch_array($result)){
     //buscando a imagem
@@ -26,9 +26,9 @@ while($rows = mysqli_fetch_array($result)){
     
     $data = date("d/m/Y H:i:s", $rows['data']);
     $denuncias[] = array(
-        'titulo' => $rows['titulo'],
+        'titulo' => utf8_decode( $rows['titulo'] ),
         'data' => $data,
-        'desc' => $rows['descricao'],
+        'desc' => utf8_decode ($rows['descricao'] ),
         'lat' => $rows['lati'],
         'lng' => $rows['lng'],
         'cidadao' => 1,

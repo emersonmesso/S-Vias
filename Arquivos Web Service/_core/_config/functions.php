@@ -1,11 +1,15 @@
 <?php
-require "cidadao.php";
+require "_model/cidadao.php";
 require "mysql.php";
-require "instituicao.php";
-require "denuncia.php";
+require "_model/instituicao.php";
+require "_model/denuncia.php";
 class Controller{
     private $url;
     private $sql;
+    
+    function Controller(){
+        $this->inicia();
+    }
             
     function inicia() {
         $_SERVER['REQUEST_URI'];
@@ -15,6 +19,7 @@ class Controller{
         array_shift($this->url);
         $this->conecta();
     }
+    
     public function conecta(){
         //
         $mysql = new Mysql();
@@ -302,8 +307,6 @@ class Controller{
         $sql = $this->select("cidades", "*", "cep = '$cep'");
         $array = array();
         while ($row = mysqli_fetch_array($sql)){
-            
-            
             
         }
         

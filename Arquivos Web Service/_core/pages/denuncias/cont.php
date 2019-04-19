@@ -1,6 +1,19 @@
-<button id="btnAtivaModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalPermissao">
-  Launch demo modal
-</button>
+<!-- Tela Carregamento -->
+<div class="" id="telaCarregamento">
+    <div class="container text-center p-5" id="infoCarregamento">
+        
+        <div id="carregandoInfo">
+            <h3>Carregando Mapa...</h3>
+            <img src="../../_core/_img/load.gif" alt="load mapa" title="Carregando mapa..." />
+        </div>
+        
+        <button type="button" class="btn btn-block btn-primary" id="btnPermissao">Permitir</button>
+        <h2 class="text-center" id="textInfo"></h2>
+        <a href="../index.php" class="btn btn-block btn-warning" id="btnInicio">Início Do Site</a>
+        
+    </div>
+</div>
+
 <!-- MAPA -->
 <div class="container-fluid mt-2" id="mapa">
     <!-- MAPA -->
@@ -16,6 +29,10 @@
     <!-- MAPA -->
 </div>
 <!-- MAPA -->
+
+<button id="btnAtivaModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalPermissao">
+  Launch demo modal
+</button>
 
 <!--MODAL INFORMAÇÕES-->
 <button type="button" id="modalInfo" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>

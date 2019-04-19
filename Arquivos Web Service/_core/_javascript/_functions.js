@@ -25,7 +25,17 @@ function initMap(){
                         }
                         
                     });
-                    getMarkets(cep);
+                    if(cep == ""){
+                        console.log("CEP não encontrado!");
+                        //buscando o cep
+                        var origem = data['results'][0]['formatted_address'];
+                        console.log(origem);
+                        var dados = origem.split(", ");
+                        console.log(dados[1]);
+                        getMarkets(dados[1]);
+                    }else{
+                        getMarkets(cep);
+                    }                    
                 },
                 error: function(){
 
@@ -194,30 +204,39 @@ function getMarkets(cep){
         type: "POST",
         dataType: "JSON",
         success: function (data) {
+            $("#carregandoInfo").hide();
             console.log(data);
-            $("#totalMarkets").attr("lang", data.total);
-            $.each(data, function(key, valor){
-                //valor['name']
-                var customLabel = {
-                    P: 'https://png.pngtree.com/element_pic/16/12/02/51e6452ca365f618ab4b723c7aa18be9.jpg',
-                    R: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-                };
-                var type = valor['type'];
-                var point = new google.maps.LatLng(valor['lat'],valor['lng']);
-                
-                var icon = customLabel[type];
-                
-                marker = new google.maps.Marker({
-                    map: map,
-                    draggable: false,
-                    animation: google.maps.Animation.DROP,
-                    position: point
+            if(data.erro == true){
+                $("#textInfo").html('');
+                $("#textInfo").html(data.message);
+                $("#btnInicio").show();
+            }else{
+                $("#totalMarkets").attr("lang", data.total);
+                $.each(data.denuncias, function(key, valor){
+                    //valor['name']
+                    var customLabel = {
+                        P: 'https://png.pngtree.com/element_pic/16/12/02/51e6452ca365f618ab4b723c7aa18be9.jpg',
+                        R: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+                    };
+                    var type = valor['type'];
+                    var point = new google.maps.LatLng(valor['lat'],valor['lng']);
+
+                    var icon = customLabel[type];
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                        draggable: false,
+                        animation: google.maps.Animation.DROP,
+                        position: point
+                    });
+                    marker.addListener('click', function() {
+                        viewData(valor['id']);
+                        //$("#telaDetalhe").fadeOut(100);
+                    });
                 });
-                marker.addListener('click', function() {
-                    viewData(valor['id']);
-                    //$("#telaDetalhe").fadeOut(100);
-                });
-            });
+                $("#telaCarregamento").hide();
+                
+            }
         },
         error: function () {
             alerts(1, "Erro ao buscar posíções do mapa");
