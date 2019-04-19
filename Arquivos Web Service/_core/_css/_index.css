@@ -1,0 +1,30 @@
+#navBarInicio{
+    font-size: 22px;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 2;
+}
+#carrousel{
+    z-index: 0;
+}
+.texto-inicial{
+    font-size: 25px;
+}
+.carousel-inner{
+    width: 100%;
+}
+#indicators{
+    z-index: 1;
+}
+body p{
+    font-size: 25px;
+    text-justify: inherit;
+}
+body button i{
+    font-size: 50px;
+}
+#btnCadastro{
+    font-size: 30px !important;
+    margin-top: -15px !important;
+}

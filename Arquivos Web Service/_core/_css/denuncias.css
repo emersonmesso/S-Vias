@@ -1,0 +1,41 @@
+*{
+    border: 0px;
+    margin: 0;
+}
+html, body{
+    width: 100%;
+    height: 98%;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 20px;
+}
+#navBarInicio{
+    font-size: 22px;
+    width: 100%;
+    z-index: 2;
+}
+#mapa{
+    width: 100%;
+    height: 95%;
+}
+#map{
+    width: 100%;
+    height: 100%;
+}
+#imageView{
+    max-height: 300px;
+}
+#dadosUsers{
+    z-index: 4;
+    margin-left: 10vw;
+}
+#opacit{
+    z-index: 7;
+    background-color: #333;
+    opacity: 0.9;
+    height: 100%;
+}
+#dadosUsers{
+    z-index: 4;
+    margin-left: 20vw;
+    width: 100%;
+}
