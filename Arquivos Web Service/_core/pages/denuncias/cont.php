@@ -1,3 +1,7 @@
+<div class="progress" style="height: 3px;">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
 <!-- Tela Carregamento -->
 <div class="" id="telaCarregamento">
     <div class="container text-center p-5" id="infoCarregamento">

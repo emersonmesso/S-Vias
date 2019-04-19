@@ -101,6 +101,9 @@ function initMap(){
         }, 
         function(error){ // callback de erro
            //ativa o modal
+           console.log("Não Permitido!");
+           $("#carregandoInfo").hide();
+           $("#btnPermissao").show();
         });
     } else {
         console.log('Navegador não suporta Geolocalização!');
@@ -147,12 +150,14 @@ function alerts(tipo, texto){
 /*Mostra os dados dos Markets*/
 function viewData(id){
     //buscando as informações da denúncia
+    progressbar(55);
     $.ajax({
         url: processos + "getDenuncia.php",
         data: {id : id},
         type: "POST",
         dataType: "JSON",
         success: function (data) {
+            progressbar(80);
             console.log(data);
             $("#modalName").html(data[0]['titulo']);
             if(data[0]['imagem'] != ""){
@@ -184,9 +189,10 @@ function viewData(id){
             $("#infoDenuncia").append('<button class="btn btn-block btn-primary">Compartilhar   <i class="fab fa-facebook-f"></i></button>');
             $("#infoDenuncia").append('<button class="btn btn-block btn-success">Compartilhar   <i class="fab fa-whatsapp"></i></button>');
             $("#infoDenuncia").append('');
-            
-            
+            progressbar(90);
             $("#modalInfo").click();
+            progressbar(100);
+            progressbar(0)
         },
         error: function () {
             
@@ -195,6 +201,11 @@ function viewData(id){
     
 }
 
+function progressbar(progress){
+    $("#progressBar").css({
+        'width' : progress + '%'
+    });
+}
 
 function getMarkets(cep){
     //
@@ -230,8 +241,8 @@ function getMarkets(cep){
                         position: point
                     });
                     marker.addListener('click', function() {
+                        progressbar(0);
                         viewData(valor['id']);
-                        //$("#telaDetalhe").fadeOut(100);
                     });
                 });
                 $("#telaCarregamento").hide();

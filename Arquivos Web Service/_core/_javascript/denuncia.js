@@ -13,8 +13,6 @@ $(document).ready(function(){
 
         if(permissionStatus.state != "denied"){
             initMap();
-        }else{
-            
         }
         permissionStatus.onchange = function() {
             console.log('geolocation permission state has changed to ', this.state);
