@@ -95,7 +95,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, SearchView.OnQueryTextListener, LocationListener, GoogleMap.OnMarkerClickListener, GpsStatus.Listener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, SearchView.OnQueryTextListener, LocationListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     GoogleSignInClient googleSignInClient;
@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity
     FrameLayout loadMapa;
     List<Address> lugares;
     LocationManager locationManager;
-    private String provider;
     Location minhaLocalizacao;
     boolean ativoGPS = false;
     //Lista de marcadores
@@ -126,7 +125,7 @@ public class MainActivity extends AppCompatActivity
     int zG = 14;
     SupportMapFragment mapFragment;
     private ImageView imgLoad;
-    private GpsStatus mStatus;
+    private TextView textoInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,16 +184,22 @@ public class MainActivity extends AppCompatActivity
         /*CAMPO DE BUSCA*/
         campoBusca = (SearchView) findViewById(R.id.campoBusca);
         loadMapa = (FrameLayout) findViewById(R.id.telaLoad);
+        textoInfo = (TextView) findViewById(R.id.textViewInfo);
+        textoInfo.setText("Carregando Denúncias");
         campoBusca.setOnQueryTextListener(this);
         /*CAMPO DE BUSCA*/
 
 
         /*LOCALIZAÇÃO E DADOS DA TELA*/
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.addGpsStatusListener(this);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-        BuscaDadosSistema sistema = new BuscaDadosSistema();
-        sistema.execute();
+        if(getLocation()){
+            BuscaDadosSistema sistema = new BuscaDadosSistema();
+            sistema.execute();
+        }else{
+            erroLocalizacao();
+        }
     }
 
     public void CidadeErro() {
@@ -225,51 +230,14 @@ public class MainActivity extends AppCompatActivity
     }
     //Mostra que não encontrou a localização
     public void erroLocalizacao() {
-        AlertDialog.Builder loca = new AlertDialog.Builder(this);
-        LayoutInflater layoutInflater = getLayoutInflater();
-
-        View view = layoutInflater.inflate(R.layout.layoutlocal, null);
-
-        ImageView loadImg = (ImageView) view.findViewById(R.id.loadImg);
-
-        Glide.with(getApplicationContext()).load(R.drawable.load).into(loadImg);
-
-        loca.setView(view);
-        loca.setCancelable(false);
-        loca.setNegativeButton(R.string.sair, new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //
-                signOut();
-                Intent intent = new Intent(MainActivity.this, PreProcessamento.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        loca.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        AlertDialog alert = loca.create();
-        alert.show();
-
+        exibirProgress(true);
+        textoInfo.setText("Buscando Sua Localização");
     }
 
     private boolean getLocation(){
-        Location locationGPS = locationManager.getLastKnownLocation(provider);
-
+        Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(locationGPS != null){
             minhaLocalizacao = locationGPS;
-            ativoGPS = true;
             return true;
         }else{
             return false;
@@ -340,6 +308,7 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("lat", lugares.get(0).getLatitude());
             intent.putExtra("lng", lugares.get(0).getLongitude());
             startActivity(intent);
+            this.onPause();
 
         } else if (id == R.id.nav_sobre) {
             Intent i = new Intent(MainActivity.this, ActivityContato.class);
@@ -470,7 +439,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
 
     /* Remove the locationlistener updates when Activity is paused */
@@ -482,10 +451,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        minhaLocalizacao = location;
-        if(!ativoGPS){
-            Toast.makeText(getApplicationContext(), R.string.locationChange, Toast.LENGTH_LONG).show();
-            ativoGPS = true;
+        if(getLocation()){
+            Log.i("localizacao", "Localizado!");
+            if(!ativoGPS){
+                textoInfo.setText("Carregando Denúncias...");
+                ativoGPS = true;
+                BuscaDadosSistema sistema = new BuscaDadosSistema();
+                sistema.execute();
+            }
+        }else{
+            Log.i("localizacao", "Aguardando...");
         }
 
     }
@@ -578,34 +553,6 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
-    @Override
-    public void onGpsStatusChanged(int event) {
-        mStatus = locationManager.getGpsStatus(mStatus);
-        Log.i("TESTE", (ativoGPS)? "Sim" : "Não");
-        switch (event) {
-            case GpsStatus.GPS_EVENT_STARTED:
-                // Do Something with mStatus info
-                //Log.i("TESTE", "1");
-                break;
-
-            case GpsStatus.GPS_EVENT_STOPPED:
-                // Do Something with mStatus info
-                //Log.i("TESTE", "2");
-                break;
-
-            case GpsStatus.GPS_EVENT_FIRST_FIX:
-                // Do Something with mStatus info
-                //Log.i("TESTE", "3");
-                break;
-
-            case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                // Do Something with mStatus info
-                //Log.i("TESTE", "4");
-                break;
-        }
-
-    }
-
     /**/
     private class BuscaDadosSistema extends AsyncTask<String, String, String> {
         private String retorno;
@@ -617,14 +564,7 @@ public class MainActivity extends AppCompatActivity
         protected void onPreExecute (){
             exibirProgress(true);
             //Buscando os dados de GPS
-            Criteria criteria = new Criteria();
-            provider = locationManager.getBestProvider(criteria, false);
-            minhaLocalizacao = locationManager.getLastKnownLocation(provider);
-            if (minhaLocalizacao != null) {
-                onResume();
-                onLocationChanged(minhaLocalizacao);
-            }
-            minhaLocalizacao = locationManager.getLastKnownLocation(provider);
+            minhaLocalizacao = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
         @Override
@@ -635,7 +575,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(String... strings) {
             //Buscando a minha localização
-            if(getLocation()){
+            if(minhaLocalizacao != null){
                 //buscando o meu CEP
                 Geocoder geo = new Geocoder(getApplicationContext());
                 try {

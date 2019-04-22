@@ -84,6 +84,7 @@ public class ActivityVisitante extends AppCompatActivity
     boolean ativoGPS = false;
     SupportMapFragment mapFragment;
     private ImageView imgLoad;
+    private TextView textoInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,26 +114,31 @@ public class ActivityVisitante extends AppCompatActivity
         //
         campoBusca = (SearchView) findViewById(R.id.campoBusca);
         loadMapa = (FrameLayout) findViewById(R.id.telaLoad);
+        textoInfo = (TextView) findViewById(R.id.textViewInfo);
+        textoInfo.setText("Carregando Denúncias");
 
         imgLoad = (ImageView) findViewById(R.id.imgLoad);
         Glide.with(this).load(R.drawable.load).into(imgLoad);
 
         campoBusca.setOnQueryTextListener(this);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //
+        /*LOCALIZAÇÃO E DADOS DA TELA*/
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-        BuscaDadosSistema sistema = new BuscaDadosSistema();
-        sistema.execute();
+        if(getLocation()){
+            BuscaDadosSistema sistema = new BuscaDadosSistema();
+            sistema.execute();
+        }else{
+            erroLocalizacao();
+        }
 
     }
 
 
     private boolean getLocation(){
-        Location locationGPS = locationManager.getLastKnownLocation(provider);
-
+        Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(locationGPS != null){
-            ativoGPS = true;
             minhaLocalizacao = locationGPS;
             return true;
         }else{
@@ -145,7 +151,7 @@ public class ActivityVisitante extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
 
     /* Remove the locationlistener updates when Activity is paused */
@@ -156,9 +162,16 @@ public class ActivityVisitante extends AppCompatActivity
     }
 
     public void onLocationChanged(Location location) {
-        minhaLocalizacao = location;
-        if(!ativoGPS){
-            ativoGPS = true;
+        if(getLocation()){
+            Log.i("localizacao", "Localizado!");
+            if(!ativoGPS){
+                textoInfo.setText("Carregando Denúncias...");
+                ativoGPS = true;
+                BuscaDadosSistema sistema = new BuscaDadosSistema();
+                sistema.execute();
+            }
+        }else{
+            Log.i("localizacao", "Aguardando...");
         }
     }
 
@@ -212,45 +225,9 @@ public class ActivityVisitante extends AppCompatActivity
 
     //Mostra que não encontrou a localização
     public void erroLocalizacao() {
-        AlertDialog.Builder loca = new AlertDialog.Builder(this);
-        LayoutInflater layoutInflater = getLayoutInflater();
-
-        View view = layoutInflater.inflate(R.layout.layoutlocal, null);
-
-        ImageView loadImg = (ImageView) view.findViewById(R.id.loadImg);
-
-        Glide.with(getApplicationContext()).load(R.drawable.load).into(loadImg);
-
-        loca.setView(view);
-        loca.setCancelable(false);
-        loca.setNegativeButton(R.string.sair, new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //
-                Intent intent = new Intent(ActivityVisitante.this, PreProcessamento.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        loca.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //
-                Intent intent = new Intent(ActivityVisitante.this, ActivityVisitante.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        AlertDialog alert = loca.create();
-        alert.show();
-
+        exibirProgress(true);
+        textoInfo.setText("Buscando Sua Localização");
     }
-
-
 
     private void exibirProgress(boolean exibir) {
         loadMapa.setVisibility(exibir ? View.VISIBLE : View.GONE);
@@ -461,14 +438,7 @@ public class ActivityVisitante extends AppCompatActivity
         protected void onPreExecute (){
             exibirProgress(true);
             //Buscando os dados de GPS
-            Criteria criteria = new Criteria();
-            provider = locationManager.getBestProvider(criteria, false);
-            minhaLocalizacao = locationManager.getLastKnownLocation(provider);
-            if (minhaLocalizacao != null) {
-                onResume();
-                onLocationChanged(minhaLocalizacao);
-            }
-            minhaLocalizacao = locationManager.getLastKnownLocation(provider);
+            minhaLocalizacao = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
         @Override
@@ -479,7 +449,7 @@ public class ActivityVisitante extends AppCompatActivity
         @Override
         protected String doInBackground(String... strings) {
             //Buscando a minha localização
-            if(getLocation()){
+            if(minhaLocalizacao != null){
                 //buscando o meu CEP
                 Geocoder geo = new Geocoder(getApplicationContext());
                 try {
