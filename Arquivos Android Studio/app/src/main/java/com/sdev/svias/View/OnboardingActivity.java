@@ -1,6 +1,9 @@
 package com.sdev.svias.View;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,19 +26,19 @@ public class OnboardingActivity extends AppCompatActivity {
     private SliderAdapter sliderAdapter;
 
     private Button btnproximo, btnVolta;
-
     private int mCurrentPage;
-
+    private boolean permitirGPS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 
+
         //
         mDotslayout = (LinearLayout) findViewById(R.id.dotsLayout);
         mSliderViewPager = (ViewPager) findViewById(R.id.slideViewPager);
-        sliderAdapter = new SliderAdapter(this);
+        sliderAdapter = new SliderAdapter(this, OnboardingActivity.this);
         mSliderViewPager.setAdapter(sliderAdapter);
 
         btnproximo = (Button) findViewById(R.id.nextBtn);
@@ -48,10 +51,21 @@ public class OnboardingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(mCurrentPage == mDots.length - 1){
-                    Intent intent = new Intent(OnboardingActivity.this, PreProcessamento.class);
-                    startActivity(intent);
-                    finish();
-
+                    if(permitirGPS){
+                        Intent intent = new Intent(OnboardingActivity.this, PreProcessamento.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.ACCESS_COARSE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions(OnboardingActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                            btnproximo.setText("Entrar");
+                        }else{
+                            permitirGPS = true;
+                            btnproximo.setText("Entrar");
+                        }
+                    }
                 }
                 mSliderViewPager.setCurrentItem(mCurrentPage + 1);
             }
@@ -63,12 +77,15 @@ public class OnboardingActivity extends AppCompatActivity {
                 mSliderViewPager.setCurrentItem(mCurrentPage - 1);
             }
         });
+    }
 
+    public void onClick(View v){
+        Toast.makeText(getApplicationContext(), "Permissão", Toast.LENGTH_LONG).show();
     }
 
 
     public void addDotsIndicator(int position) {
-        mDots = new TextView[3];
+        mDots = new TextView[4];
 
         for(int i = 0; i < mDots.length; i++){
             mDots[i] = new TextView(this);
@@ -109,7 +126,7 @@ public class OnboardingActivity extends AppCompatActivity {
                 btnVolta.setEnabled(true);
                 btnVolta.setVisibility(View.VISIBLE);
 
-                btnproximo.setText("Entrar");
+                btnproximo.setText("Permitir");
                 btnVolta.setText("Voltar");
             }else{
 

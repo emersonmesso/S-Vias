@@ -576,6 +576,7 @@ public class MainActivity extends AppCompatActivity
         protected String doInBackground(String... strings) {
             //Buscando a minha localização
             if(minhaLocalizacao != null){
+                ativoGPS = true;
                 //buscando o meu CEP
                 Geocoder geo = new Geocoder(getApplicationContext());
                 try {
@@ -629,6 +630,7 @@ public class MainActivity extends AppCompatActivity
         protected void onPostExecute(String result) {
 
             if(result == "ok"){
+                ativoGPS = true;
                 chamaMapa();
             }else if(result == "erro1"){
                 CidadeErro();

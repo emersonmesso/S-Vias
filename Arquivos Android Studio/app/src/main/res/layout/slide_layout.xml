@@ -12,7 +12,7 @@
         android:layout_margin="50dp"
         android:layout_gravity="start">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/slideImageView"
             android:layout_width="175dp"
             android:layout_height="166dp"

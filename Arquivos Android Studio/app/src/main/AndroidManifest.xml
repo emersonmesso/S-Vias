@@ -24,6 +24,7 @@
         <activity
             android:name=".View.ActivityDenuncias"
             android:label="Minhas Denúncias"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".View.OnboardingActivity"
@@ -31,6 +32,7 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".View.ActivityContato"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".View.ActivityAdd"

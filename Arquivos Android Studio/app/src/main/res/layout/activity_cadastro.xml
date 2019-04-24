@@ -19,7 +19,7 @@
             android:layout_height="197dp"
             android:orientation="vertical">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:src="@drawable/icon"
                 android:layout_width="match_parent"
                 android:layout_height="138dp" />
@@ -44,39 +44,17 @@
             android:orientation="vertical"
             android:padding="15dp">
 
-            <EditText
-                android:id="@+id/campoCPF"
-                android:inputType="number"
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/google_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="CPF" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:id="@+id/campoSenha"
-                android:hint="Senha"
-                android:inputType="textPassword"/>
+                android:layout_marginLeft="5dp"
+                android:text="Cadastre-se"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:textSize="18sp" />
 
         </LinearLayout>
-
-        <RelativeLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btnCadastrar"
-                android:layout_width="match_parent"
-                android:layout_height="68dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="83dp"
-                android:background="@color/colorPrimary"
-                android:text="Cadastrar"
-                android:textColor="#FFFFFF" />
-
-        </RelativeLayout>
 
 
     </LinearLayout>
@@ -113,7 +91,6 @@
 
 
     </FrameLayout>
-
 
 
 </android.support.constraint.ConstraintLayout>

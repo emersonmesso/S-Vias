@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackSplash"
-    tools:context=".View.View.SplashActivity">
+    tools:context=".View.SplashActivity"
+    android:orientation="horizontal">
 
     <ImageView
         android:layout_width="match_parent"
@@ -13,4 +14,36 @@
         android:maxWidth="@dimen/activity_horizontal_margin"
         android:src="@drawable/splash" />
 
-</LinearLayout>
+    <FrameLayout
+        android:id="@+id/FrameLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="216dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="50dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgUser"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/nomeuser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/colorBranco"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

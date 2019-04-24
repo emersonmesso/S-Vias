@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,12 +33,10 @@ public class Cadastro extends AppCompatActivity {
     //
     GoogleSignInClient googleSignInClient;
     GoogleSignInOptions gso;
-    ProgressBar mProgressBar;
     int RC_SIGN_IN;
-    EditText campoCPF;
-    EditText campoSenha;
     private ImageView imgLoad;
     FrameLayout loadMapa;
+    private SignInButton signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,25 +48,19 @@ public class Cadastro extends AppCompatActivity {
         imgLoad = (ImageView) findViewById(R.id.imgLoad);
         Glide.with(this).load(R.drawable.load).into(imgLoad);
 
-        campoCPF = (EditText)findViewById(R.id.campoCPF);
-        campoSenha = (EditText) findViewById(R.id.campoSenha);
+        signInButton = (SignInButton) findViewById(R.id.google_button);
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                singIn();
+            }
+        });
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        /*Ação Do Botão de cadastro*/
-        Button btnCadastro = (Button) findViewById(R.id.btnCadastrar);
-
-        btnCadastro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            //pega a conta do usuário
-                singIn();
-            }
-        });
 
         exibirProgress(false);
 
@@ -106,8 +99,8 @@ public class Cadastro extends AppCompatActivity {
                 String email = acc.getEmail();
                 String nome = acc.getDisplayName();
                 //recebe os dados do campo e verifica
-                String senha = String.valueOf( campoSenha.getText() );
-                String CPF = String.valueOf( campoCPF.getText() );
+                String senha = String.valueOf(email);
+                String CPF = String.valueOf( email );
 
                 if(CPF.isEmpty() || senha.isEmpty()){
                     Toast.makeText(this, "CPF ou Senha não informada!", Toast.LENGTH_LONG).show();
@@ -128,8 +121,6 @@ public class Cadastro extends AppCompatActivity {
 
                     }
                 }
-
-
             }
             exibirProgress(false);
         } catch (ApiException e) {

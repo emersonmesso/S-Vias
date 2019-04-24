@@ -50,9 +50,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.sdev.svias.Controller.HTTPRequest;
+import com.sdev.svias.Controller.ScriptDLL;
 import com.sdev.svias.Controller.UtilAPP;
 import com.sdev.svias.Model.Parametro;
 import com.sdev.svias.R;
+
+import org.json.JSONException;
 
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
@@ -121,8 +125,6 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener, 
             personName = acc.getDisplayName();
             personEmail = acc.getEmail();
         }
-
-
         //Carregando as imagens e botões
         btnConcluir = (Button) findViewById(R.id.btnConcluir);
         imgSelect = (ImageView) findViewById(R.id.imgArquivos);
@@ -173,6 +175,8 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener, 
 
             for(int i = 0; i < lugares.size(); i++){
                 Log.i("lugares", lugares.get(i).getPostalCode());
+                Log.i("lugares", String.valueOf( lugares.get(i).getAddressLine(0) ));
+                Log.i("lugares", String.valueOf( lugares.get(i).getSubLocality() ));
             }
 
             CEP = lugares.get(0).getPostalCode();
@@ -367,7 +371,6 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener, 
         @Override
         protected String doInBackground(String... strings) {
 
-
             if(this.imageBitmap != null){
 
                 ByteArrayOutputStream saida = new ByteArrayOutputStream();
@@ -389,6 +392,7 @@ public class ActivityAdd extends AppCompatActivity implements LocationListener, 
                 valores.add(new BasicNameValuePair("desc", this.parametro.getDesc()));
                 valores.add(new BasicNameValuePair("email", this.parametro.getEmail()));
                 valores.add(new BasicNameValuePair("cep", this.parametro.getCep()));
+                valores.add(new BasicNameValuePair("rua", String.valueOf( lugares.get(0).getAddressLine(0) )));
                 valores.add(new BasicNameValuePair("img", this.parametro.getImagem()));
                 valores.add(new BasicNameValuePair("lat", String.valueOf( this.parametro.getLat() )));
                 valores.add(new BasicNameValuePair("lng", String.valueOf( this.parametro.getLng() )));

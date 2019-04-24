@@ -22,7 +22,7 @@
         android:layout_height="100dp"
         android:layout_gravity="bottom|center"
         android:orientation="vertical"
-        android:padding="200dp"></LinearLayout>
+        android:padding="1500dp"></LinearLayout>
 
     <Button
         android:id="@+id/prevBtn"
