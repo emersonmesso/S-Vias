@@ -9,6 +9,12 @@ class Controller{
     
     function Controller(){
         $this->inicia();
+        if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
+            $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            header('HTTP/1.1 301 Moved Permanently');
+            header("Location: $redirect_url");
+            exit();
+        }
     }
             
     function inicia() {
@@ -144,9 +150,27 @@ class Controller{
     
     //Barra de navegação
     public function navBarPage() {
-        echo '<nav class="navbar navbar-expand-lg navbar-light bg-warning" id="navBarInicio">';
+        echo '<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #FACC2E;" id="navBarInicio">';
             echo '<div class="container">';
-                echo '<img src="./_core/_img/logoApp.png" class="navbar-brand rounded" alt="Logo aplicativo" title="Logo Aplicativo" width="45px" />';
+                echo '<img src="./_core/_img/logoApp.png" class="navbar-brand" alt="Logo aplicativo" title="Logo Aplicativo" width="45px" style="border-radius: 50% !important;" />';
+                echo '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">';
+                    echo '<span class="navbar-toggler-icon"></span>';
+                echo '</button>';
+                echo '<div class="collapse navbar-collapse" id="navbarNavAltMarkup">';
+                    echo '<div class="navbar-nav">';
+                        echo '<a class="nav-item nav-link active" href="index.php">Inicio <span class="sr-only">(current)</span></a>';
+                        echo '<a class="nav-item nav-link" href="denuncias">Denúncias</a>';
+                        echo '<a class="nav-item nav-link" href="login">Login</a>';
+                        //echo '<a class="nav-item nav-link" href="#telaContatoLocal">Contato</a>';
+                        echo '</div>';
+                echo '</div>';
+            echo '</div>';
+        echo '</nav>';
+    }
+    public function navBarPageIndex() {
+        echo '<nav class="navbar navbar-expand-lg navbar-light" id="navBarInicio">';
+            echo '<div class="container">';
+                echo '<img src="./_core/_img/logoApp.png" class="navbar-brand" alt="Logo aplicativo" title="Logo Aplicativo" width="45px" style="border-radius: 50% !important;" />';
                 echo '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">';
                     echo '<span class="navbar-toggler-icon"></span>';
                 echo '</button>';
@@ -164,30 +188,56 @@ class Controller{
     }
     
     //Imagens Do Aplicativo e descrição
+    public function imgCarousel() {
+        $array = array();
+        $pasta = '_core/_img/carrousel/';
+        
+        $diretorio = dir($pasta);
+        while(($arquivo = $diretorio->read()) !== false){
+            if(strlen($arquivo) > 2){
+                $array[] = $pasta . $arquivo;
+            }
+        }
+        $diretorio->close();
+        return $array;
+    }
+    
     public function Carrousel() {
-        $caminho = "../../_img/carrousel/";
         echo '<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img class="d-block w-100" src="'.$caminho.'img1.jpg'.'" alt="First slide">
-              </div>
-              <div class="carousel-item">
-                <img class="d-block w-100" src="'.$caminho.'img2.jpg'.'" alt="Second slide">
-              </div>
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
+                <ol class="carousel-indicators">';
+                for ($a = 0; $a < count($this->imgCarousel()); $a++){
+                    if($a == 0){
+                        echo '<li data-target="#carouselExampleIndicators" data-slide-to="'.$a.'" class="active" style="z-index:1;"></li>';
+                    }else{
+                        echo '<li data-target="#carouselExampleIndicators" data-slide-to="'.$a.'" style="z-index:1;"></li>';
+                    }
+                }
+                echo '</ol>
+                <div class="carousel-inner">
+                ';
+                
+                $cont = 1;
+                foreach ($this->imgCarousel() as $image) {
+                    if ($cont == 1) {
+                        echo '<div class="carousel-item active">
+                                    <img class="d-block w-100" src="' . $image . '" alt="First slide">
+                                </div>';
+                    } else {
+                        echo '<div class="carousel-item">
+                                   <img class="d-block w-100" src="' . $image . '" alt="">
+                                </div>';
+                    }
+                    $cont++;
+                }
+                echo '  </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
         </div>';
     }
     
@@ -311,4 +361,52 @@ class Controller{
         }
         
     }
+    
+    
+    /*MENU DAS CIDADES DA DENUNCIA DO USUARIO*/
+    public function cidadesDenuncia($email) {
+        $sql = $this->select("cidades", "*");
+        while($cidade = mysqli_fetch_array($sql)){
+            
+            //buscando as denuncias da cidade
+            $sqlDenuncia = $this->select("denuncia", "*", "cep = '".$cidade['cep']."' AND email_cid = '$email'");
+            
+            if(mysqli_num_rows($sqlDenuncia) > 0){
+                //mostra o botão
+                echo '<li>';
+                    echo '<a href="javascript:void(0)" id="btnCidade" lang="'.$cidade['nome'].'" cep="'.$cidade['cep'].'">'.$cidade['nome'].'</a>';
+                echo '</li>';
+            }
+        }
+        
+    }
+    
+    
+    /*FORMULÁRIO DE CONTATO DO SITE*/
+    public function enviaFormContato($dados) {
+        $destino = "emersonmessoribeiro@gmail.com";
+        $arquivo = ''
+            . '<h1>Novo registro de contato</h1>'
+            . 'Você recebeu um novo chamado de contato no site da empresa<br />'
+            . '<b>Mensagem:</b> ' . $dados['mensagem'] . '<br />'
+            . '<b>De:</b> ' . $dados['nome'] . '<br />'
+            . '<b>E-mail:</b> ' . $dados['email']
+            . '';
+        
+        
+        $emailenviar = $dados['email'];
+        $assunto = "Formulário De Contato S-Vias";
+
+        // É necessário indicar que o formato do e-mail é html
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= 'From: <'.$emailenviar.'>';
+        //$headers .= "Bcc: $EmailPadrao\r\n";
+        if(!mail($destino, $assunto, $arquivo, $headers)){
+            echo "E-MAIL NÃO ENVIADO!";
+        }
+        
+    }
+    
+    /*FORMULÁRIO DE CONTATO DO SITE*/
 }

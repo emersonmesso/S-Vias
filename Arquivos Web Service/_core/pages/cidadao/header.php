@@ -5,10 +5,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" type="imagem/x-icon" href="../../_core/_img/icon.ico"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Cidadão - S Vias</title>
         <!-- Bootstrap CSS CDN -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <link rel="stylesheet" href="../../_core/_css/css/bootstrap.css">
         <!-- Our Custom CSS -->
         <link rel="stylesheet" href="../../_core/pages/cidadao/style.css">
         <!-- Font Awesome JS -->

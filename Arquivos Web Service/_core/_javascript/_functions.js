@@ -226,8 +226,9 @@ function getMarkets(cep){
                 $.each(data.denuncias, function(key, valor){
                     //valor['name']
                     var customLabel = {
-                        P: 'https://png.pngtree.com/element_pic/16/12/02/51e6452ca365f618ab4b723c7aa18be9.jpg',
-                        R: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+                        "P": '../_core/_img/pendente.png',
+                        "C": '../_core/_img/concluido.png',
+                        "S": '../_core/_img/progresso.png'
                     };
                     var type = valor['type'];
                     var point = new google.maps.LatLng(valor['lat'],valor['lng']);
@@ -238,7 +239,8 @@ function getMarkets(cep){
                         map: map,
                         draggable: false,
                         animation: google.maps.Animation.DROP,
-                        position: point
+                        position: point,
+                        icon: icon
                     });
                     marker.addListener('click', function() {
                         progressbar(0);
@@ -253,4 +255,26 @@ function getMarkets(cep){
             alerts(1, "Erro ao buscar posíções do mapa");
         }
     });
+    
+    
+    function formContato(nome, email, mensagem){
+        $.ajax({
+            url: processos + "enviaFormContato.php",
+            data: {nome : nome, email : email, mensagem : mensagem},
+            type: "POST",
+            success: function(data){
+                if(data == ""){
+                    $("#alertContato").html('');
+                    $("#alertContato").html('<div class="alert alert-success">Obrigado por nos contatar!</div>');
+                }else{
+                    $("#alertContato").html('');
+                    $("#alertContato").html('<div class="alert alert-danger">' + data + '</div>');
+                }
+            },
+            error: function(){
+                
+            }
+        });
+    }
+    
 }

@@ -7,13 +7,12 @@
     <div class="container text-center p-5" id="infoCarregamento">
         
         <div id="carregandoInfo">
-            <h3>Carregando Mapa...</h3>
             <img src="../../_core/_img/load.gif" alt="load mapa" title="Carregando mapa..." />
         </div>
         
-        <button type="button" class="btn btn-block btn-primary" id="btnPermissao">Permitir</button>
+        <!--<button type="button" class="btn btn-block btn-primary" id="btnPermissao">Permitir</button>-->
         <h2 class="text-center" id="textInfo"></h2>
-        <a href="../index.php" class="btn btn-block btn-warning" id="btnInicio">Início Do Site</a>
+        <!--<a href="../index.php" class="btn btn-block btn-warning" id="btnInicio">Início Do Site</a>-->
         
     </div>
 </div>
@@ -25,7 +24,7 @@
         
         <div class="text-center">
             <h1>Imagem</h1>
-            <button type="button" class="btn btn-block btn-primary" id="btnPermissao">Permitir</button>
+            <!--<button type="button" class="btn btn-block btn-primary" id="btnPermissao">Permitir</button>-->
             
         </div>
         
@@ -68,7 +67,7 @@
                 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-block btn-light" data-dismiss="modal"><i class="fas fa-external-link text-danger"></i>Fechar</button>
             </div>
         </div>
     </div>
