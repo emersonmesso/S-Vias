@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/xampp/htdocs/_core/_processos/cadastroIns.php</file>
+            <file>file:/C:/xampp/htdocs/_core/_config/config.php</file>
+            <file>file:/C:/xampp/htdocs/_core/pages/login/header.php</file>
+            <file>file:/C:/xampp/htdocs/_core/pages/login/cont.php</file>
+            <file>file:/C:/xampp/htdocs/_core/pages/login/footer.php</file>
+            <file>file:/C:/xampp/htdocs/_core/pages/cadastro/footer.php</file>
+            <file>file:/C:/xampp/htdocs/_core/pages/cadastro/cont.php</file>
+            <file>file:/C:/xampp/htdocs/_core/_processos/getDenuncia.php</file>
+            <file>file:/C:/xampp/htdocs/_core/_processos/getDenunciaAtual.php</file>
+            <file>file:/C:/xampp/htdocs/_core/pages/cadastro/header.php</file>
+            <file>file:/C:/xampp/htdocs/_core/_config/mysql.php</file>
+            <file>file:/C:/xampp/htdocs/_core/_processos/loginUser.php</file>
+            <file>file:/C:/xampp/htdocs/_core/_config/functions.php</file>
+            <file>file:/C:/xampp/htdocs/_core/_processos/enviaFormContato.php</file>
+            <file>file:/C:/xampp/htdocs/_core/_processos/logoutUser.php</file>
+        </group>
+    </open-files>
+</project-private>

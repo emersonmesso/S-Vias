@@ -1,5 +1,5 @@
 <?php require "_core/_config/config.php";
-$con->redirecionaSessao();
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,3 +15,4 @@ $con->redirecionaSessao();
         <?php
         //Barra de navegação
         $con->navBarPage();
+
