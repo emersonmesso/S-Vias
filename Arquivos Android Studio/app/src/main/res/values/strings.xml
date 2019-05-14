@@ -25,4 +25,5 @@
     <string name="buscaLocal">Buscando Sua Localização</string>
     <string name="carregaBusca">Carregando Resultados...</string>
     <string name="cadastrando">Realizando Cadastro...</string>
+    <string name="aguarde">Aguarde...</string>
 </resources>

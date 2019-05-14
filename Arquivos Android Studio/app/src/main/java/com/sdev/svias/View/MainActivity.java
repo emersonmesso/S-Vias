@@ -269,8 +269,11 @@ public class MainActivity extends AppCompatActivity
         //
         nomeUser.setText(personName);
         emailUser.setText(personEmail);
-        imagem = DownloadImage(personPhoto.toString());
-        imageUser.setImageBitmap(imagem);
+        if(personPhoto != null){
+            imagem = DownloadImage(personPhoto.toString());
+            imageUser.setImageBitmap(imagem);
+        }
+
         return true;
     }
 

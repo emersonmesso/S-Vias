@@ -44,6 +44,8 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
     static final int REQUEST_LOCATION = 1;
 
     AppCompatButton buttonLogin;
+    AppCompatButton btnInstituicao;
+    AppCompatButton cadastro;
     LinearLayout ligin;
     LinearLayout carregando;
     GoogleSignInClient googleSignInClient;
@@ -64,6 +66,19 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
         ligin = (LinearLayout) findViewById(R.id.login);
         carregando = (LinearLayout) findViewById(R.id.carregando);
         ligin.setVisibility(View.GONE);
+
+        //Entrar como instituição
+        btnInstituicao = (AppCompatButton) findViewById(R.id.btnIns);
+        btnInstituicao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //tela de login Instituição
+                Intent intent = new Intent(PreProcessamento.this,
+                        LoginInstituicao.class);
+                startActivity(intent);
+            }
+        });
+
         buttonLogin = (AppCompatButton) findViewById(R.id.sign_in_button);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +88,7 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
             }
         });
 
-        AppCompatButton cadastro = (AppCompatButton) findViewById(R.id.btnCadastro);
+        cadastro = (AppCompatButton) findViewById(R.id.btnCadastro);
         cadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,7 +235,6 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
         Intent intent = new Intent(PreProcessamento.this,
                 ActivityVisitante.class);
         startActivity(intent);
-        finish();
     }
 
     public void AtivaGPS() {

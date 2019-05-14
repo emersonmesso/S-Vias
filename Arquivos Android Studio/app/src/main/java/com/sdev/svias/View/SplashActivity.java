@@ -122,12 +122,11 @@ public class SplashActivity extends Activity {
 
     private void adicionarPreferenceJaAbriu(SharedPreferences preferences) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("ja_abriu_app", true);
+        editor.putBoolean("onboarding", true);
         editor.commit();
     }
 
     private class Splash extends AsyncTask<String, String, String> {
-        private String retorno;
 
         private String nome;
         private Uri imagem;
@@ -157,25 +156,28 @@ public class SplashActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
             if(isLogado){
-                imgUser.setImageBitmap(DownloadImage(this.imagem.toString()));
-                nomeUser.setText(this.nome);
-                FrameLogin.setVisibility(View.VISIBLE);
+
+                if(this.imagem != null){
+                    imgUser.setImageBitmap(DownloadImage(this.imagem.toString()));
+                    nomeUser.setText(this.nome);
+                    FrameLogin.setVisibility(View.VISIBLE);
+                }
             }
             Handler handle = new Handler();
             handle.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (preferences.contains("ja_abriu_app")) {
-                        //adicionarPreferenceJaAbriu(preferences);
+                if (preferences.contains("onboarding")) {
 
-                        if(isLogado){
-                            mostraMapa();
-                        }else {
-                            mostrarLogin();
-                        }
-                    } else {
-                        mostraOnBoarding();
+                    if(isLogado){
+                        mostraMapa();
+                    }else {
+                        mostrarLogin();
                     }
+                } else {
+                    adicionarPreferenceJaAbriu(preferences);
+                    mostraOnBoarding();
+                }
                 }
             }, 4000);
         }
