@@ -3,7 +3,7 @@ class Mysql{
     private $host = "localhost";
     private $user = "root";
     private $pass = "";
-    private $banco = "s-vias";
+    private $banco = "id7145571_svias";
     
     function getHost() {
         return $this->host;
