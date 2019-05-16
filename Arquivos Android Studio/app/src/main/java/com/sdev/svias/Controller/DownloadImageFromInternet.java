@@ -20,9 +20,6 @@ public class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
-        imageView.setImageResource(R.drawable.baseline_add_black_48);
-
     }
 
     protected Bitmap doInBackground(String... urls) {

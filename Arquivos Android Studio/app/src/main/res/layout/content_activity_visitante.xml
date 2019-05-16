@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".View.View.ActivityVisitante"
+    tools:context=".View.ActivityVisitante"
     tools:showIn="@layout/app_bar_activity_visitante">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -54,14 +54,24 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/loadMapa"
-                android:layout_width="120dp"
-                android:layout_height="138dp" />
+            <ImageView
+                android:id="@+id/imgLoad"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:src="@drawable/load" />
+
+            <TextView
+                android:id="@+id/textViewInfo"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Carregando Denúncias..."
+                android:textAlignment="center" />
         </LinearLayout>
 
 

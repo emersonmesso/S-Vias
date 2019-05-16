@@ -19,10 +19,13 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -46,19 +49,22 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
     GoogleSignInClient googleSignInClient;
     GoogleSignInOptions gso;
     int RC_SIGN_IN;
-    ProgressBar mProgressBar;
-
+    private ImageView imgLoad;
+    FrameLayout telaLoad;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_processamento);
 
+        telaLoad = (FrameLayout) findViewById(R.id.telaLoad);
+
+        imgLoad = (ImageView) findViewById(R.id.imgLoad);
+        Glide.with(this).load(R.drawable.load).into(imgLoad);
+
         ligin = (LinearLayout) findViewById(R.id.login);
         carregando = (LinearLayout) findViewById(R.id.carregando);
         ligin.setVisibility(View.GONE);
         buttonLogin = (AppCompatButton) findViewById(R.id.sign_in_button);
-
-        mProgressBar = (ProgressBar) findViewById(R.id.note_list_progress);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +93,7 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
     }
 
     private void exibirProgress(boolean exibir) {
-        mProgressBar.setVisibility(exibir ? View.VISIBLE : View.GONE);
+        telaLoad.setVisibility(exibir ? View.VISIBLE : View.GONE);
     }
 
     //verifica se tem internet
@@ -110,6 +116,7 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
                 != PackageManager.PERMISSION_GRANTED){
             ativoGps = false;
             ActivityCompat.requestPermissions(PreProcessamento.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            //AtivaGPS();
         }else {
             ativoGps = true;
         }
@@ -134,17 +141,14 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        exibirProgress(true);
 
         GoogleSignInAccount acc = GoogleSignIn.getLastSignedInAccount(this);
         if(acc != null){
             String email = acc.getEmail();
             verificaCadastro(email);
-            exibirProgress(false);
         }else{
             Log.i("Google", "Erro ao buscar dados do aplicativo");
         }
-        exibirProgress(false);
 
     }
 

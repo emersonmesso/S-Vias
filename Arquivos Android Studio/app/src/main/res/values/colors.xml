@@ -7,4 +7,5 @@
     <color name="colorBranco">#FFF</color>
     <color name="colorAppBar">#FACC2E</color>
     <color name="colorDescDenuncia">#EBEBEB</color>
+    <color name="colorTransparent">#CCCCCC</color>
 </resources>

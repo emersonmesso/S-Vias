@@ -32,6 +32,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -82,6 +83,8 @@ public class ActivityVisitante extends AppCompatActivity
     private AdView mAdView;
     boolean ativoGPS = false;
     SupportMapFragment mapFragment;
+    private ImageView imgLoad;
+    private TextView textoInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,55 +111,34 @@ public class ActivityVisitante extends AppCompatActivity
                 .build();
         mAdView.loadAd(adRequest);
 
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // Code to be executed when an ad request fails.
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when when the user is about to return
-                // to the app after tapping on an ad.
-            }
-        });
-
         //
         campoBusca = (SearchView) findViewById(R.id.campoBusca);
         loadMapa = (FrameLayout) findViewById(R.id.telaLoad);
+        textoInfo = (TextView) findViewById(R.id.textViewInfo);
+        textoInfo.setText("Carregando Denúncias");
+
+        imgLoad = (ImageView) findViewById(R.id.imgLoad);
+        Glide.with(this).load(R.drawable.load).into(imgLoad);
 
         campoBusca.setOnQueryTextListener(this);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //
+        /*LOCALIZAÇÃO E DADOS DA TELA*/
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-        BuscaDadosSistema sistema = new BuscaDadosSistema();
-        sistema.execute();
+        if(getLocation()){
+            BuscaDadosSistema sistema = new BuscaDadosSistema();
+            sistema.execute();
+        }else{
+            erroLocalizacao();
+        }
 
     }
 
 
     private boolean getLocation(){
-        Location locationGPS = locationManager.getLastKnownLocation(provider);
-
+        Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(locationGPS != null){
-            ativoGPS = true;
             minhaLocalizacao = locationGPS;
             return true;
         }else{
@@ -169,7 +151,7 @@ public class ActivityVisitante extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
 
     /* Remove the locationlistener updates when Activity is paused */
@@ -180,12 +162,17 @@ public class ActivityVisitante extends AppCompatActivity
     }
 
     public void onLocationChanged(Location location) {
-        minhaLocalizacao = location;
-        if(!ativoGPS){
-            Toast.makeText(this, "Localização Atualizada!", Toast.LENGTH_LONG).show();
-            ativoGPS = true;
+        if(getLocation()){
+            Log.i("localizacao", "Localizado!");
+            if(!ativoGPS){
+                textoInfo.setText("Carregando Denúncias...");
+                ativoGPS = true;
+                BuscaDadosSistema sistema = new BuscaDadosSistema();
+                sistema.execute();
+            }
+        }else{
+            Log.i("localizacao", "Aguardando...");
         }
-        //Toast.makeText(this, "Localização Atualizada!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -196,22 +183,23 @@ public class ActivityVisitante extends AppCompatActivity
 
     @Override
     public void onProviderEnabled(String provider) {
-        Toast.makeText(this, "Enabled new provider " + provider,
+        Toast.makeText(this, R.string.gpsEnable,
                 Toast.LENGTH_SHORT).show();
-
+        onResume();
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(this, "Disabled provider " + provider,
+        Toast.makeText(this, R.string.gpsDisable,
                 Toast.LENGTH_SHORT).show();
     }
 
     //Mostra mensagem de cidade não permitida
     public void CidadeErro() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Sua cidade não é compatível com o nosso sistema!");
+        builder.setMessage(R.string.erroCidade);
         builder.setCancelable(false);
+        /*
         builder.setPositiveButton("Quero Na Cidade", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -219,7 +207,8 @@ public class ActivityVisitante extends AppCompatActivity
                 //
             }
         });
-        builder.setNegativeButton("Sair", new DialogInterface.OnClickListener() {
+        */
+        builder.setNegativeButton(R.string.sair, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //
@@ -236,31 +225,9 @@ public class ActivityVisitante extends AppCompatActivity
 
     //Mostra que não encontrou a localização
     public void erroLocalizacao() {
-        AlertDialog.Builder loca = new AlertDialog.Builder(this);
-        loca.setMessage("Não encontramos a sua localização.\nAguarde até carpturarmos a sua licalização.\nPressione OK quando a localização for encontrada!");
-        loca.setCancelable(false);
-        loca.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-            }
-        });
-        loca.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //
-            }
-        });
-        AlertDialog alert = loca.create();
-        alert.show();
-
+        exibirProgress(true);
+        textoInfo.setText("Buscando Sua Localização");
     }
-
-
 
     private void exibirProgress(boolean exibir) {
         loadMapa.setVisibility(exibir ? View.VISIBLE : View.GONE);
@@ -319,7 +286,7 @@ public class ActivityVisitante extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.nav_empresa) {
-            String url = "https://emersonmesso95.000webhostapp.com/";
+            String url = UtilAPP.LINK_SITE_EMPRESA;
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
@@ -333,9 +300,6 @@ public class ActivityVisitante extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        CriaDataBase banco = new CriaDataBase();
-        banco.criaConexao(getApplicationContext());
 
         if(minhaCidade){
             LatLng local = new LatLng(localMapaG.latitude, localMapaG.longitude);
@@ -399,7 +363,6 @@ public class ActivityVisitante extends AppCompatActivity
         final AlertDialog.Builder viewop = new AlertDialog.Builder(this);
 
         LatLng posisao = marker.getPosition();
-
         int pos = -1;
 
         LayoutInflater li = getLayoutInflater();
@@ -410,45 +373,48 @@ public class ActivityVisitante extends AppCompatActivity
             }
         }
 
-        Log.i("posicao", "Posição do marcador no mapa: " + posisao.latitude + " | " + posisao.longitude);
-        Log.i("posicao", "Posição do marcador: " + marcadores.get(pos).getLatlng().latitude + " | " + marcadores.get(pos).getLatlng().longitude);
-
         //inflamos o layout alerta.xml na view
         View view = li.inflate(R.layout.click_marcador, null);
         ImageView imgDenuncia = (ImageView) view.findViewById(R.id.imgMarcador);
-
-        imgDenuncia.setImageDrawable(getDrawable(R.drawable.load));
         TextView nomeDenuncia = (TextView) view.findViewById(R.id.nomeDenuncia);
         nomeDenuncia.setText(marcadores.get(pos).getNome());
+        //verificando se existe a imagem
+        if(marcadores.get(pos).getMidia().equals("")){
+            imgDenuncia.setImageResource(R.drawable.image_off);
+        }else{
+            Glide.with(view).load(R.drawable.load).into(imgDenuncia);
+            DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
+            img.execute(marcadores.get(pos).getMidia());
 
-        DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-        img.execute(marcadores.get(pos).getMidia());
+            imgDenuncia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
+
         TextView descDenuncia = (TextView) view.findViewById(R.id.descDenuncia);
         descDenuncia.setText(marcadores.get(pos).getDescricao());
         TextView cordenadasDenuncia = (TextView) view.findViewById(R.id.cordenadas);
 
         ImageView imgSituacao = (ImageView) view.findViewById(R.id.situacaoDenuncia);
 
-        if(marcadores.get(pos).getSituacao() == "pendente"){
+        if(marcadores.get(pos).getSituacao().equals("Pendente" )){
             //troca a imagem aqui de pendente
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
-        }else if(marcadores.get(pos).getSituacao() == "andamento"){
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.vermelho));
+        }else if(marcadores.get(pos).getSituacao().equals("Em Progresso" )){
             //Em andamento
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
+            imgSituacao.setImageDrawable(getDrawable(R.drawable.amarelo));
         }else{
             //Concluido
             imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
         }
-
         cordenadasDenuncia.setText("Latitude: " + posisao.latitude + " Longitude: " + posisao.longitude);
-
-
         viewop.setView(view);
-
-
-
         viewop.setCancelable(false);
-        viewop.setPositiveButton("Voltar", new DialogInterface.OnClickListener() {
+        viewop.setPositiveButton(R.string.voltar, new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -458,20 +424,7 @@ public class ActivityVisitante extends AppCompatActivity
             }
         });
         AlertDialog alert = viewop.create();
-
-
-
-
         alert.show();
-
-        /*capturando os textViews e imageViews
-        TextView nomeDenuncia = (TextView) findViewById(R.id.nomeDenuncia);
-
-
-        //alterando os dados na tela
-        nomeDenuncia.setText(marcadores.get(pos).getNome());
-        */
-
         return false;
     }
 
@@ -485,14 +438,7 @@ public class ActivityVisitante extends AppCompatActivity
         protected void onPreExecute (){
             exibirProgress(true);
             //Buscando os dados de GPS
-            Criteria criteria = new Criteria();
-            provider = locationManager.getBestProvider(criteria, false);
-            minhaLocalizacao = locationManager.getLastKnownLocation(provider);
-            if (minhaLocalizacao != null) {
-                onResume();
-                onLocationChanged(minhaLocalizacao);
-            }
-            minhaLocalizacao = locationManager.getLastKnownLocation(provider);
+            minhaLocalizacao = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
         @Override
@@ -503,7 +449,8 @@ public class ActivityVisitante extends AppCompatActivity
         @Override
         protected String doInBackground(String... strings) {
             //Buscando a minha localização
-            if(getLocation()){
+            if(minhaLocalizacao != null){
+                ativoGPS = true;
                 //buscando o meu CEP
                 Geocoder geo = new Geocoder(getApplicationContext());
                 try {
@@ -521,8 +468,7 @@ public class ActivityVisitante extends AppCompatActivity
                             }
                         }
                         if(!minhaCidade){
-                            CidadeErro();
-                            this.retorno = "erro";
+                            this.retorno = "erro1";
                         }else{
                             //recebe o os dados da posição da cidade
                             localMapaG = new LatLng(lugares.get(0).getLatitude(), lugares.get(0).getLongitude());
@@ -536,32 +482,33 @@ public class ActivityVisitante extends AppCompatActivity
 
                     } catch (JSONException e) {
                         Log.i("cidades", "não encontrado");
-                        this.retorno = "erro";
-                        CidadeErro();
+                        this.retorno = "erro1";
                     }
 
 
                 } catch (IOException e) {
-                    this.retorno = "erro";
-                    CidadeErro();
+                    this.retorno = "erro1";
                 }
 
             }else{
-                this.retorno = "erro";
+                this.retorno = "erro2";
                 ativoGPS = false;
-                erroLocalizacao();
             }
-
-
             return this.retorno;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("RETORNO", result);
 
             if(result == "ok"){
+                ativoGPS = true;
                 chamaMapa();
+            }else if(result == "erro1"){
+                CidadeErro();
+            }else{
+                erroLocalizacao();
+                onResume();
+                onLocationChanged(minhaLocalizacao);
             }
 
             exibirProgress(false);
