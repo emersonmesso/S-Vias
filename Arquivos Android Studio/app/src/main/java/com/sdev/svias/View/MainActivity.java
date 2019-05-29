@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -135,14 +136,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, ActivityAdd.class);
-                finish();
-                startActivity(i);
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -200,6 +194,17 @@ public class MainActivity extends AppCompatActivity
         }else{
             erroLocalizacao();
         }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, LocationMap.class);
+                i.putExtra("local", minhaLocalizacao);
+                i.putExtra("lat", minhaLocalizacao.getLatitude());
+                i.putExtra("lng", minhaLocalizacao.getLongitude());
+                startActivity(i);
+                onPause();
+            }
+        });
     }
 
     public void CidadeErro() {
@@ -269,8 +274,11 @@ public class MainActivity extends AppCompatActivity
         //
         nomeUser.setText(personName);
         emailUser.setText(personEmail);
-        imagem = DownloadImage(personPhoto.toString());
-        imageUser.setImageBitmap(imagem);
+        if(personPhoto != null){
+            imagem = DownloadImage(personPhoto.toString());
+            imageUser.setImageBitmap(imagem);
+        }
+
         return true;
     }
 
@@ -335,10 +343,12 @@ public class MainActivity extends AppCompatActivity
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, zG);
             mMap.moveCamera(update);
             mMap.setOnMarkerClickListener(this);
+            mMap.setMyLocationEnabled(true);
         }else{
             LatLng local = new LatLng(localMapaP.latitude, localMapaP.longitude);
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, zP);
             mMap.moveCamera(update);
+            mMap.setMyLocationEnabled(true);
         }
 
         for (int i = 0; i < marcadores.size(); i++) {
@@ -509,12 +519,17 @@ public class MainActivity extends AppCompatActivity
         }else{
             Glide.with(view).load(R.drawable.load).into(imgDenuncia);
             DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-            img.execute(marcadores.get(pos).getMidia());
+            img.execute(marcadores.get(pos).getMidia().get(0));
 
+            final int finalPos = pos;
             imgDenuncia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    int posi  = finalPos;
+                    Intent i = new Intent(MainActivity.this, ViewImages.class);
+                    i.putExtra("imagens", marcadores.get(posi).getMidia());
+                    startActivity(i);
+                    onPause();
                 }
             });
         }

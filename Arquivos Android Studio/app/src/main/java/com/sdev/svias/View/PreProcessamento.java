@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.sdev.svias.Controller.HTTPRequest;
 import com.sdev.svias.Controller.UtilAPP;
@@ -44,6 +46,8 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
     static final int REQUEST_LOCATION = 1;
 
     AppCompatButton buttonLogin;
+    AppCompatButton btnInstituicao;
+    AppCompatButton cadastro;
     LinearLayout ligin;
     LinearLayout carregando;
     GoogleSignInClient googleSignInClient;
@@ -64,6 +68,19 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
         ligin = (LinearLayout) findViewById(R.id.login);
         carregando = (LinearLayout) findViewById(R.id.carregando);
         ligin.setVisibility(View.GONE);
+
+        //Entrar como instituição
+        btnInstituicao = (AppCompatButton) findViewById(R.id.btnIns);
+        btnInstituicao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //tela de login Instituição
+                Intent intent = new Intent(PreProcessamento.this,
+                        LoginInstituicao.class);
+                startActivity(intent);
+            }
+        });
+
         buttonLogin = (AppCompatButton) findViewById(R.id.sign_in_button);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +90,7 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
             }
         });
 
-        AppCompatButton cadastro = (AppCompatButton) findViewById(R.id.btnCadastro);
+        cadastro = (AppCompatButton) findViewById(R.id.btnCadastro);
         cadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,6 +204,15 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
 
     }
 
+    private void signOut() {
+        googleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
+    }
+
     private void verificaCadastro (String email){
         ligin.setVisibility(View.INVISIBLE);
         HTTPRequest request = new HTTPRequest();
@@ -202,6 +228,7 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
             startActivity(intent);
             finish();
         }else if(dados.equals("0")){
+            signOut();
             Log.i("dados", "Erro");
             Intent intent = new Intent(PreProcessamento.this,
                     Cadastro.class);
@@ -220,7 +247,6 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
         Intent intent = new Intent(PreProcessamento.this,
                 ActivityVisitante.class);
         startActivity(intent);
-        finish();
     }
 
     public void AtivaGPS() {

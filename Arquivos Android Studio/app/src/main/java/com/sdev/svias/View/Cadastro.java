@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import com.sdev.svias.Controller.CNP;
+import com.sdev.svias.Controller.Mask;
 import com.sdev.svias.R;
 import com.sdev.svias.Controller.HTTPRequest;
 import com.sdev.svias.Controller.UtilAPP;
@@ -36,7 +40,11 @@ public class Cadastro extends AppCompatActivity {
     int RC_SIGN_IN;
     private ImageView imgLoad;
     FrameLayout loadMapa;
-    private SignInButton signInButton;
+    private Button btnConcluir;
+    private EditText campoCPF;
+    private EditText campoSenha;
+
+    private TextWatcher cpfMask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +56,16 @@ public class Cadastro extends AppCompatActivity {
         imgLoad = (ImageView) findViewById(R.id.imgLoad);
         Glide.with(this).load(R.drawable.load).into(imgLoad);
 
-        signInButton = (SignInButton) findViewById(R.id.google_button);
+        //
+        campoCPF = (EditText) findViewById(R.id.editCPF);
+        cpfMask = Mask.insert("###.###.###-##", campoCPF);
+        campoCPF.addTextChangedListener(cpfMask);
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        campoSenha = (EditText) findViewById(R.id.editSenha);
+
+        //
+        btnConcluir = (Button) findViewById(R.id.btnCadastro);
+        btnConcluir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 singIn();
@@ -69,8 +84,6 @@ public class Cadastro extends AppCompatActivity {
     private void exibirProgress(boolean exibir) {
         loadMapa.setVisibility(exibir ? View.VISIBLE : View.GONE);
     }
-
-
     //Sing In
     public void singIn (){
         exibirProgress(true);
@@ -99,11 +112,13 @@ public class Cadastro extends AppCompatActivity {
                 String email = acc.getEmail();
                 String nome = acc.getDisplayName();
                 //recebe os dados do campo e verifica
-                String senha = String.valueOf(email);
-                String CPF = String.valueOf( email );
+                String senha = campoSenha.getText().toString();
+                String CPF = campoCPF.getText().toString();
 
-                if(CPF.isEmpty() || senha.isEmpty()){
-                    Toast.makeText(this, "CPF ou Senha não informada!", Toast.LENGTH_LONG).show();
+                if(CPF.isEmpty() || senha.isEmpty() || !CNP.isValidCPF(CPF)){
+                    Toast.makeText(this, "DADOS INCOMPLETOS OU ERRADOS!", Toast.LENGTH_LONG).show();
+                    //logout do sistema
+                    signOut();
                 }else{
                     //faz o cadastro no servidor
                     HTTPRequest rest = new HTTPRequest();

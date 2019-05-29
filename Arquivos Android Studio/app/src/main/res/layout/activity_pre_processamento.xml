@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="match_parent"
                     android:layout_height="149dp"
                     android:src="@drawable/icon" />
@@ -54,17 +54,20 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
+                android:text="Bem Vindo Ao S-Vias"
                 android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
                 android:textSize="25dp"
-                android:text="Bem Vindo Ao S-Vias" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
-                android:layout_height="112dp"
+                android:layout_height="74dp"
                 android:backgroundTint="@color/colorAppBar"
+                android:baselineAligned="false"
                 android:onClick="visitante"
                 android:text="Entrar Com Minha Conta"
                 android:textColor="@color/colorPrimary"
@@ -73,7 +76,7 @@
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnVisitante"
                 android:layout_width="match_parent"
-                android:layout_height="112dp"
+                android:layout_height="72dp"
                 android:backgroundTint="@color/colorAppBar"
                 android:onClick="visitante"
                 android:text="Entrar Como Visitante"
@@ -81,11 +84,21 @@
                 android:textSize="20dp" />
 
             <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnIns"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:backgroundTint="@color/colorAppBar"
+                android:onClick="visitante"
+                android:text="Entrar como instituição"
+                android:textColor="@color/colorBranco"
+                android:textSize="20dp" />
+
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnCadastro"
                 android:layout_width="match_parent"
-                android:layout_height="112dp"
-                android:onClick="visitante"
+                android:layout_height="72dp"
                 android:backgroundTint="@color/colorAppBar"
+                android:onClick="visitante"
                 android:text="Cadastre-se"
                 android:textColor="@color/colorBranco"
                 android:textSize="20dp" />
@@ -94,6 +107,7 @@
 
 
     </LinearLayout>
+
 
     <FrameLayout
         android:id="@+id/telaLoad"
@@ -110,5 +124,7 @@
             android:layout_width="match_parent"
             android:layout_height="75dp" />
     </FrameLayout>
+
+
 
 </android.support.constraint.ConstraintLayout>

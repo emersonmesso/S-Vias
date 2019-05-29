@@ -306,10 +306,12 @@ public class ActivityVisitante extends AppCompatActivity
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, zG);
             mMap.moveCamera(update);
             mMap.setOnMarkerClickListener(this);
+            mMap.setMyLocationEnabled(true);
         }else{
             LatLng local = new LatLng(localMapaP.latitude, localMapaP.longitude);
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, zP);
             mMap.moveCamera(update);
+            mMap.setMyLocationEnabled(true);
         }
 
         for (int i = 0; i < marcadores.size(); i++) {
@@ -384,12 +386,16 @@ public class ActivityVisitante extends AppCompatActivity
         }else{
             Glide.with(view).load(R.drawable.load).into(imgDenuncia);
             DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-            img.execute(marcadores.get(pos).getMidia());
-
+            img.execute(marcadores.get(pos).getMidia().get(0));
+            final int finalPos = pos;
             imgDenuncia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    int posi  = finalPos;
+                    Intent i = new Intent(ActivityVisitante.this, ViewImages.class);
+                    i.putExtra("imagens", marcadores.get(posi).getMidia());
+                    startActivity(i);
+                    onPause();
                 }
             });
         }

@@ -49,7 +49,7 @@ public class DenunciasAdapter extends ArrayAdapter<Marcador> {
         }else{
             Glide.with(rowView.getContext()).load(R.drawable.load).into(imgDenuncia);
             DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-            img.execute(denuncias.get(position).getMidia());
+            img.execute(denuncias.get(position).getMidia().get(0));
         }
 
         TextView nomeDenuncia = (TextView) rowView.findViewById(R.id.nomeDenuncia);

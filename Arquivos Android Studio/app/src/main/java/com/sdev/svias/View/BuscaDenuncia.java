@@ -167,7 +167,7 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
         nomeDenuncia.setText(marcadores.get(pos).getNome());
 
         DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-        img.execute(marcadores.get(pos).getMidia());
+        img.execute(marcadores.get(pos).getMidia().get(0));
 
         imgDenuncia.setOnClickListener(new View.OnClickListener() {
             @Override
