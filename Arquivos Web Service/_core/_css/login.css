@@ -1,0 +1,73 @@
+/*
+ * Autor: Michael Dydean
+ * Data de criação: 2018-12-07.
+ * Data de modificação: 2019-02-12.
+ */
+@charset "uft-8";
+
+#navBarInicio{
+    font-size: 22px;
+    width: 100%;
+    z-index: 2;
+}
+#carrousel{
+    z-index: 0;
+}
+.texto-inicial{
+    font-size: 25px;
+}
+.carousel-inner{
+    width: 100%;
+}
+#indicators{
+    z-index: 1;
+}
+
+.logo{
+    width:50px;
+    height: 50px;
+}
+body{
+    font-family: 'Open Sans Condensed', sans-serif;
+    background-image: url('../_img/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+/*.content{
+    width: 500px;
+    min-height: 560px;    
+    margin: 0px auto;
+    position: relative;   
+
+}*/
+p{
+    margin-bottom:15px;
+}
+#login1{
+    margin: 2%;
+    padding: 4%;
+    background: #f7f7f7;
+    border: 1px solid rgba(147, 184, 189,0.8);
+    -webkit-box-shadow: 5px;
+    border-radius: 5px;
+}
+
+footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    font-size: 25px;
+    text-align: center;
+}
+.link {
+    width: 40%;
+    margin-left: 35%;
+    text-decoration: #002752;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    display: flex;
+    font-size: 0.9em;
+}
