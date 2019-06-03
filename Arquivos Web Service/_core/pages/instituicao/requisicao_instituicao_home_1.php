@@ -10,11 +10,10 @@ include '../../_config/functions.php';
 
 $con = new Controller();
 
-$text = $_GET['text'];
+$termo = $_GET['termo'];
 
-$cep = $_GET['cep'] . '-000';
-
-$denuncias = $con->statusDenuncia($text, $cep);
+if($con->searchDenuncia($termo) != NULL) {
+$denuncias = $con->searchDenuncia($termo);
 
 $cod = '<table id="tableview" class="table"><thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Título</th><th scope="col">Descrição</th><th scope="col">Status</th><th scope="col">Cep</th><th scope="col">Editar</th><th scope="col">Excluir</th></tr></thead>';
 
@@ -30,7 +29,7 @@ foreach ($denuncias as $denuncia) {
             $cod .= PHP_EOL . '<td>pendente</td>';
             break;
         case '2':
-            $cod .= PHP_EOL . '<td>em progresso</td>';
+            $cod .= PHP_EOL . '<td>em andamento</td>';
             break;
         case '3':
             $cod .= PHP_EOL . '<td>concluído</td>';
@@ -48,4 +47,7 @@ foreach ($denuncias as $denuncia) {
 $cod .= PHP_EOL . '</table>';
 
 echo $cod;
+} else  {
+    echo 'nenhum dados encontrado!';
+}
 

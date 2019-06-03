@@ -298,6 +298,11 @@ class Controller {
     }
 
     public function dadosInstituicao() {
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
         $sql = $this->select("instituicao", "*", "email = '" . $_SESSION['email'] . "'");
         $instituicao = new Instituicao();
         while ($dado = mysqli_fetch_array($sql)) {
@@ -377,10 +382,11 @@ class Controller {
      * O método recupera os dados da tabela denuncia do banco de dados.
      * 
      * @param type $status
+     * @param type $cep
      * @author Michael Dydean
      */
     public function statusDenuncia($status, $cep) {
-
+        $denuncias = [];
         if ($status != NULL && $cep == NULL) {
             $sql = $this->select("denuncia", "*", "id_class = '" . $status . "'");
         } elseif ($status == NULL && $cep != NULL) {
@@ -388,7 +394,64 @@ class Controller {
         } else {
             $sql = $this->select("denuncia", "*", "id_class = '" . $status . "' AND cep = '" . $cep . "'");
         }
-        
+
+        while ($denuncia = mysqli_fetch_array($sql)) {
+            $denuncias[] = $denuncia;
+        }
+
+        return $denuncias;
+    }
+    
+    public function countStatusDenuncia($status, $cep) {
+        if ($status != NULL && $cep == NULL) {
+            $sql = $this->select("denuncia", "*", "id_class = '" . $status . "'");
+        } elseif ($status == NULL && $cep != NULL) {
+            $sql = $this->select("denuncia", "*", "cep = '" . $cep . "'");
+        } else {
+            $sql = $this->select("denuncia", "*", "id_class = '" . $status . "' AND cep = '" . $cep . "'");
+        }
+
+        return mysqli_num_rows($sql);
+    }
+    
+       /**
+     * O método recupera os dados da tabela denuncia do banco de dados.
+     * 
+     * @param type $status
+     * @param type $cep
+     * @author Michael Dydean
+     */
+    public function statusDenunciaLimit($status, $cep, $i, $r) {
+        $denuncias = [];
+        if ($status != NULL && $cep == NULL) {
+            $sql = $this->select("denuncia", "*", "id_class = '$status' Limit $i, $r");
+        } elseif ($status == NULL && $cep != NULL) {
+            $sql = $this->select("denuncia", "*", "cep = '$cep'  Limit $i, $r");
+        } else {
+            $sql = $this->select("denuncia", "*", "id_class = '$status' AND cep = '$cep' Limit $i, $r");
+        }
+
+        while ($denuncia = mysqli_fetch_array($sql)) {
+            $denuncias[] = $denuncia;
+        }
+
+        return $denuncias;
+    }
+    
+     /**
+     * O método recupera os dados da tabela denuncia do banco de dados.
+     * 
+     * @param type $termo
+     * @author Michael Dydean
+     */
+    public function searchDenuncia($termo) {
+        $denuncias = [];
+        if ($termo != NULL) {
+            $sql = $this->select("denuncia", "*", "titulo LIKE '%$termo%' or descricao LIKE '%$termo%' or cep LIKE '%$termo%'");
+        } else {
+            return NULL;
+        }
+
         while ($denuncia = mysqli_fetch_array($sql)) {
             $denuncias[] = $denuncia;
         }
