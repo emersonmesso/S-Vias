@@ -1,110 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:padding="10dp"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="50dp"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/telaSituacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@color/colorConcluido"
+            tools:ignore="MissingConstraints">
+
+            <TextView
+                android:id="@+id/nomeSituacao"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Teste"
+                android:textSize="30dp"
+                android:layout_marginRight="10dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorBranco" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_marginTop="30dp"
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:id="@+id/imgDenuncia"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorBranco"
+                    android:text="Ver Mais Fotos"
+                    android:id="@+id/btnViewImages"
+                    android:background="@color/colorAppBar"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/nomeDenuncia"
+                android:id="@+id/descDenuncia"
+                android:textSize="25dp"
+                android:text="teste"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nome Do Marcador"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
-                android:textSize="30dp" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
+
 
         <LinearLayout
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="25dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/descDenuncia"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textSize="18dp"
-                android:text="TextView"
-                android:textStyle="normal"
-                android:textAlignment="textStart"
-                android:gravity="start" />
-
-            <TextView
-                android:id="@+id/data"
-                android:layout_width="match_parent"
                 android:textAlignment="center"
-                android:layout_marginTop="5dp"
+                android:id="@+id/endereco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textAlignment="center"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Postado Em 11/02/2019" />
-
-            <LinearLayout
+                android:id="@+id/cidade"/>
+            <TextView
+                android:textAlignment="center"
                 android:layout_width="match_parent"
-                android:layout_height="185dp"
-                android:layout_marginTop="40dp"
-                android:orientation="horizontal">
-
-
-                <ImageView
-                    android:id="@+id/imgMarcador"
-                    android:layout_width="198dp"
-                    android:layout_height="match_parent" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Status"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="25dp" />
-                    <ImageView
-                        android:id="@+id/situacaoDenuncia"
-                        android:layout_margin="30dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="35dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/cep"/>
+            <TextView
+                android:textAlignment="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/cordenadas"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:id="@+id/data"/>
 
         </LinearLayout>
 
-
     </LinearLayout>
-
 </ScrollView>

@@ -1,8 +1,10 @@
 package com.sdev.svias.View;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Geocoder;
@@ -12,6 +14,8 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +28,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.sdev.svias.Controller.HTTPRequest;
 import com.sdev.svias.Controller.ScriptDLL;
 import com.sdev.svias.Controller.UtilAPP;
@@ -51,7 +57,6 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
         FrameLogin = (FrameLayout) findViewById(R.id.FrameLogin) ;
         FrameLogin.setVisibility(View.GONE);
         nomeUser = (TextView) findViewById(R.id.nomeuser);
@@ -63,6 +68,7 @@ public class SplashActivity extends Activity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        //signOut();
         Splash init = new Splash();
         init.execute();
 
@@ -124,6 +130,16 @@ public class SplashActivity extends Activity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("onboarding", true);
         editor.commit();
+    }
+
+    private void signOut() {
+        googleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });
     }
 
     private class Splash extends AsyncTask<String, String, String> {

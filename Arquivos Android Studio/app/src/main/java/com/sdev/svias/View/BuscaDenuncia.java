@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -160,41 +162,68 @@ public class BuscaDenuncia extends AppCompatActivity implements OnMapReadyCallba
 
         //inflamos o layout alerta.xml na view
         View view = li.inflate(R.layout.click_marcador, null);
-        ImageView imgDenuncia = (ImageView) view.findViewById(R.id.imgMarcador);
 
-        Glide.with(view).load(R.drawable.load).into(imgDenuncia);
-        TextView nomeDenuncia = (TextView) view.findViewById(R.id.nomeDenuncia);
-        nomeDenuncia.setText(marcadores.get(pos).getNome());
+        //ALTERANDO AS INFORMAÇÕES DA TELA
+        LinearLayout telaSituacao = (LinearLayout) view.findViewById(R.id.telaSituacao);
+        TextView situacaoDenuncia = (TextView) view.findViewById(R.id.nomeSituacao);
 
-        DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-        img.execute(marcadores.get(pos).getMidia());
+        if(marcadores.get(pos).getSituacao().equals("Pendente")){
+            telaSituacao.setBackgroundResource(R.color.colorPendente);
+            situacaoDenuncia.setText("Ainda não foi Analisada pelas Autoridades Competentes!");
+        }else if(marcadores.get(pos).getSituacao().equals("Em Progresso")){
+            telaSituacao.setBackgroundResource(R.color.colorAppBar);
+            situacaoDenuncia.setText("A denuncia foi analisada e está em processo de resolução!");
+        }else{
+            telaSituacao.setBackgroundResource(R.color.colorConcluido);
+            situacaoDenuncia.setText("Problema Resolvido com Sucesso!");
+        }
 
-        imgDenuncia.setOnClickListener(new View.OnClickListener() {
+
+        //Imagem Da Denúncia
+        ImageView imgDenuncia = view.findViewById(R.id.imgDenuncia);
+
+        Glide.with(this).load(R.drawable.down).into(imgDenuncia);
+        imgDenuncia.setImageResource(R.drawable.down);
+        if(marcadores.get(pos).getMidia().size() > 0){
+            //tem imagem
+            DownloadImageFromInternet downImage = new DownloadImageFromInternet(imgDenuncia, this);
+            downImage.execute(marcadores.get(pos).getMidia().get(0));
+        }else{
+            imgDenuncia.setImageResource(R.drawable.image_off);
+        }
+
+        //Botão mais imagens
+        Button btnViewImages = (Button) view.findViewById(R.id.btnViewImages);
+        if(marcadores.get(pos).getMidia().size() > 1){
+            btnViewImages.setVisibility(View.VISIBLE);
+        }else{
+            btnViewImages.setVisibility(View.INVISIBLE);
+        }
+        final int posicao = pos;
+        btnViewImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(BuscaDenuncia.this, ViewImages.class);
+                intent.putExtra("imagens", marcadores.get(posicao).getMidia());
+                startActivity(intent);
+                onPause();
             }
         });
 
-
-
+        //Descrição da denúncia
         TextView descDenuncia = (TextView) view.findViewById(R.id.descDenuncia);
         descDenuncia.setText(marcadores.get(pos).getDescricao());
-        TextView cordenadasDenuncia = (TextView) view.findViewById(R.id.cordenadas);
 
-        ImageView imgSituacao = (ImageView) view.findViewById(R.id.situacaoDenuncia);
+        /*Outras informações*/
+        TextView dataDen = (TextView) view.findViewById(R.id.data);
+        dataDen.setText(marcadores.get(pos).getData());
+        TextView cidadeDen = (TextView) view.findViewById(R.id.cidade);
+        cidadeDen.setText(marcadores.get(pos).getCidade());
+        TextView cepDen = (TextView) view.findViewById(R.id.cep);
+        cepDen.setText(marcadores.get(pos).getCep());
+        TextView enderecoDen = (TextView) view.findViewById(R.id.endereco);
+        enderecoDen.setText(marcadores.get(pos).getRua());
 
-        if(marcadores.get(pos).getSituacao().equals("Pendente" )){
-            //troca a imagem aqui de pendente
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.vermelho));
-        }else if(marcadores.get(pos).getSituacao().equals("Em Progresso" )){
-            //Em andamento
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.amarelo));
-        }else{
-            //Concluido
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
-        }
-        cordenadasDenuncia.setText("Latitude: " + posisao.latitude + " Longitude: " + posisao.longitude);
         viewop.setView(view);
         viewop.setCancelable(false);
         viewop.setPositiveButton("Voltar", new DialogInterface.OnClickListener() {

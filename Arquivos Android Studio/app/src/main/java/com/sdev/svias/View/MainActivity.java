@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -37,8 +38,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -48,6 +51,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity
     ImageView imageUser;
     Bitmap imagem;
     private AdView mAdView;
+    private InterstitialAd mInterstitialAd;
     SearchView campoBusca;
     FrameLayout loadMapa;
     List<Address> lugares;
@@ -135,14 +140,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, ActivityAdd.class);
-                finish();
-                startActivity(i);
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -178,6 +176,43 @@ public class MainActivity extends AppCompatActivity
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdView.loadAd(adRequest);
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-1846233707943905/6386155897");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                chamaAdd();
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                chamaAdd();
+            }
+        });
         /*ANÚNCIOS*/
 
 
@@ -200,6 +235,28 @@ public class MainActivity extends AppCompatActivity
         }else{
             erroLocalizacao();
         }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(mInterstitialAd.isLoaded()){
+                    mInterstitialAd.show();
+                }else{
+                    chamaAdd();
+                }
+
+
+            }
+        });
+    }
+
+    private void chamaAdd(){
+        Intent i = new Intent(MainActivity.this, LocationMap.class);
+        i.putExtra("local", minhaLocalizacao);
+        i.putExtra("lat", minhaLocalizacao.getLatitude());
+        i.putExtra("lng", minhaLocalizacao.getLongitude());
+        startActivity(i);
+        onPause();
     }
 
     public void CidadeErro() {
@@ -338,10 +395,12 @@ public class MainActivity extends AppCompatActivity
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, zG);
             mMap.moveCamera(update);
             mMap.setOnMarkerClickListener(this);
+            mMap.setMyLocationEnabled(true);
         }else{
             LatLng local = new LatLng(localMapaP.latitude, localMapaP.longitude);
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(local, zP);
             mMap.moveCamera(update);
+            mMap.setMyLocationEnabled(true);
         }
 
         for (int i = 0; i < marcadores.size(); i++) {
@@ -503,43 +562,69 @@ public class MainActivity extends AppCompatActivity
 
         //inflamos o layout alerta.xml na view
         View view = li.inflate(R.layout.click_marcador, null);
-        ImageView imgDenuncia = (ImageView) view.findViewById(R.id.imgMarcador);
-        TextView nomeDenuncia = (TextView) view.findViewById(R.id.nomeDenuncia);
-        nomeDenuncia.setText(marcadores.get(pos).getNome());
-        //verificando se existe a imagem
-        if(marcadores.get(pos).getMidia().equals("")){
-            imgDenuncia.setImageResource(R.drawable.image_off);
+
+
+        //ALTERANDO AS INFORMAÇÕES DA TELA
+        LinearLayout telaSituacao = (LinearLayout) view.findViewById(R.id.telaSituacao);
+        TextView situacaoDenuncia = (TextView) view.findViewById(R.id.nomeSituacao);
+
+        if(marcadores.get(pos).getSituacao().equals("Pendente")){
+            telaSituacao.setBackgroundResource(R.color.colorPendente);
+            situacaoDenuncia.setText("Ainda não foi Analisada pelas Autoridades Competentes!");
+        }else if(marcadores.get(pos).getSituacao().equals("Em Progresso")){
+            telaSituacao.setBackgroundResource(R.color.colorAppBar);
+            situacaoDenuncia.setText("A denuncia foi analisada e está em processo de resolução!");
         }else{
-            Glide.with(view).load(R.drawable.load).into(imgDenuncia);
-            DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-            img.execute(marcadores.get(pos).getMidia());
-
-            imgDenuncia.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+            telaSituacao.setBackgroundResource(R.color.colorConcluido);
+            situacaoDenuncia.setText("Problema Resolvido com Sucesso!");
         }
 
 
+        //Imagem Da Denúncia
+        ImageView imgDenuncia = view.findViewById(R.id.imgDenuncia);
+
+        Glide.with(this).load(R.drawable.down).into(imgDenuncia);
+        imgDenuncia.setImageResource(R.drawable.down);
+        if(marcadores.get(pos).getMidia().size() > 0){
+            //tem imagem
+            DownloadImageFromInternet downImage = new DownloadImageFromInternet(imgDenuncia, this);
+            downImage.execute(marcadores.get(pos).getMidia().get(0));
+        }else{
+            imgDenuncia.setImageResource(R.drawable.image_off);
+        }
+
+        //Botão mais imagens
+        Button btnViewImages = (Button) view.findViewById(R.id.btnViewImages);
+        if(marcadores.get(pos).getMidia().size() > 1){
+            btnViewImages.setVisibility(View.VISIBLE);
+        }else{
+            btnViewImages.setVisibility(View.INVISIBLE);
+        }
+        final int posicao = pos;
+        btnViewImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ViewImages.class);
+                intent.putExtra("imagens", marcadores.get(posicao).getMidia());
+                startActivity(intent);
+                onPause();
+            }
+        });
+
+        //Descrição da denúncia
         TextView descDenuncia = (TextView) view.findViewById(R.id.descDenuncia);
         descDenuncia.setText(marcadores.get(pos).getDescricao());
-        TextView cordenadasDenuncia = (TextView) view.findViewById(R.id.cordenadas);
 
-        ImageView imgSituacao = (ImageView) view.findViewById(R.id.situacaoDenuncia);
+        /*Outras informações*/
+        TextView dataDen = (TextView) view.findViewById(R.id.data);
+        dataDen.setText(marcadores.get(pos).getData());
+        TextView cidadeDen = (TextView) view.findViewById(R.id.cidade);
+        cidadeDen.setText(marcadores.get(pos).getCidade());
+        TextView cepDen = (TextView) view.findViewById(R.id.cep);
+        cepDen.setText(marcadores.get(pos).getCep());
+        TextView enderecoDen = (TextView) view.findViewById(R.id.endereco);
+        enderecoDen.setText(marcadores.get(pos).getRua());
 
-        if(marcadores.get(pos).getSituacao().equals("Pendente" )){
-            //troca a imagem aqui de pendente
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.vermelho));
-        }else if(marcadores.get(pos).getSituacao().equals("Em Progresso" )){
-            //Em andamento
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.amarelo));
-        }else{
-            //Concluido
-            imgSituacao.setImageDrawable(getDrawable(R.drawable.verde));
-        }
-        cordenadasDenuncia.setText("Latitude: " + posisao.latitude + " Longitude: " + posisao.longitude);
         viewop.setView(view);
         viewop.setCancelable(false);
         viewop.setPositiveButton(R.string.voltar, new DialogInterface.OnClickListener() {

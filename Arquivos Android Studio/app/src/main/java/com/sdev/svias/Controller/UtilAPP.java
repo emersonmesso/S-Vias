@@ -15,13 +15,14 @@ public class UtilAPP {
     public static final int READ_TIMEOUT = 15000;
     public static String LINK_SITE_APP = "https://emersonmesso95.000webhostapp.com/";
     public static String LINK_SITE_EMPRESA = "https://s-development.000webhostapp.com/";
-    public static String LINK_SITE_CADASTRO_INSTITUICAO = "https://s-development.000webhostapp.com/cadastro";
+    public static String LINK_SITE_CADASTRO_INSTITUICAO = LINK_SITE_APP + "cadastro";
     public static String LINK_SERVIDOR = "https://emersonmesso95.000webhostapp.com/_api/";
     public static String LINK_SERVIDOR_EMAIL = "https://emersonmesso95.000webhostapp.com/_api/_apiVerificaLogin.php?email=";
     public static String LINK_SERVIDOR_CADASTRO = "https://emersonmesso95.000webhostapp.com/_api/cadastro.php?";
 
     public static String LINK_SERVIDOR_CADASTRO_DENUCIA = "https://emersonmesso95.000webhostapp.com/_api/cadastroDenuncia.php";
     public static String LINK_SERVIDOR_CADASTRO_IMG_DENUCIA = "https://emersonmesso95.000webhostapp.com/_api/salvaImagem.php";
+    public static String LINK_SERVIDOR_CADASTRO_IMG_INSTITUICAO = "https://emersonmesso95.000webhostapp.com/_api/SalvaImagemInstituicao.php";
 
 
     //

@@ -72,6 +72,10 @@ public class LoginInstituicao extends AppCompatActivity {
             }
         });
 
+        if(!preferences.contains("loginInstituicao")){
+            criaPreferences();
+        }
+
         String login = preferences.getString("loginInstituicao", null);
         String email = preferences.getString("email", null);
 
@@ -94,6 +98,13 @@ public class LoginInstituicao extends AppCompatActivity {
     private void adicionarPreferenceJaAbriu(SharedPreferences preferences) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("loginInstituicao", "sim");
+        editor.commit();
+    }
+
+    private void criaPreferences(){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("email", "");
+        editor.putString("loginInstituicao", "nao");
         editor.commit();
     }
     private void adicionarPreferenceEmail(String email) {

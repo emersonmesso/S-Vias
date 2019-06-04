@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,40 +40,36 @@ public class DenunciasAdapter extends ArrayAdapter<Marcador> {
 
 
         //editando os dados da tela
-
         if(selected != -1 && position == selected) {
             rowView.setBackgroundColor(Color.BLACK);
         }
-        ImageView imgDenuncia = (ImageView) rowView.findViewById(R.id.imgDenuncia);
-        if(denuncias.get(position).getMidia().equals("")){
-            imgDenuncia.setImageResource(R.drawable.image_off);
+
+        //background
+        LinearLayout tela = (LinearLayout) rowView.findViewById(R.id.linhaComp);
+        if(denuncias.get(position).getSituacao().equals("Pendente")){
+            tela.setBackgroundColor(Color.RED);
+        }else if(denuncias.get(position).getSituacao().equals("Em Progresso" )){
+            tela.setBackgroundColor(Color.YELLOW);
         }else{
-            Glide.with(rowView.getContext()).load(R.drawable.load).into(imgDenuncia);
-            DownloadImageFromInternet img = new DownloadImageFromInternet(imgDenuncia);
-            img.execute(denuncias.get(position).getMidia());
+            tela.setBackgroundColor(Color.GREEN);
         }
 
+        //nome da denuncia
         TextView nomeDenuncia = (TextView) rowView.findViewById(R.id.nomeDenuncia);
         nomeDenuncia.setText(denuncias.get(position).getNome());
 
-        ImageView imgSituacao = (ImageView) rowView.findViewById(R.id.imgSituacao);
-
-        if(denuncias.get(position).getSituacao().equals("Pendente")){
-            imgSituacao.setImageResource(R.drawable.vermelho);
-        }else if(denuncias.get(position).getSituacao().equals("Em Progresso" )){
-            imgSituacao.setImageResource(R.drawable.amarelo);
+        //descrição
+        TextView descDenuncia = (TextView) rowView.findViewById(R.id.descDenuncia);
+        if(denuncias.get(position).getDescricao().length() > 50){
+            descDenuncia.setText(denuncias.get(position).getDescricao().substring(0, 50)+"...");
         }else{
-            imgSituacao.setImageResource(R.drawable.verde);
+            descDenuncia.setText(denuncias.get(position).getDescricao());
         }
 
-        imgDenuncia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
-        TextView descDenuncia = (TextView) rowView.findViewById(R.id.descDenuncia);
-        descDenuncia.setText(denuncias.get(position).getDescricao());
+        //Rua
+        TextView rua = (TextView) rowView.findViewById(R.id.textRua);
+        rua.setText(denuncias.get(position).getRua());
 
 
         return rowView;

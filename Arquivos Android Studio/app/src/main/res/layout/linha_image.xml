@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/imagem"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:layout_gravity="center_vertical"
+            android:layout_width="100dp"
+            android:text="Remover"
+            android:id="@+id/btnRemove"
+            android:background="#F00"
+            android:textColor="#FFF"
+            android:layout_height="50dp" />
+
+
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

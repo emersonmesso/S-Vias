@@ -1,20 +1,24 @@
 package com.sdev.svias.Controller;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.sdev.svias.R;
 
 import java.io.InputStream;
 
 public class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
     ImageView imageView;
+    private Context context;
 
-    public DownloadImageFromInternet(ImageView imageView) {
+    public DownloadImageFromInternet(ImageView imageView, Context context) {
         this.imageView = imageView;
+        this.context = context;
     }
 
     @Override

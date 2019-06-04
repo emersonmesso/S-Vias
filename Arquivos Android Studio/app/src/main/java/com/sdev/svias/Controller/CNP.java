@@ -15,6 +15,9 @@ public class CNP {
     }
 
     public static boolean isValidCPF(String cpf) {
+        cpf = cpf.replace("-", "");
+        cpf = cpf.replace(".", "");
+
         if ((cpf==null) || (cpf.length()!=11)) return false;
 
         Integer digito1 = calcularDigito(cpf.substring(0,9), pesoCPF);

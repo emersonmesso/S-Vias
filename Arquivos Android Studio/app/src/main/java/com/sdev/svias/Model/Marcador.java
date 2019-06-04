@@ -2,15 +2,61 @@ package com.sdev.svias.Model;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+
 public class Marcador {
     private String descricao;
     private String data;
     private String nome;
     private LatLng latlng;
-    private String midia;
+    private ArrayList<String> midia;
     private Cidadao cidadao;
     private String situacao;
+    private int id_loc;
+    private String cidade;
+    private String rua;
+    private String bairro;
+    private String cep;
 
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public int getId_loc() {
+        return id_loc;
+    }
+
+    public void setId_loc(int id_loc) {
+        this.id_loc = id_loc;
+    }
 
     public String getSituacao() {
         return situacao;
@@ -52,11 +98,11 @@ public class Marcador {
         this.latlng = latlng;
     }
 
-    public String getMidia() {
+    public ArrayList<String> getMidia() {
         return midia;
     }
 
-    public void setMidia(String midia) {
+    public void setMidia(ArrayList<String> midia) {
         this.midia = midia;
     }
 

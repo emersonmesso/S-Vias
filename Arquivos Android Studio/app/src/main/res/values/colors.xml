@@ -8,4 +8,6 @@
     <color name="colorAppBar">#FACC2E</color>
     <color name="colorDescDenuncia">#EBEBEB</color>
     <color name="colorTransparent">#CCCCCC</color>
+    <color name="colorPendente">#F77777</color>
+    <color name="colorConcluido">#2CC17E</color>
 </resources>
