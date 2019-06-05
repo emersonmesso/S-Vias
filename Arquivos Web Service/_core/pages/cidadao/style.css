@@ -67,6 +67,10 @@ a:focus {
 #sidebar.active {
     margin-left: -250px;
 }
+.btn-warning{
+    background-color: #FACC2E !important;
+    color: #FFF !important;
+}
 
 #sidebar .sidebar-header {
     padding: 20px;

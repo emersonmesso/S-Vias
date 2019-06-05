@@ -12,6 +12,15 @@ class Denuncia {
     private $class;
     private $desc;
     private $imagem;
+    private $imagens_pref;
+    
+    function getImagens_pref() {
+        return $this->imagens_pref;
+    }
+
+    function setImagens_pref($imagens_pref) {
+        $this->imagens_pref = $imagens_pref;
+    }
     
     function getImagem() {
         return $this->imagem;

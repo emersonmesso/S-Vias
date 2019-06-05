@@ -14,7 +14,9 @@ $array[] = array(
     'cep' => $dados->getCep(),
     'rua' => utf8_decode( $dados->getRua() ),
     'data' => htmlspecialchars($dados->getData()),
-    'situacao' => $dados->getClass()
+    'situacao' => $dados->getClass(),
+    'id' => $dados->getId_loc(),
+    'img_pref' => $dados->getImagens_pref()
 );
 header('Content-type: application/json');
 echo json_encode($array, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

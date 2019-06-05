@@ -15,7 +15,7 @@ $cidade = mysqli_fetch_array($sqCidade);
 $array['cidade'] = $cidade['nome'] . " - " . $cidade['uf'];
 
 //buscando os dados
-$sql = $con->select("denuncia", "*", "email_cid = '$email' AND cep = '$cep'");
+$sql = $con->select("denuncia", "*", "email_cid = '$email' AND cep = '$cep'", "id_loc DESC");
 if(mysqli_num_rows($sql) == 0){
     $array['total'] = 0;
 }else{
@@ -41,7 +41,8 @@ if(mysqli_num_rows($sql) == 0){
             'data' => htmlspecialchars($dados->getData()),
             'situacao' => $dados->getClass(),
             'alert' => $alert,
-            'id' => $denuncia['id_loc']
+            'id' => $denuncia['id_loc'],
+            'img_pref' => $dados->getImagens_pref()
         );
     }
 }

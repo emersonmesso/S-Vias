@@ -30,7 +30,7 @@ if(mysqli_num_rows($sqlCep) == 1){
             "lng" => $row['lng'],
             "name" => $row['titulo'],
             'desc' => "Descrição",
-            'type' => "P"
+            'type' => $type
         );
     }
 }else{

@@ -39,12 +39,6 @@ $cidadao = $con->dadosCidadao();
 
 
         </ul>
-
-        <ul class="list-unstyled CTAs">
-            <li>
-                <a href="javascript:void(0)" class="download">Download source</a>
-            </li>
-        </ul>
     </nav>
 
     <!-- Page Content  -->
@@ -56,17 +50,11 @@ $cidadao = $con->dadosCidadao();
                 <button type="button" id="sidebarCollapse" style="background-color: #FACC2E;" class="btn btn-warning">
                     <i class="fas fa-align-left"></i>
                 </button>
-                <button class="btn btn-warning d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-align-justify"></i>
+                
+                <button class="btn btn-warning" id="btnLogout" type="button">
+                    <i class="fas fa-times-circle" style="font-size: 20px;"></i>
                 </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0)" id="btnLogout">Sair</a>
-                        </li>
-                    </ul>
-                </div>
+                
             </div>
         </nav>
         <!--Variáveis do Jquery-->
@@ -94,7 +82,7 @@ $cidadao = $con->dadosCidadao();
 <button type="button" class="btn btn-primary" id="modalDen" data-toggle="modal" data-target=".bd-example-modal-info">Large modal</button>
 <div class="modal fade bd-example-modal-info" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title text-center" id="modalName"></h3>
@@ -106,19 +94,55 @@ $cidadao = $con->dadosCidadao();
                 <div class="row">
                     
                     <div class="col-lg-5 p-3 text-center" id="imagemDenuncia">
+                        <h3>Antes</h3>
+                        
+                        <div id="carouselControls" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner" id="img">
+                                
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        
+                        <div class="container-fluid" id="anterior">
+                            <h3>Depois</h3>
+                            <div id="carouselControlsD" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner" id="imgD">
+
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselControlsD" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselControlsD" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                        
                         
                     </div>
                     
-                    <div class="col-lg-6" id="infoDenuncia">
-                        
+                    <div class="col-lg-6">
+                        <div id="infoDenuncia">
+                            
+                        </div>
+                        <div id="situacao" class="mt-5">
+                            
+                        </div>
                     </div>
                     <div class="col-lg-1">
                         
                     </div>
                     
                 </div>
-                
-                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-block btn-light" data-dismiss="modal"><i class="fas fa-times"></i> Fechar</button>

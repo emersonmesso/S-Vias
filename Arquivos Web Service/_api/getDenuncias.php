@@ -16,9 +16,14 @@ $result = $Controller->getSql()->select("denuncia", "*", "email_cid = '$email'",
 while($rows = mysqli_fetch_array($result)){
     //buscando a imagem
     $imgDenuncia = $Controller->getSql()->select("imagens", "*", "id_loc = ".$rows['id_loc']);
-    $image = "";
-    while ($img = mysqli_fetch_array($imgDenuncia)){
-        $image = "https://emersonmesso95.000webhostapp.com/_api/images/".$img['img_den'];
+    $image = array();
+   
+    if(mysqli_num_rows($imgDenuncia) > 0){
+        while ($img = mysqli_fetch_array($imgDenuncia)){
+            $image[] = array('img' => "https://emersonmesso95.000webhostapp.com/_api/images/".$img['img_den']);
+        }
+    }else{
+        $image[] = array('img' => "https://emersonmesso95.000webhostapp.com/_core/_img/imageError.png");
     }
     //buscando o tipo de situação
     $sqlSituacao = $Controller->getSql()->select("classificacao", "*", "id_class = " . $rows['id_class']);
@@ -34,7 +39,11 @@ while($rows = mysqli_fetch_array($result)){
         'cidadao' => 1,
         'cep' => $rows['cep'],
         'sit' => $dadosClassificacao['classificacao'],
-        'img' => $image
+        'img' => $image,
+        'id_loc' => $rows['id_loc'],
+        'rua' => utf8_decode($rows['rua']),
+        'cidade' => utf8_decode($rows['cidade']),
+        'bairro' => $rows['bairro']
     );
 }
 echo json_encode($denuncias);

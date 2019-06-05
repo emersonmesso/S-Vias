@@ -2,15 +2,10 @@
 require './Controller.php';
 $Controller = new Controller();
 
-$id_loc = 60;
-$img = $_POST['file'];
+$id_loc = intval($_POST['id_loc']);
+$img = $_POST['img'];
 
 $caminho = $Controller->salvarImagem($img);
-$dados = array(
-    'img' => $img,
-    'id_loc' =>$id_loc,
-    'caminho' => $caminho
-);
 
 $sql = $Controller->getSql()->insere("imagens", "id_loc, img_den", "$id_loc, '$caminho'");
 if($sql){
@@ -18,4 +13,3 @@ if($sql){
 }else{
     echo "NÃO FOI POSSÍVEL ADICIONAR";
 }
-echo json_encode($dados);

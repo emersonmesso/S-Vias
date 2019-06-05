@@ -1,9 +1,9 @@
 <?php
 class Mysql{
     private $host = "localhost";
-    private $user = "root";
-    private $pass = "";
-    private $banco = "svias";
+    private $user = "id7145571_svias";
+    private $pass = "sistemassvias";
+    private $banco = "id7145571_svias";
     
     function getHost() {
         return $this->host;
