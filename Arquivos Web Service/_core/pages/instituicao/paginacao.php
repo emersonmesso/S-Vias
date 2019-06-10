@@ -87,7 +87,7 @@ $pagina = 1;
 $status = (isset($_GET['status'])) ? $_GET['status'] : '-1';
 $cep = $_GET['cep'] . '-000';
 
-$total = $con->countStatusDenuncia("$status", $cep);
+$total = $con->countStatusDenuncia($status, $cep);
 
 //seta a quantidade de itens por página, neste caso, 2 itens 
 $registros = 5;
@@ -100,8 +100,7 @@ $inicio = ($registros * $pagina) - $registros;
 
 $denuncias = $con->statusDenunciaLimit($status, $cep, $inicio, $registros);
 
-$codd = ''
-        . PHP_EOL . '<nav style=" margin-top: 5%; align-items: center; display: flex; flex-direction: row;  flex-wrap: wrap; justify-content: center;">'
+$codd = '<nav style="margin-top: 5%; align-items: center; display: flex; flex-direction: row;  flex-wrap: wrap; justify-content: center;">'
         . PHP_EOL . '<ul class="pagination">'
         . PHP_EOL . '<li class="page-item disabled">'
         . PHP_EOL . '<a class="page-link" href="#" aria-label="Previous">'
@@ -114,11 +113,11 @@ for ($i = 1; $i < $numPaginas + 1; $i++) {
 
     if ($pagina == $i) {
         $codd .= PHP_EOL . '<li class="page-item active">';
-        $codd .= PHP_EOL . '<a class="page-link" href="?pagina=' . $i . '&status=' . $status .'">' . $i . '<span class="sr-only">(current)</span> </a>';
+        $codd .= PHP_EOL . '<a class="page-link" href="?pagina=' . $i . '&status=' . $status . '">' . $i . '<span class="sr-only">(current)</span> </a>';
         $codd .= PHP_EOL . '</li>';
     } else {
         $codd .= PHP_EOL . '<li class="page-item">';
-        $codd .= PHP_EOL . '<a class="page-link" href="?pagina=' . $i . '&status=' . $status .'">' . $i . '</a>';
+        $codd .= PHP_EOL . '<a class="page-link" href="?pagina=' . $i . '&status=' . $status . '">' . $i . '</a>';
         $codd .= PHP_EOL . '</li>';
     }
 }
@@ -128,7 +127,6 @@ $codd .= PHP_EOL . '<li class="page-item">'
         . PHP_EOL . '</a>'
         . PHP_EOL . '</li>'
         . PHP_EOL . '</ul>'
-        . PHP_EOL . '</nav>'
-        . PHP_EOL . '</div>';
+        . PHP_EOL . '</nav>';
 
 echo $codd;

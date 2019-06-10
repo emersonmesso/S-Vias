@@ -11,11 +11,12 @@ include '../../_config/functions.php';
 $con = new Controller();
 
 $termo = $_GET['termo'];
+$status = (isset($_GET['status'])) ? $_GET['status'] : '-1';
 
 if ($con->searchDenuncia($termo) != NULL) {
     $denuncias = $con->searchDenuncia($termo);
 
-    $cod = '<table id="tableview" class="table"><thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Título</th><th scope="col">Descrição</th><th scope="col">Status</th><th scope="col">Cep</th><th scope="col">Editar</th><th scope="col">Excluir</th></tr></thead>';
+    $cod = '<table class="table"><thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Título</th><th scope="col">Descrição</th><th scope="col">Status</th><th scope="col">Cep</th><th scope="col">Editar</th></tr></thead>';
 
 
     foreach ($denuncias as $denuncia) {
@@ -45,6 +46,8 @@ if ($con->searchDenuncia($termo) != NULL) {
     }
     $cod .= PHP_EOL . '</table>';
 
+    $cod .= PHP_EOL . '<a style="box-shadow: 2px 2px 2px #616161; width: 20%; padding: 5px; margin-left: 45%;border: 1px solid black;" href="https://localhost/instituicao">voltar</a>';
+    
     echo $cod;
 } else {
     echo 'nenhum dados encontrado!';

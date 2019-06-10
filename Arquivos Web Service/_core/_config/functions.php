@@ -120,7 +120,7 @@ class Controller {
         //executa a Query
         $query = $mysql->query($sql);
         //fecha a coneção
-        mysqli_close($mysql->sql);
+        mysqli_close($mysql);
         return $query;
     }
 
@@ -430,11 +430,11 @@ class Controller {
         } else {
             $sql = $this->select("denuncia", "*", "id_class = '$status' AND cep = '$cep' Limit $i, $r");
         }
-
+        
         while ($denuncia = mysqli_fetch_array($sql)) {
             $denuncias[] = $denuncia;
         }
-
+        
         return $denuncias;
     }
     

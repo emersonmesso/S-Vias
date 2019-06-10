@@ -12,6 +12,7 @@ $instituicao = $con->dadosInstituicao();
 <div class="container">
     <div id="content-op" class="row" hidden="true" >
         <div id="modal" class="col align-self-center">
+            <input id="cod-modal" type="hidden" />
             <br/>
             <br/>
             <label style="padding-bottom: 2vh;">Alterar status :
@@ -37,37 +38,24 @@ $instituicao = $con->dadosInstituicao();
             <div style="right: 1.5vw; top: 1vh; position: absolute; cursor: pointer;" onclick="desativar();">&nbsp;<b>X</b>&nbsp;</div>
             <div id="content-btn">
                 <button id="btn-modal-cancel" class="btn-modal" onclick="desativar();" type="button">Cancel</button>
-                <button id="btn-modal-confirm" class="btn-modal" onclick="document.getElementById('id01').style.display = 'none'" type="button">Confirmar</button>
+                <button id="btn-modal-confirm" class="btn-modal" onclick="modifyItem();desativar();" type="button">Confirmar</button>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    function ativar() {
-        var content = document.getElementById("content-op");
-
-        if (content.hidden) {
-            content.hidden = false;
-            modal.hidden = false;
-        } else {
-            content.hidden = true;
-            modal.hidden = true;
-        }
-    }
-    function desativar() {
-        var content = document.getElementById("content-op");
-
-        content.hidden = true;
-        modal.hidden = true;
-
-    }
-</script>
-
+<button type="button" id="sidebarCollapse" class="btn btn-info" style="z-index: 4; position: absolute; top: 10px;" onclick="javascript:
+                // ddd();
+        ">
+    <i class="fas fa-arrow-left"></i>
+</button>
 <div class="wrapper" style="z-index: 1;">
+
     <!-- Sidebar  -->
     <nav id="sidebar" style="z-index: 3;">
+        <div style="box-sizing: border-box; height: 10vh; width: 100%;">         
 
+        </div>
         <div>
             <div class="row justify-content-center">
                 <div class="col col-auto">
@@ -125,27 +113,6 @@ $instituicao = $con->dadosInstituicao();
         <!--      <nav class="navbar navbar-expand-lg navbar-light bg-light">
                  <div class="container-fluid">-->
 
-        <script>
-
-            function ddd() {
-                if (document.getElementById('content-op').style.visibility === 'hidden') {
-                    document.getElementById('content-op').style.visibility = 'visible';
-                } else if (document.getElementById('content-op').style.visibility === 'visible') {
-                    document.getElementById('content-op').style.visibility = 'hidden';
-                }
-
-                return 0;
-            }
-
-        </script>
-        <div style="box-sizing: border-box; height: 10vh; width: 100%;">         
-            <button type="button" id="sidebarCollapse" class="btn btn-info" style="float: left; z-index: 3; position: absolute;" onclick="javascript:
-                            // ddd();
-                    ">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-        </div>
-
 
         <!--                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <i class="fas fa-align-justify"></i>
@@ -168,7 +135,8 @@ $instituicao = $con->dadosInstituicao();
            *-->
         <div id="content-op" style="background-color: rgba(0,0,0,0.5); z-index: 2; width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; visibility: hidden;">
         </div>
-        <p style="color: black;">
+        <br/><br/>
+        <p id="filtros" style="color: black;">
             <span style="font-weight: 700; color: black;">Filtros :</span>
 
             <label>status
@@ -181,72 +149,17 @@ $instituicao = $con->dadosInstituicao();
                 </select>
             </label>
 
-            <script src="../../_javascript/jquery.js"></script>
-            <script>
-                    function send() {
-                        $.ajax({
-                            url: "../../../_core/pages/instituicao/requisicao_instituicao_home.php",
-                            data: {text: document.getElementById('select-status-id').value, cep: <?php echo $instituicao->getCep(); ?>},
-                            type: "GET",
-                            success: function (data) {
-                                modifyTable(data);
-                            },
-                            error: function () {
-                                alert("Erro ao buscar posíções do mapa");
-                            }
-                        });
 
-                        $.ajax({
-                            url: "../../../_core/pages/instituicao/paginacao.php",
-                            data: {status: document.getElementById('select-status-id').value, cep: <?php echo $instituicao->getCep(); ?>},
-                            type: "GET",
-                            success: function (data) {
-                                modifyTable1(data);
-                            },
-                            error: function () {
-                                alert("Erro ao buscar posíções do mapa");
-                            }
-                        });
-
-                    }
-                    function sendSearch() {
-                        $.ajax({
-                            url: "../../../_core/pages/instituicao/requisicao_instituicao_home_1.php",
-                            data: {termo: document.getElementById('search-termo').value},
-                            type: "GET",
-                            success: function (data) {
-                                modifyTable(data);
-                            },
-                            error: function () {
-                                alert("Erro ao buscar posíções do mapa");
-                            }
-                        });
-
-                    }
-                    function modifyTable(data) {
-                        document.getElementById('tableview').innerHTML = data;
-                    }
-                    function modifyTable1(data) {
-                        document.getElementById('tableview').innerHTML += data;
-                    }
-                    function deleteItem() {
-
-                    }
-
-                    function modifyItem() {
-
-                    }
-            </script>
 
             <button style="float:right;" onclick="sendSearch()">ir</button>
-            <input id='search-termo' style="float:right;" type="search" />
+            <input id='search-termo' style="float:right;" type="search" required="" />
         </p>
 
         <?php
         $pagina = (isset($_GET['pagina'])) ? $_GET['pagina'] : 1;
         $status = (isset($_GET['status'])) ? $_GET['status'] : 1;
 
-        echo '<script>document.getElementById("select-status-id").value =' . $status . '</script>';
+        echo "<script> document.getElementById('select-status-id').value = '$status';</script>";
 
 
         $total = $con->countStatusDenuncia($status, '' . $instituicao->getCep() . '');
@@ -300,7 +213,7 @@ $instituicao = $con->dadosInstituicao();
             }
 
             echo PHP_EOL . '<td>' . $denuncia["cep"] . '</td>';
-            echo PHP_EOL . '<td><button onclick="ativar();" name="btn-edit" style="cursor: pointer;" value=""><span class="glyphicon">&#x270f;</span></button></td>';
+            echo PHP_EOL . '<td><button id="' . $denuncia["id_loc"] . '" onclick="ativar(' . $denuncia["id_loc"] . ');" name="btn-edit" style="cursor: pointer;" value=""><span class="glyphicon">&#x270f;</span></button></td>';
             // <td><form method="post"><button name="exc" style="cursor: pointer;" value="$isbn" formaction="excluir_dados.php">x</button></form></td>"
             echo PHP_EOL . '</tr>';
 
@@ -420,6 +333,8 @@ $instituicao = $con->dadosInstituicao();
 
 <script>
 
+    var codG;
+
     function modalSelect() {
 
         var ite = document.getElementById('label-modal-ft');
@@ -433,8 +348,107 @@ $instituicao = $con->dadosInstituicao();
         }
     }
 
+    function modifySelect(v) {
+        document.getElementById("select-status-id").value = v;
+    }
+
+    function send() {
+        $.ajax({
+            url: "../../../_core/pages/instituicao/requisicao_instituicao_home.php",
+            data: {text: document.getElementById('select-status-id').value, cep: <?php echo $instituicao->getCep(); ?>},
+            type: "GET",
+            success: function (data) {
+                document.getElementById('tableview').innerHTML = data;
+            },
+            error: function () {
+                alert("Erro ao buscar posíções do mapa");
+            }
+        });
+
+        $.ajax({
+            url: "../../../_core/pages/instituicao/paginacao.php",
+            data: {status: document.getElementById('select-status-id').value, cep: <?php echo $instituicao->getCep(); ?>},
+            type: "GET",
+            success: function (data) {
+                document.getElementById('tableview').innerHTML += data;
+            },
+            error: function () {
+                alert("Erro ao buscar posíções do mapa");
+            }
+        });
+
+    }
+    function sendSearch() {
+
+        document.getElementById("filtros").hidden = true;
+
+        $.ajax({
+            url: "../../../_core/pages/instituicao/requisicao_instituicao_home_1.php",
+            data: {termo: document.getElementById('search-termo').value, status: document.getElementById('select-status-id').value},
+            type: "GET",
+            success: function (data) {
+                modifyTable(data);
+            },
+            error: function () {
+                alert("Erro ao buscar posíções do mapa");
+            }
+        });
+
+    }
+
+    function modifyItem() {
+
+
+        $.ajax({
+            url: "../../../_core/pages/instituicao/modify_denuncia.php",
+            data: {cod: document.getElementById('cod-modal').value, foto: null, status: document.getElementById('select-status-modal-id').value},
+            type: "GET",
+            success: function (data) {
+                alert(data);
+            },
+            error: function () {
+                alert("Erro ao buscar posíções do mapa");
+            }
+        });
+
+    }
+
+    function ativar(id) {
+        var content = document.getElementById("content-op");
+        var modal = document.getElementById("modal");
+
+        document.getElementById("cod-modal").value = id;
+
+        if (content.hidden) {
+            content.hidden = false;
+            modal.hidden = false;
+        } else {
+            content.hidden = true;
+            modal.hidden = true;
+        }
+    }
+    function desativar() {
+        var content = document.getElementById("content-op");
+        var modal = document.getElementById("modal");
+
+        content.hidden = true;
+        modal.hidden = true;
+
+        document.getElementById('select-status-modal-id').value = "2";
+
+    }
+    function ddd() {
+        if (document.getElementById('content-op').style.visibility === 'hidden') {
+            document.getElementById('content-op').style.visibility = 'visible';
+        } else if (document.getElementById('content-op').style.visibility === 'visible') {
+            document.getElementById('content-op').style.visibility = 'hidden';
+        }
+
+        return 0;
+    }
 </script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="../../_javascript/jquery.js"></script>
