@@ -28,6 +28,7 @@ $instituicao = $con->dadosInstituicao();
                 <input type="hidden" name="MAX_FILE_SIZE" value="30000" require />
                 <input name="userfile" type="file" />
             </label>
+            <a style="margin-left: 1vw;border-bottom: 1px solid #2196F3; color: #2196F3; cursor: pointer; font-size: 0.8em;">Mais...</a>
             <br/>
             <br/>
             <hr/>
@@ -44,7 +45,7 @@ $instituicao = $con->dadosInstituicao();
     </div>
 </div>
 
-<button type="button" id="sidebarCollapse" class="btn btn-info" style="z-index: 4; position: absolute; top: 10px;" onclick="javascript:
+<button type="button" id="sidebarCollapse" class="btn btn-info" style="z-index: 4; position: absolute; top: 10px; background-color: black; border-color: rgb(100, 100, 100);" onclick="javascript:
                 // ddd();
         ">
     <i class="fas fa-arrow-left"></i>
@@ -78,7 +79,7 @@ $instituicao = $con->dadosInstituicao();
 
         <ul class="list-unstyled components">
             <li>
-                <a href="#">Minhas conta</a>
+                <a href="pages/index.html">Minhas conta</a>
                 <a class="nav-link" href="javascript:void(0)" id="btnLogout">Sair</a>
             </li>
 
@@ -333,8 +334,6 @@ $instituicao = $con->dadosInstituicao();
 
 <script>
 
-    var codG;
-
     function modalSelect() {
 
         var ite = document.getElementById('label-modal-ft');
@@ -354,7 +353,7 @@ $instituicao = $con->dadosInstituicao();
 
     function send() {
         $.ajax({
-            url: "../../../_core/pages/instituicao/requisicao_instituicao_home.php",
+            url: "../../../_core/pages/instituicao/getTableDenunciaFiltro.php",
             data: {text: document.getElementById('select-status-id').value, cep: <?php echo $instituicao->getCep(); ?>},
             type: "GET",
             success: function (data) {
@@ -383,7 +382,7 @@ $instituicao = $con->dadosInstituicao();
         document.getElementById("filtros").hidden = true;
 
         $.ajax({
-            url: "../../../_core/pages/instituicao/requisicao_instituicao_home_1.php",
+            url: "../../../_core/pages/instituicao/getTableDenunciaSearch.php",
             data: {termo: document.getElementById('search-termo').value, status: document.getElementById('select-status-id').value},
             type: "GET",
             success: function (data) {
@@ -398,9 +397,8 @@ $instituicao = $con->dadosInstituicao();
 
     function modifyItem() {
 
-
         $.ajax({
-            url: "../../../_core/pages/instituicao/modify_denuncia.php",
+            url: "../../../_core/pages/instituicao/modifyDenuncia.php",
             data: {cod: document.getElementById('cod-modal').value, foto: null, status: document.getElementById('select-status-modal-id').value},
             type: "GET",
             success: function (data) {
@@ -451,4 +449,3 @@ $instituicao = $con->dadosInstituicao();
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-<script src="../../_javascript/jquery.js"></script>

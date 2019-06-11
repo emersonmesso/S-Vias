@@ -14,4 +14,4 @@ $foto = (isset($_GET['status'])) ? $_GET['status'] : null;
 
 $con->update("denuncia", '`id_class`=' . $status , 'id_loc = ' . $cod);
 
-echo 'Modificado!';
+echo 'modificado!';
