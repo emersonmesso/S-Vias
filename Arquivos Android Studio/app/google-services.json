@@ -1,0 +1,41 @@
+{
+  "project_info": {
+    "project_number": "323771112173",
+    "firebase_url": "https://fir-vias.firebaseio.com",
+    "project_id": "fir-vias",
+    "storage_bucket": "fir-vias.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323771112173:android:9037162d137daf9f",
+        "android_client_info": {
+          "package_name": "com.sdev.svias"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "323771112173-gg8f8pjqo70jqa83b1fmra7eng6bd9i3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA5PmTk29XzpT18EVr07SB2OkgtZLmuqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323771112173-gg8f8pjqo70jqa83b1fmra7eng6bd9i3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-1846233707943905~6483000765"
+    }
+  ],
+  "configuration_version": "1"
+}

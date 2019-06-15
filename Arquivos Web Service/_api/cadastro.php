@@ -1,15 +1,15 @@
 <?php
 require './Controller.php';
 $Controller = new Controller();
-if(!isset($_GET['nome']) || !isset($_GET['email']) || !isset($_GET['cpf']) || !isset($_GET['senha'])){
+if(!isset($_POST['nome']) || !isset($_POST['email']) || !isset($_POST['cpf']) || !isset($_POST['senha'])){
     echo "DADOS NÃO ENVIADOS!";
     exit;
 }
 //armazena os dados em variáveis
-$nome = $_GET['nome'];
-$email = $_GET['email'];
-$senha = $_GET['senha'];
-$cpf = $_GET['cpf'];
+$nome = $_POST['nome'];
+$email = $_POST['email'];
+$senha = $_POST['senha'];
+$cpf = $_POST['cpf'];
 
 //verifica se já tem algum cidadão com o mesmo email
 $result = $Controller->getSql()->select("cidadao", "*", "email = '$email'");

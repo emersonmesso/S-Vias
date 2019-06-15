@@ -14,27 +14,7 @@
             android:padding="10dp"
             android:textAlignment="center">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="149dp"
-                    android:src="@drawable/icon" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Bem Vindo Ao S-Vias"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="25dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
 
 
             <ScrollView
@@ -47,6 +27,29 @@
                     android:onClick="cidadao"
                     android:layout_height="wrap_content">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="149dp"
+                            android:src="@drawable/icon" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Bem Vindo Ao S-Vias"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="25dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
                     <!--LOGIN CIDADÃO CADASTRADO-->
                     <LinearLayout
                         android:layout_marginBottom="5dp"
@@ -56,7 +59,7 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:src="@drawable/instituicao"
+                            android:src="@drawable/cidadao"
                             android:layout_width="70dp"
                             android:layout_height="70dp" />
 
@@ -88,7 +91,7 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:src="@drawable/instituicao"
+                            android:src="@drawable/visitante"
                             android:layout_width="70dp"
                             android:layout_height="70dp" />
 
@@ -152,7 +155,7 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:src="@drawable/instituicao"
+                            android:src="@drawable/cadastro"
                             android:layout_width="70dp"
                             android:layout_height="70dp" />
 

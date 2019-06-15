@@ -7,7 +7,7 @@ class Controller{
     private $url;
     private $sql;
     
-    function Controller(){
+    function __construct(){
         $this->inicia();
         if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
             $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -260,6 +260,17 @@ class Controller{
         }
     }
     
+    public function verificaSessaoAdmin() {
+        if ( session_status() !== PHP_SESSION_ACTIVE ){
+            session_start();
+        }
+        if(isset($_SESSION['admin'])){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
     public function redirecionaSessao() {
         if ( session_status() !== PHP_SESSION_ACTIVE ){
             session_start();
@@ -272,6 +283,19 @@ class Controller{
                 //instituição
                 echo '<script>window.location.href="../instituicao";</script>';
             }
+        }
+    }
+    
+    /*
+     * Redireciona a sessão do admin caso ela exista
+     * Criado por Emerson Santos
+     */
+    public function redirecionaAdmin() {
+        if ( session_status() !== PHP_SESSION_ACTIVE ){
+            session_start();
+        }
+        if(isset($_SESSION['admin'])){
+            echo '<script>window.location.href="../admin";</script>';            
         }
     }
     
@@ -594,4 +618,58 @@ class Controller{
     }
     
     /*FORMULÁRIO DE CONTATO DO SITE*/
+    
+    /*Download release php*/
+    public function release(){
+        $releases = array(
+            'location' => $this->gerLinkPastas() . "_core/releases/apk.apk",
+            'name' => "S-Vias",
+            'version' => 0.1
+        );
+
+        // Define o tempo máximo de execução em 0 para as conexões lentas
+        set_time_limit(0);
+        // Aqui você pode aumentar o contador de downloads
+        // Configuramos os headers que serão enviados para o browser
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment; filename="' . $releases['name'] . '"');
+        header('Content-Type: application/octet-stream');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: ' . filesize($releases['location']));
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+        header('Expires: 0');
+        // Envia o arquivo para o cliente
+        readfile($releases['location']);
+    }
+    
+    /*
+     * Envia email para a administração para que seja respondida sobre a adição da instituição no sistema
+     * 
+     */
+    public function emailContatoIns($email){
+        $arquivo = ''
+                . 'Você recebeu este E-mail porque uma instituição quer utilizar o sistema S Vias em sua cidade!<br />'
+                . 'Você pode conversar com a mesma a fim de sanar todas as dúvidas da instituição.<br />';
+        
+        
+        $emailenviar = $email;
+        $destino = "emersonmessoribeiro@gmail.com";
+        $assunto = "Nova Instituição (S-Vias)";
+
+        // É necessário indicar que o formato do e-mail é html
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= 'From: <'.$emailenviar.'>';
+        //$headers .= "Bcc: $EmailPadrao\r\n";
+        if(mail($destino, $assunto, $arquivo, $headers)){
+            echo '<div class="alert alert-success text-center">';
+                echo 'Aguarde nossa resposta em seu E-mail. Não vamos demorar para responder!';
+            echo '</div>';
+        }else{
+            echo '<div class="alert alert-danger text-center">';
+                echo 'Não foi possível enviar o E-mail!';
+            echo '</div>';
+        }
+    }
 }

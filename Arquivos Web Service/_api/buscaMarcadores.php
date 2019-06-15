@@ -18,11 +18,16 @@ while($rows = mysqli_fetch_array($result)){
     
     //buscando a imagem
     $imgDenuncia = $Controller->getSql()->select("imagens", "*", "id_loc = ".$rows['id_loc']);
+    $imgpref = $Controller->getSql()->select("imagens_pref", "*", "id_loc = ".$rows['id_loc']);
     $image = array();
+    $image_pref = array();
    
-    if(mysqli_num_rows($imgDenuncia) > 0){
+    if(mysqli_num_rows($imgDenuncia) > 0 || mysqli_num_rows($imgpref) > 0){
         while ($img = mysqli_fetch_array($imgDenuncia)){
             $image[] = array('img' => "https://emersonmesso95.000webhostapp.com/_api/images/".$img['img_den']);
+        }
+        while($pref = mysqli_fetch_array($imgpref)){
+            $image_pref[] = array('img' => "https://emersonmesso95.000webhostapp.com/_api/images/".$pref['imagem']);
         }
     }else{
         $image[] = array('img' => "https://emersonmesso95.000webhostapp.com/_core/_img/imageError.png");
@@ -46,7 +51,8 @@ while($rows = mysqli_fetch_array($result)){
         'id_loc' => $rows['id_loc'],
         'rua' => utf8_decode($rows['rua']),
         'cidade' => utf8_decode($rows['cidade']),
-        'bairro' => $rows['bairro']
+        'bairro' => $rows['bairro'],
+        'img_pref' => $image_pref
     );
     
 }

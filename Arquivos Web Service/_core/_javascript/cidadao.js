@@ -10,7 +10,7 @@ $(document).ready(function(){
     $("#modalDen").hide();
     $("#infoDenuncia div[id^='telaEdit'").hide();
     
-    
+    $('#sidebar').toggleClass('active');
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
     });

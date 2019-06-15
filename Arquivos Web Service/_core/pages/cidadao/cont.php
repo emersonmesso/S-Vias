@@ -19,7 +19,9 @@ $cidadao = $con->dadosCidadao();
             <p>Bem Vindo!
             <br />
             <?php echo $cidadao->getNome() ?></p>
-
+            <li>
+                <a href="<?php echo $con->gerLinkPastas() ?>cidadao/me">Meus Dados</a>
+            </li>
             <li>
                 <a href="../cidadao">Minhas Denúncias</a>
             </li>
@@ -31,13 +33,10 @@ $cidadao = $con->dadosCidadao();
 
                 </ul>
             </li>
-
-
             <li>
-                <a href="../denuncias">Mapa Denúncias</a>
+                <a href="<?php echo $con->gerLinkPastas() ?>denuncias">Mapa Denúncias</a>
             </li>
-
-
+            
         </ul>
     </nav>
 
@@ -61,6 +60,53 @@ $cidadao = $con->dadosCidadao();
         <b id="lat" lang=""></b>
         <b id="lng" lang=""></b>
         <b id="emailUser" lang="<?php echo $cidadao->getEmail(); ?>"></b>
+        <?php
+        if(isset($con->url[1]) && $con->url[1] == "me"){
+        ?>
+        <!--MOSTRANDO OS DADOS CADASTRAIS DO CIDADÃO-->
+        <h1>Meus Dados</h1>
+        <p>Os seus dados pessoais foram capturados utilizando o aplicativo S-Vias</p>
+        <form method="post" action="">
+            <div class="form-group">
+                <label for="">E-mail:</label>
+                <input type="email" disabled class="form-control col-sm-5" value="<?php echo $cidadao->getEmail(); ?>">
+            </div>
+            <div class="form-group">
+                <label for="">CPF:</label>
+                <input type="text" disabled class="form-control col-sm-3" value="<?php echo $cidadao->getCpf(); ?>">
+            </div>
+            <div class="form-group">
+                <label for="">Nome:</label>
+                <input type="text" class="form-control col-sm-6" value="<?php echo $cidadao->getNome(); ?>">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success" title="Salvar Informações"><i class="fas fa-save"></i> Salvar</button>
+            </div>
+        </form>
+        
+        <form method="post" action="">
+            <div class="form-group">
+                <h3>Alterar Senha</h3>
+                <label for="">Senha Atual:</label>
+                <input type="password" class="form-control col-sm-4">
+                <label for="">Nova Senha:</label>
+                <input type="password" class="form-control col-sm-4">
+                <label for="">Confirmação Nova Senha:</label>
+                <input type="password" class="form-control col-sm-4">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success" title="Salvar Informações"><i class="fas fa-save"></i> Salvar</button>
+            </div>
+            
+            
+        </form>
+        
+        
+        <!--MOSTRANDO OS DADOS CADASTRAIS DO CIDADÃO-->
+        <?php
+            
+        }else{
+        ?>
         <!--Mostra as denúncias-->
         <div class="container-fluid bg-light navbar">
             <h1><i id="nomeCidade"></i></h1>
@@ -74,6 +120,8 @@ $cidadao = $con->dadosCidadao();
             </div>
 
         </div>
+        
+        <?php } ?>
 
     </div>
 </div>

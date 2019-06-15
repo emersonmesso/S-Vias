@@ -261,7 +261,7 @@ public class ActivityVisitante extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            System.exit(0);
+            finishAffinity();
         }
 
         return super.onOptionsItemSelected(item);
@@ -278,7 +278,7 @@ public class ActivityVisitante extends AppCompatActivity
             Intent intent = new Intent(ActivityVisitante.this,
                     PreProcessamento.class);
             startActivity(intent);
-            finish();
+            this.finish();
         } else if (id == R.id.nav_cadastro) {
             Intent intent = new Intent(ActivityVisitante.this,
                     Cadastro.class);
@@ -409,6 +409,34 @@ public class ActivityVisitante extends AppCompatActivity
             imgDenuncia.setImageResource(R.drawable.image_off);
         }
 
+
+        /*Imagens da Pref*/
+        FrameLayout frameImagensPref = (FrameLayout) view.findViewById(R.id.imagensPrefFrame);
+        ImageView imgPref = (ImageView) view.findViewById(R.id.imgDenunciaPref);
+        if(marcadores.get(pos).getMidia_pref().size() > 0){
+            //adiciona a primeira imagem
+            DownloadImageFromInternet downloadImageFromInternet = new DownloadImageFromInternet(imgPref, this);
+            downloadImageFromInternet.execute(marcadores.get(pos).getMidia_pref().get(0));
+        }else{
+            frameImagensPref.setVisibility(View.GONE);
+        }
+
+        //
+        final int posicao = pos;
+
+        //Botão mais Imagens Prefeitura
+        Button btnImgPref = (Button) view.findViewById(R.id.btnViewImgPref);
+        btnImgPref.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityVisitante.this, ViewImages.class);
+                intent.putExtra("imagens", marcadores.get(posicao).getMidia_pref());
+                startActivity(intent);
+                onPause();
+            }
+        });
+
+
         //Botão mais imagens
         Button btnViewImages = (Button) view.findViewById(R.id.btnViewImages);
         if(marcadores.get(pos).getMidia().size() > 1){
@@ -416,7 +444,7 @@ public class ActivityVisitante extends AppCompatActivity
         }else{
             btnViewImages.setVisibility(View.INVISIBLE);
         }
-        final int posicao = pos;
+
         btnViewImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

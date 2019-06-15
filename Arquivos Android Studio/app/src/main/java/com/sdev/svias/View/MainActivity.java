@@ -132,15 +132,14 @@ public class MainActivity extends AppCompatActivity
     private ImageView imgLoad;
     private TextView textoInfo;
 
+    private Button fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -235,6 +234,8 @@ public class MainActivity extends AppCompatActivity
         }else{
             erroLocalizacao();
         }
+        //Botão Adicionar
+        fab = (Button) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -248,6 +249,7 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
     }
 
     private void chamaAdd(){
@@ -360,7 +362,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_cadastro) {
             //Meu Perfil
-        } else if (id == R.id.nav_gallery) {
+        /*} else if (id == R.id.nav_gallery) {
             //Minhas Denúncias
             Intent intent = new Intent(this, ActivityDenuncias.class);
             intent.putExtra("email", personEmail);
@@ -369,7 +371,7 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("lng", lugares.get(0).getLongitude());
             startActivity(intent);
             this.onPause();
-
+        */
         } else if (id == R.id.nav_sobre) {
             Intent i = new Intent(MainActivity.this, ActivityContato.class);
             startActivity(i);
@@ -593,6 +595,34 @@ public class MainActivity extends AppCompatActivity
             imgDenuncia.setImageResource(R.drawable.image_off);
         }
 
+
+        /*Imagens da Pref*/
+        FrameLayout frameImagensPref = (FrameLayout) view.findViewById(R.id.imagensPrefFrame);
+        ImageView imgPref = (ImageView) view.findViewById(R.id.imgDenunciaPref);
+        if(marcadores.get(pos).getMidia_pref().size() > 0){
+            //adiciona a primeira imagem
+            DownloadImageFromInternet downloadImageFromInternet = new DownloadImageFromInternet(imgPref, this);
+            downloadImageFromInternet.execute(marcadores.get(pos).getMidia_pref().get(0));
+        }else{
+            frameImagensPref.setVisibility(View.GONE);
+        }
+
+        //
+        final int posicao = pos;
+
+        //Botão mais Imagens Prefeitura
+        Button btnImgPref = (Button) view.findViewById(R.id.btnViewImgPref);
+        btnImgPref.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ViewImages.class);
+                intent.putExtra("imagens", marcadores.get(posicao).getMidia_pref());
+                startActivity(intent);
+                onPause();
+            }
+        });
+
+
         //Botão mais imagens
         Button btnViewImages = (Button) view.findViewById(R.id.btnViewImages);
         if(marcadores.get(pos).getMidia().size() > 1){
@@ -600,7 +630,7 @@ public class MainActivity extends AppCompatActivity
         }else{
             btnViewImages.setVisibility(View.INVISIBLE);
         }
-        final int posicao = pos;
+
         btnViewImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

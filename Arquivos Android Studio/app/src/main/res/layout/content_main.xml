@@ -53,15 +53,47 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
-        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_gravity="bottom"
-            ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-1846233707943905/1043983582"></com.google.android.gms.ads.AdView>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_gravity="bottom|center"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="15dp"
+                android:layout_height="65dp">
+
+                <Button
+                    android:textColor="@color/colorBranco"
+                    android:id="@+id/fab"
+                    android:background="@drawable/etyle_botao_add"
+                    android:layout_width="wrap_content"
+                    android:padding="15dp"
+                    android:textSize="18dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="Denunciar"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="bottom"
+                ads:adSize="BANNER"
+                ads:adUnitId="ca-app-pub-1846233707943905/1043983582"></com.google.android.gms.ads.AdView>
+
+
+
+        </LinearLayout>
+
+
 
     </FrameLayout>
 

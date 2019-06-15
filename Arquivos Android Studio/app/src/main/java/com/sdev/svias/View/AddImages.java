@@ -55,8 +55,11 @@ public class AddImages extends AppCompatActivity {
 
 
     /*BOTÕES ADD*/
-    private Button btnSelect;
-    private Button btnPick;
+    private ImageView btnSelect;
+    private ImageView btnPick;
+
+    /*Botão Concluir*/
+    private Button brnConcluir;
 
     /*IIMAGEM SELECIONADA*/
     private Bitmap imgSelected;
@@ -77,16 +80,20 @@ public class AddImages extends AppCompatActivity {
         setContentView(R.layout.activity_add_images);
 
         /*CRIANDO OS OBJETOS XML*/
-        btnSelect = (Button) findViewById(R.id.btnSelect);
-        btnPick = (Button) findViewById(R.id.btnPick);
+        btnSelect = (ImageView) findViewById(R.id.btnSelect);
+        btnPick = (ImageView) findViewById(R.id.btnPick);
         textoDesc = (TextView) findViewById(R.id.textoDesc);
         textoSituacao = (TextView) findViewById(R.id.textoSituacao);
+        brnConcluir = (Button) findViewById(R.id.brnConcluir);
         /*CRIANDO OS OBJETOS XML*/
 
         /*Alterando o texto exibido*/
-        if(sit == 2){
-        textoSituacao.setText("O Status da Denúncia foi Alterada para \"Em Processo de Resolução\"!");
-        textoDesc.setText("Caso queira adicionar imagens da situação atual, envie selecionando-as abaixo!");
+        if(sit == 2) {
+            textoSituacao.setText("O Status da Denúncia foi Alterada para \"Em Processo de Resolução\"!");
+            textoDesc.setText("Caso queira adicionar imagens da situação atual, envie selecionando-as abaixo!");
+        }if(sit == 0){
+            textoSituacao.setText("Adicione Novas Fotos!");
+            textoDesc.setText("Selecione da sua galeria ou capture com a camera!");
         }else{
             textoSituacao.setText("Você Alterou o Status da Denúncia Para Concluído!");
             textoDesc.setText("Envie Imagens do Problema Já Resolvido!");
@@ -116,11 +123,19 @@ public class AddImages extends AppCompatActivity {
             }
         });
 
+        brnConcluir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
     }
 
     public void onBackPressed(){
         super.onBackPressed();
+        this.finish();
     }
 
 

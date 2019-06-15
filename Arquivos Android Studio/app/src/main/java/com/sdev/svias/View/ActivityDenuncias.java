@@ -68,6 +68,12 @@ public class ActivityDenuncias extends AppCompatActivity implements AdapterView.
         sistema.execute();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
     private void exibirProgress(boolean exibir) {
         loadMapa.setVisibility(exibir ? View.VISIBLE : View.GONE);
     }

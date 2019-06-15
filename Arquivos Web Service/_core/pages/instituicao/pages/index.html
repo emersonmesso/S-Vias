@@ -1,0 +1,234 @@
+<!--
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+Copyright (c) 2012, 2016 Oracle and/or its affiliates. All rights reserved.
+
+Oracle and Java are registered trademarks of Oracle and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 2 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://www.netbeans.org/cddl-gplv2.html
+or nbbuild/licenses/CDDL-GPL-2-CP. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License file at
+nbbuild/licenses/CDDL-GPL-2-CP.  Oracle designates this
+particular file as subject to the "Classpath" exception as provided
+by Oracle in the GPL Version 2 section of the License file that
+accompanied this code. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 2, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 2] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 2 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 2 code and therefore, elected the GPL
+Version 2 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <script type="text/javascript" src="js/loadWelcome.js"></script>
+        <script type="text/javascript">window.onload = getWelcome;</script>
+
+        <!-- Le styles -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/2.0.4/css/bootstrap.css" type="text/css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/2.0.4/css/bootstrap-responsive.css" type="text/css"/>
+        <link rel="stylesheet" href="css/style.css" type="text/css"/>
+
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+                 /*centraliza o elemento filho*/
+                align-items: center; 
+                display: flex; 
+                flex-direction: row;  
+                flex-wrap: wrap; 
+                justify-content: center;
+            }
+            main {
+                width: 80vw;
+                height: 80vh;
+                background-color: rgba(230, 230, 230, 0.6);
+                box-shadow: 3px 3px 5px rgb(100, 100, 100);
+               /*bordas arredondadas*/
+                border-top-left-radius: 3em;
+                border-top-right-radius: 3em;
+                border-bottom-left-radius: 3em;
+                border-bottom-right-radius: 3em;
+                /*centraliza o elemento filho*/
+                align-items: center; 
+                display: flex; 
+                flex-direction: row;  
+                flex-wrap: wrap; 
+                justify-content: center;
+
+            }
+            form {
+                width: 100%;
+                margin-left: 0px;
+                position: relative;
+            }
+            fieldset {
+                
+                border: 1px solid #dedede;
+            }
+            fieldset > legend {
+                font-family: sans-serif;
+                font-weight: bold;  
+            }
+            label {
+                /*fonte*/
+                font-size: 1.1em;
+                font-family: sans-serif;
+                font-weight: bold;  
+                /*dimensões e espacamentos*/
+                margin-left: 3vw;
+                width: 30vw; 
+                height: 5vh;
+                display: block;
+                border-left: 1px solid #dedede;
+                border-bottom-left-radius: 10px;
+            }
+            input {
+                width: 70%;
+                height: 80%;
+                float: right;
+                 /*bordas arredondadas*/
+                border-top-right-radius: 10px;
+                border-bottom-left-radius: 10px;
+                border: none;
+                border-bottom: 0.5px solid rgb(150, 150, 150);
+            }
+            input[type="text"] {
+                font-size: 1.2em;
+
+            }
+            #container-login {
+                margin-bottom: 8vh;
+            }
+            #container-login > label {
+                float: left;
+            }
+
+        </style>
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <title>Project Easel Demo</title>
+    </head>
+    <body>
+
+        <!--
+        CREATE TABLE `instituicao` (
+  `email` varchar(100) NOT NULL,
+  `razao_social` varchar(50) NOT NULL,
+  `cnpj` char(18) NOT NULL,
+  `endereco` varchar(150) DEFAULT NULL,
+  `num_ende` varchar(20) DEFAULT NULL,
+  `bairro` varchar(50) DEFAULT NULL,
+  `cidade` varchar(50) DEFAULT NULL,
+  `uf` char(2) DEFAULT NULL,
+  `cep` char(12) DEFAULT NULL,
+  `senha` varchar(40) NOT NULL,
+  `telefone` bigint(14) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+        -->
+        <main>
+            <form>  
+
+                <div id="container-login">
+
+                    <label>Email:
+                        <input type="email" style="background-color: rgb(220, 220, 220);" disabled/>
+                    </label>
+                    <label>Senha:
+                        <input type="password"/>
+                    </label>
+                    <br/>
+
+                </div>
+
+                <div id="container-dados-emp">
+
+                    <div style="margin-bottom: 10vh;">
+
+                        <label style="float: left;">Razao Social:
+                            <input type="text"  style="background-color: rgb(220, 220, 220);" disabled/>
+                        </label>
+
+                        <label style="float: left;">CNPJ:
+                            <input type="text" style="background-color: rgb(220, 220, 220);" disabled/>
+                        </label>
+                        <br/>
+
+                    </div>
+
+                    <label>Telefone:
+                        <input type="tel"/>
+                    </label>
+                    <br/>
+
+                    <fieldset>
+
+                        <legend>
+                            Endereço
+                        </legend>
+
+                        <div style="margin-bottom: 10vh;">
+
+                            <label style="float: left;">Cep:
+                                <input type="text" style="background-color: rgb(220, 220, 220);" disabled/>
+                            </label>
+
+                            <label style="float: left;">UF:
+                                <input type="text" style="background-color: rgb(220, 220, 220);" disabled/>
+                            </label>
+                            <br/>
+
+                        </div>
+
+                        <div style="margin-bottom: 10vh;">
+
+                            <label style="float: left; width: 30%;">Cidade:
+                                <input type="text" style="background-color: rgb(220, 220, 220);" disabled/>
+                            </label>
+
+                            <label style="float: left; width: 30%;">Bairro:
+                                <input type="text" style="background-color: rgb(220, 220, 220);" disabled/>
+                            </label>
+
+                            <label style="float: left; width: 15%;">Número:
+                                <input  style="width: 50%; background-color: rgb(220, 220, 220);" disabled type="text"/>
+                            </label>
+
+                        </div>
+
+                    </fieldset>
+
+                </div>
+
+            </form>
+        </main>
+    </body>
+</html>

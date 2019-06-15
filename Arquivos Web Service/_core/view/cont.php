@@ -22,9 +22,9 @@ $Controller = new Controller();
                 <div class="row mb-5">
                     
                     <div class="col-md-6 text-center">
-                        <a href="<?php echo $Controller->gerLinkPastas() ?>releases"><img src="../../_core/_img/playStore.png" width="90%" /></a>
+                        <a href="<?php echo $Controller->gerLinkPastas() ?>releases/download"><img src="../../_core/_img/playStore.png" width="90%" /></a>
                         <br />
-                        <a class="text-dark" href="<?php echo $Controller->gerLinkPastas() ?>releases"><em><strong>Download .APK</strong></em></a>  
+                        <a class="text-dark" href="<?php echo $Controller->gerLinkPastas() ?>releases/download"><em><strong>Download .APK</strong></em></a>  
                     </div>
                     <div class="col-md-6">
                         

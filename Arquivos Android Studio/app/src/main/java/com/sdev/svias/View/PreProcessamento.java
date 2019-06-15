@@ -44,9 +44,6 @@ public class PreProcessamento extends AppCompatActivity implements LocationListe
     boolean ativoGps = false;
     boolean ativoInt = false;
     static final int REQUEST_LOCATION = 1;
-
-
-
     LinearLayout ligin;
     GoogleSignInClient googleSignInClient;
     GoogleSignInOptions gso;

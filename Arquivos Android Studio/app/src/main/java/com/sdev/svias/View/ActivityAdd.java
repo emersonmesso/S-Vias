@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -86,14 +87,13 @@ public class ActivityAdd extends AppCompatActivity{
     private static final int TIRAR_FOTO = 3;
     Bitmap imageBitmap = null;
     private ListView imagensSelecionadas;
-    private ArrayAdapter<Bitmap> adapter;
+    private AdapterImages adapter;
     private int totalImage = 10;
 
     //
     private ArrayList<Bitmap> imagensSelect;
     //
     FrameLayout loadMapa;
-    ScrollView telaConteudo;
     Button btnConcluir;
     EditText nomeDenuncia;
     EditText descDenuncia;
@@ -152,7 +152,6 @@ public class ActivityAdd extends AppCompatActivity{
         imgSelect = (ImageView) findViewById(R.id.imgArquivos);
         imgFoto = (ImageView) findViewById(R.id.imgFoto);
         loadMapa = (FrameLayout) findViewById(R.id.telaLoad);
-        telaConteudo = (ScrollView) findViewById(R.id.telaConteudo);
         nomeDenuncia = (EditText) findViewById(R.id.editNomeDenuncia);
         descDenuncia = (EditText) findViewById(R.id.editDescDenuncia);
 
@@ -198,6 +197,9 @@ public class ActivityAdd extends AppCompatActivity{
         btnConcluir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(), String.valueOf(imagensSelect.size()), Toast.LENGTH_LONG).show();
+
                 final String nome = String.valueOf(nomeDenuncia.getText());
                 final String desc = String.valueOf(descDenuncia.getText());
 
@@ -240,14 +242,16 @@ public class ActivityAdd extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(ActivityAdd.this, MainActivity.class);
-        finish();
-        startActivity(i);
+        this.finish();
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        imagensSelect.clear();
     }
 
     private void exibirProgress(boolean exibir) {
         loadMapa.setVisibility(exibir ? View.VISIBLE : View.GONE);
-        telaConteudo.setVisibility(exibir? View.GONE : View.VISIBLE);
     }
 
     //
@@ -281,8 +285,7 @@ public class ActivityAdd extends AppCompatActivity{
                         Uri uri = resultData.getClipData().getItemAt(i).getUri();
                         try {
                             Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                            imagensSelect.add(image);
-                            adapter.notifyDataSetChanged();
+                            adapter.add(image);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -294,9 +297,7 @@ public class ActivityAdd extends AppCompatActivity{
 
             if(requestCode == TIRAR_FOTO){
                 Bundle extras = resultData.getExtras();
-                imagensSelect.add( (Bitmap) extras.get("data"));
-                adapter.notifyDataSetChanged();
-                mostraImagens();
+                adapter.add((Bitmap) extras.get("data"));
             }
 
         }

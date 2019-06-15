@@ -10,6 +10,7 @@ public class Marcador {
     private String nome;
     private LatLng latlng;
     private ArrayList<String> midia;
+    private ArrayList<String> midia_pref;
     private Cidadao cidadao;
     private String situacao;
     private int id_loc;
@@ -17,6 +18,14 @@ public class Marcador {
     private String rua;
     private String bairro;
     private String cep;
+
+    public ArrayList<String> getMidia_pref() {
+        return midia_pref;
+    }
+
+    public void setMidia_pref(ArrayList<String> midia_pref) {
+        this.midia_pref = midia_pref;
+    }
 
     public String getCidade() {
         return cidade;

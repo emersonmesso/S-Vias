@@ -23,14 +23,17 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
+import com.sdev.svias.Controller.AdapterImages;
 import com.sdev.svias.Controller.DownloadImageFromInternet;
 import com.sdev.svias.Controller.HTTPRequest;
+import com.sdev.svias.Controller.ImagensAdapterInstituicao;
 import com.sdev.svias.Controller.ScriptDLL;
 import com.sdev.svias.Controller.UtilAPP;
 import com.sdev.svias.R;
@@ -48,6 +51,7 @@ public class ViewDenunciaInstituicao extends AppCompatActivity {
     private int IDSituacao;
     private ArrayList<String> foto;
     private String desc;
+    private ArrayList<String> foto_pref;
 
     //
     private LinearLayout telaSituacao;
@@ -56,6 +60,8 @@ public class ViewDenunciaInstituicao extends AppCompatActivity {
     private ImageView imgDenuncia;
     private TextView situacaoDenuncia;
     private Button btnViewImages;
+    private ImagensAdapterInstituicao adapterImages;
+    private ListView listImg;
 
     //table
     private String endereco;
@@ -86,6 +92,7 @@ public class ViewDenunciaInstituicao extends AppCompatActivity {
             situacao = extras.getString("sit");
             itemSelect = situacao;
             foto = extras.getStringArrayList("foto");
+            foto_pref = extras.getStringArrayList("foto_pref");
             desc = extras.getString("desc");
             endereco = extras.getString("endereco");
             cidade = extras.getString("cidade");
@@ -100,6 +107,9 @@ public class ViewDenunciaInstituicao extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
+
+        //ListView
+        listImg = (ListView)findViewById(R.id.listImg);
 
         /*Interação do o XML*/
         alteraSituacao();
@@ -128,6 +138,15 @@ public class ViewDenunciaInstituicao extends AppCompatActivity {
 
         //Botão adicionar mais imagens
         btnAdd = (Button) findViewById(R.id.btnAddImage);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ViewDenunciaInstituicao.this, AddImages.class);
+                i.putExtra("id_loc", id_loc);
+                i.putExtra("sit", 0);
+                startActivity(i);
+            }
+        });
 
 
         //Tela Load
@@ -147,6 +166,8 @@ public class ViewDenunciaInstituicao extends AppCompatActivity {
                         R.array.planets_array, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapter);
+
+
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -196,9 +217,13 @@ public class ViewDenunciaInstituicao extends AppCompatActivity {
         imgDenuncia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
+
+        //Imagens Da Prefeitura
+        adapterImages = new ImagensAdapterInstituicao(getApplicationContext(), foto_pref);
+        listImg.setAdapter(adapterImages);
+
 
         //table
         dataDen = (TextView) findViewById(R.id.data);
@@ -228,7 +253,7 @@ public class ViewDenunciaInstituicao extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        this.finish();
     }
 
     private void exibirProgress(boolean exibir) {

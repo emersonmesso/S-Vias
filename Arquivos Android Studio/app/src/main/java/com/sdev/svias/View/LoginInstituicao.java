@@ -95,6 +95,12 @@ public class LoginInstituicao extends AppCompatActivity {
         editor.commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
     private void adicionarPreferenceJaAbriu(SharedPreferences preferences) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("loginInstituicao", "sim");

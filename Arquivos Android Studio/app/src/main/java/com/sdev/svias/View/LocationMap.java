@@ -83,6 +83,12 @@ public class LocationMap extends FragmentActivity implements OnMapReadyCallback,
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
 
     /**
      * Manipulates the map once available.
@@ -129,10 +135,8 @@ public class LocationMap extends FragmentActivity implements OnMapReadyCallback,
                 position.setLatitude(marker.getPosition().latitude);
                 position.setLongitude(marker.getPosition().longitude);
                 //buscando o nome da rua
-
-                rua r = new rua();
-                r.execute();
-
+                //rua r = new rua();
+                //r.execute();
             }
         });
     }

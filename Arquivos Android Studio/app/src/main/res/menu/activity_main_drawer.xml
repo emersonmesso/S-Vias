@@ -8,10 +8,10 @@
             android:id="@+id/nav_singin"
             android:icon="@drawable/baseline_face_black_48"
             android:title="Meu Perfil" />
-        <item
+        <!--<item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/baseline_list_black_48"
-            android:title="Minhas Denúncias" />
+            android:title="Minhas Denúncias" />-->
     </group>
 
     <item android:title="Comunicação">

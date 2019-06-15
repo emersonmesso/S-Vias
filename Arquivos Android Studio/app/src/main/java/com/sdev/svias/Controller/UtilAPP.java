@@ -18,7 +18,7 @@ public class UtilAPP {
     public static String LINK_SITE_CADASTRO_INSTITUICAO = LINK_SITE_APP + "cadastro";
     public static String LINK_SERVIDOR = "https://emersonmesso95.000webhostapp.com/_api/";
     public static String LINK_SERVIDOR_EMAIL = "https://emersonmesso95.000webhostapp.com/_api/_apiVerificaLogin.php?email=";
-    public static String LINK_SERVIDOR_CADASTRO = "https://emersonmesso95.000webhostapp.com/_api/cadastro.php?";
+    public static String LINK_SERVIDOR_CADASTRO = "https://emersonmesso95.000webhostapp.com/_api/cadastro.php";
 
     public static String LINK_SERVIDOR_CADASTRO_DENUCIA = "https://emersonmesso95.000webhostapp.com/_api/cadastroDenuncia.php";
     public static String LINK_SERVIDOR_CADASTRO_IMG_DENUCIA = "https://emersonmesso95.000webhostapp.com/_api/salvaImagem.php";

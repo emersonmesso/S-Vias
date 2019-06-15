@@ -84,6 +84,7 @@ public class Instituicao extends AppCompatActivity {
                 intent.putExtra("id_loc", marcadores.get(position).getId_loc());
                 intent.putExtra("nome", marcadores.get(position).getNome());
                 intent.putExtra("foto", marcadores.get(position).getMidia());
+                intent.putExtra("foto_pref", marcadores.get(position).getMidia_pref());
                 intent.putExtra("sit", marcadores.get(position).getSituacao());
                 intent.putExtra("desc", marcadores.get(position).getDescricao());
                 intent.putExtra("endereco", marcadores.get(position).getRua());
@@ -105,7 +106,7 @@ public class Instituicao extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
+        this.finish();
     }
 
     private void logout(){
