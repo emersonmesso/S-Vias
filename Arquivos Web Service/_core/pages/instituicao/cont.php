@@ -45,7 +45,7 @@ $instituicao = $con->dadosInstituicao();
     </div>
 </div>
 
-<button type="button" id="sidebarCollapse" class="btn btn-info" style="z-index: 4; position: absolute; top: 10px; background-color: black; border-color: rgb(100, 100, 100);" onclick="javascript:
+<button type="button" id="sidebarCollapse" class="btn btn-info" style="z-index: 4; position: absolute; top: 10px; background-color:#212529; border-color: rgb(100, 100, 100);" onclick="javascript:
                 // ddd();
         ">
     <i class="fas fa-arrow-left"></i>
